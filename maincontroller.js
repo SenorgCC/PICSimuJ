@@ -29,5 +29,5 @@ app.controller('cpucontroller',function($scope){
         CY=false;
         FL=false;
     };
-
+test
 });
