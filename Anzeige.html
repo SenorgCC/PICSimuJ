@@ -7,8 +7,9 @@
     <script type="text/javascript" src="maincontroller.js"></script>
 
 </head>
+
 <body>
-    <div ng-controller="cpucontroller">
+    <div ng-controller="Befehlsspeichercontroller">
         <h1>
             Aufgabe 1 Texteinlesen
         </h1>
@@ -16,7 +17,7 @@
         <input type="file" on-read-file="showContent($fileContent)" />
         <div ng-if="content">
             <h2>File content is:</h2>
-               <span ng-repeat="line in content">{{line}}<br></span>
+               <pre ng-repeat="line in content">{{line}}</pre>
         </div>
     </div>
 </body>

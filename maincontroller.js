@@ -6,14 +6,16 @@
 var Reg, IP, ZF, CY, FL;
 var app=angular.module('pic',[]);
 //die Maincontroller Funktion steuert sämtliche eingaben auf der Hauptseite
-app.controller('cpucontroller',function($scope){
+app.controller('Befehlsspeichercontroller',function($scope){
 
+    // ShowConten Visualisiert die eingegebene Datei und erstellt ein Objekt Array für die weitere Verarbeitung
     $scope.showContent = function($fileContent){
         var befehlssatz=new Array();
         befehlssatz = $fileContent.split('\n');
         $scope.content = befehlssatz;
-        alert(befehlssatz[15]);
+//TODO me: Eingehenden Dateien aus einem Array in ein Obejkt mit Zeilenpos, Operator, Arg1, Arg2 und Kommentar umwandeln
     };
+
 
 
     var Befehlsinterpretation = function(){
