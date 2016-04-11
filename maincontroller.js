@@ -13,6 +13,8 @@ app.controller('Befehlsspeichercontroller',function($scope){
         var befehlssatz=new Array();
         befehlssatz = $fileContent.split('\n');
         $scope.content = befehlssatz;
+        var befehlsobjekt=new Object();
+        befehlsobjekt.push()
 //TODO me: Eingehenden Dateien aus einem Array in ein Obejkt mit Zeilenpos, Operator, Arg1, Arg2 und Kommentar umwandeln
     };
 
@@ -49,7 +51,6 @@ app.directive('onReadFile', function ($parse) {
 
             element.on('change', function(onChangeEvent) {
                 var reader = new FileReader();
-
                 reader.onload = function(onLoadEvent) {
                     scope.$apply(function() {
                         fn(scope, {$fileContent:onLoadEvent.target.result});
