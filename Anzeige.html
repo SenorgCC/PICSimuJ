@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html ng-app="pic">
+<head>
+    <meta charset="UTF-8">
+    <title>PIC Simulator Anzeige</title>
+    <script type="text/javascript" src="angular.min.js"></script>
+    <script type="text/javascript" src="maincontroller.js"></script>
+
+</head>
+<body>
+    <div ng-controller="cpucontroller">
+        <h1>
+            Aufgabe 1 Texteinlesen
+        </h1>
+        <br>
+        <input type="file" on-read-file="showContent($fileContent)" />
+        <div ng-if="content">
+            <h2>File content is:</h2>
+               <span ng-repeat="line in content">{{line}}<br></span>
+        </div>
+    </div>
+</body>
+</html>
