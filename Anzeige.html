@@ -32,10 +32,10 @@
 
             <h2>Hier:</h2>
 
-        <table>
+        <table ng-if="ram">
 
             <tr ng-repeat="row in ram">
-                <td ng-repeat="zelle in row">{{zelle}} 1 </td>
+                <td ng-repeat="zelle in row track by $index">{{zelle}}</td>
             </tr>
 
         </table>
