@@ -3,7 +3,9 @@
  */
 //TODO: Bit Größe des Registers rausfinden! ->
 //es werden das Register (Reg), Instructionpointer (IP) und Flags: Zero (ZF), Carry(CY) und Faultflag (Fl)
-var Reg, IP, ZF, CY, FL;
+
+    var intstructioncounter=0;
+
 var app=angular.module('pic',[]);
 //die Maincontroller Funktion steuert sämtliche eingaben auf der Hauptseite
 app.controller('Befehlsspeichercontroller',function($scope){
@@ -13,35 +15,55 @@ app.controller('Befehlsspeichercontroller',function($scope){
         var befehlssatz=new Array();
         befehlssatz = $fileContent.split('\n');
         $scope.content = befehlssatz;
-        var befehlsobjekt=new Object();
-        befehlsobjekt.push()
-//TODO me: Eingehenden Dateien aus einem Array in ein Obejkt mit Zeilenpos, Operator, Arg1, Arg2 und Kommentar umwandeln
+
+        var tempbefehlsarray=new Array();
+
+        //Unsicher, ob operations abgebildet werden soll
+        $scope.operations = new Array();
+
+        //Schleife filter die wichtigen Befehle aus dem Quellcode
+        for(var i=0; i<=befehlssatz.length-1;i++) {
+
+            //Regulärer Ausdruck überprüft auf Befehlszeilen, bestehe aus 2 Hexblöcken : 001A 145F
+            if (/[0-9a-fA-F]{4}\s*[0-9a-fA-F]{4}/.test(befehlssatz[i])) {
+
+                //Der Zeilencounter und befehl sind mit einem Blank getrennt, split teilt dieses array auf
+                tempbefehlsarray=befehlssatz[i].split(' ');
+
+                //Die zwei werte werden zur übergabe an die CPU im Operations - Objekt Array gespeichert
+                //Da die Befelszeile in ein Array gesplittet -> ersten 2 Stellen der Zeilencounter und der Befehl
+                //Befehlscounter dient zur korrekten sortierung von Befehlen
+
+                $scope.operations.push({zeile:tempbefehlsarray[0],befehl:tempbefehlsarray[1]});
+            }
+
+        }
+
     };
 
 
-
-    var Befehlsinterpretation = function(){
-
-    };
-
-    var Startfunction = function (){
-
-    };
-
-    var Stopfunction = function (){
-
-    };
-
-    var Resetfunction = function (){
-
-        Reg=[0,0,0,0,0];
-        IP=0;
-        ZF=false;
-        CY=false;
-        FL=false;
-    };
 });
 
+app.controller('ramcontroller',function($scope){
+
+
+        befehlsspeicher = new Array();
+        var a=2 ;
+        for (var i = 0; i < 8; i++) {
+            befehlsspeicher[i]=new Array();
+            for (var j = 0; j < 8; j++) {
+
+                befehlsspeicher[i][j] = a++;
+            }
+        }
+
+    $scope.ram=befehlsspeicher;
+    alert(($scope.ram));
+
+});
+
+
+//Angularmagic zum Parsen von Dateien
 app.directive('onReadFile', function ($parse) {
     return {
         restrict: 'A',

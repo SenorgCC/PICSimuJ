@@ -19,6 +19,27 @@
             <h2>File content is:</h2>
                <pre ng-repeat="line in content">{{line}}</pre>
         </div>
+
+        <!--<div ng-if="operations"> -->
+        <!--    <pre ng-repeat="operation in operations">{{operation.zeile}} {{operation.befehl}}</pre> -->
+        <!-- </div>-->
+
+
+
+    <div ng-if="content" ng-controller="ramcontroller">
+
+        <h1> RAM anzeige</h1>
+
+            <h2>Hier:</h2>
+
+        <table>
+
+            <tr ng-repeat="row in ram">
+                <td ng-repeat="zelle in row">{{zelle}} 1 </td>
+            </tr>
+
+        </table>
+
     </div>
 </body>
 </html>
