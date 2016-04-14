@@ -61,7 +61,7 @@ app.controller('ramcontroller',function($scope){
     alert(($scope.ram));
 
 });
-
+//hh
 
 //Angularmagic zum Parsen von Dateien
 app.directive('onReadFile', function ($parse) {
