@@ -46,10 +46,9 @@ app.controller('Befehlsspeichercontroller',function($scope){
 
 app.controller('ramcontroller',function($scope){
 
-
+//Dummy zum befüllen des rams
         befehlsspeicher = new Array();
-        var a=2 ;
-        for (var i = 0; i < 8; i++) {
+        for (var i = 0; i < 9; i++) {
             befehlsspeicher[i]=new Array();
             for (var j = 0; j < 8; j++) {
 
@@ -58,7 +57,39 @@ app.controller('ramcontroller',function($scope){
         }
 
     $scope.ram=befehlsspeicher;
-    alert(($scope.ram));
+
+    var getValue=function (hexAdr) {
+
+        var decAdr=parseInt(hexAdr,16);
+
+        //Der RAM begint bei 0Ch -> 12d damit ist die erste Position im Array nicht 0 sondern 12
+        var ramAdr=decAdr-12;
+
+        //Ifabfrage zum Bestimmen der Array Reihe
+        if(ramAdr<=7){
+            return $scope.ram[0][ramAdr];
+        }else if((ramAdr >=8)&&(ramAdr<=15)){
+            return $scope.ram[1][ramAdr];
+        }else if((ramAdr >=16)&&(ramAdr<=23)){
+            return $scope.ram[2][ramAdr];
+        }else if((ramAdr >=24)&&(ramAdr<=31)){
+            return $scope.ram[3][ramAdr];
+        }else if((ramAdr >=32)&&(ramAdr<=39)){
+            return $scope.ram[4][ramAdr];
+        }else if((ramAdr >=40)&&(ramAdr<=47)){
+            return $scope.ram[5][ramAdr];
+        }else if((ramAdr >=48)&&(ramAdr<=55)){
+            return $scope.ram[6][ramAdr];
+        }else if((ramAdr >=56)&&(ramAdr<=63)){
+            return $scope.ram[7][ramAdr];
+        }else if((ramAdr >=64)&&(ramAdr<=67)){
+            return $scope.ram[8][ramAdr];
+        }else{
+            alert("Falscher Ram zugriff!");
+            return 0;
+        }
+
+    }
 
 });
 //hh
