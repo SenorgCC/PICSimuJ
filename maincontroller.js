@@ -53,7 +53,7 @@ app.controller('ramcontroller',function($scope){
             befehlsspeicher[i]=new Array();
             for (var j = 0; j < 8; j++) {
 
-                befehlsspeicher[i][j] =00;
+                befehlsspeicher[i][j] ='00';
             }
         }
 

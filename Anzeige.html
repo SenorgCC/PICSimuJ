@@ -25,21 +25,21 @@
         <!-- </div>-->
 
 
+        <div ng-if="content" ng-controller="ramcontroller">
 
-    <div ng-if="content" ng-controller="ramcontroller">
+            <h1> RAM anzeige</h1>
 
-        <h1> RAM anzeige</h1>
+                <h2>Hier:</h2>
 
-            <h2>Hier:</h2>
+            <table ng-if="ram">
 
-        <table ng-if="ram">
+                <tr ng-repeat="row in ram">
+                    <td ng-repeat="zelle in row track by $index">{{zelle}}</td>
+                </tr>
 
-            <tr ng-repeat="row in ram">
-                <td ng-repeat="zelle in row track by $index">{{zelle}}</td>
-            </tr>
+            </table>
 
-        </table>
-
+        </div>
     </div>
 </body>
 </html>
