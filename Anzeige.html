@@ -34,11 +34,36 @@
 
         <table ng-if="ram">
 
-            <tr ng-repeat="row in ram">
+           <!-- <tr ng-repeat="row in ram">
                 <td ng-repeat="zelle in row track by $index">{{zelle}}</td>
-            </tr>
+            </tr>-->
+           <!-- <tr><td>Indirect addr</td>	<td>{{Indirect addr}}</td>	<td>{{Indirect addr}}</td>	<td>Indirect addr</td></tr>
+            <tr><td>TMR0</td>	<td>{{TMR0}}</td>	<td>{{OPTION_REG}}</td>	<td>OPTION_REG</td></tr>
+            <tr><td>PCL</td>	<td>{{PCL}}</td>	<td>{{PCL}}</td>	<td>PCL</td></tr>
+            <tr><td>STATUS</td>	<td>{{STATUS}}</td>	<td>{{STATUS}}</td>	<td>STATUS</td></tr>
+            <tr><td>FSR</td>	<td>{{FSR}}</td>	<td>{{FSR}}</td>	<td>FSR</td></tr>
+            <tr><td>PORTA</td>	<td>{{PORTA}}</td>	<td>{{TRISA}}</td>	<td>TRISA</td></tr>
+            <tr><td>PORTB</td>	<td>{{PORTB}}</td>	<td>{{TRISB}}</td>	<td>TRISB</td></tr>
+            <tr><td>07</td>	<td></td>	<td></td>	<td>87</td></tr>
+            <tr><td>EEDATA</td>	<td>{{EEDATA}}</td>	<td>{{EECON1}}</td>	<td>EECON1</td></tr>
+            <tr><td>EEADR</td>	<td>{{EEADR}}</td>	<td>{{EECON2}}</td>	<td>EECON2</td></tr>
+            <tr><td>PCLATH</td>	<td>{{PCLATH}}</td>	<td>{{PCLATH}}</td>	<td>PCLATH</td></tr>
+            <tr><td>INTCON</td>	<td>{{INTCON}}</td>	<td>{{INTCON}}</td>	<td>INTCON</td></tr>-->
+
+            <tr><td>{{ram[0]}}</td>	<td>{{ram[1]}}</td>	<td>{{ram[2]}}</td>	<td>{{ram[3]}}</td>	<td>{{ram[4]}}</td>	<td>{{ram[5]}}</td>	<td>{{ram[6]}}</td>	<td>{{ram[7]}}</td></tr>
+            <tr><td>{{ram[8]}}</td>	<td>{{ram[9]}}</td>	<td>{{ram[10]}}</td>	<td>{{ram[11]}}</td>	<td>{{ram[12]}}</td>	<td>{{ram[13]}}</td>	<td>{{ram[14]}}</td>	<td>{{ram[15]}}</td></tr>
+            <tr><td>{{ram[16]}}</td>	<td>{{ram[17]}}</td>	<td>{{ram[18]}}</td>	<td>{{ram[19]}}</td>	<td>{{ram[20]}}</td>	<td>{{ram[21]}}</td>	<td>{{ram[22]}}</td>	<td>{{ram[23]}}</td></tr>
+            <tr><td>{{ram[24]}}</td>	<td>{{ram[25]}}</td>	<td>{{ram[26]}}</td>	<td>{{ram[27]}}</td>	<td>{{ram[28]}}</td>	<td>{{ram[29]}}</td>	<td>{{ram[30]}}</td>	<td>{{ram[31]}}</td></tr>
+            <tr><td>{{ram[32]}}</td>	<td>{{ram[33]}}</td>	<td>{{ram[34]}}</td>	<td>{{ram[35]}}</td>	<td>{{ram[36]}}</td>	<td>{{ram[37]}}</td>	<td>{{ram[38]}}</td>	<td>{{ram[39]}}</td></tr>
+            <tr><td>{{ram[40]}}</td>	<td>{{ram[41]}}</td>	<td>{{ram[42]}}</td>	<td>{{ram[43]}}</td>	<td>{{ram[44]}}</td>	<td>{{ram[45]}}</td>	<td>{{ram[46]}}</td>	<td>{{ram[47]}}</td></tr>
+            <tr><td>{{ram[48]}}</td>	<td>{{ram[49]}}</td>	<td>{{ram[50]}}</td>	<td>{{ram[51]}}</td>	<td>{{ram[52]}}</td>	<td>{{ram[53]}}</td>	<td>{{ram[54]}}</td>	<td>{{ram[55]}}</td></tr>
+            <tr><td>{{ram[56]}}</td>	<td>{{ram[57]}}</td>	<td>{{ram[58]}}</td>	<td>{{ram[59]}}</td>	<td>{{ram[60]}}</td>	<td>{{ram[61]}}</td>	<td>{{ram[62]}}</td>	<td>{{ram[63]}}</td></tr>
+            <tr><td>{{ram[64]}}</td>	<td>{{ram[65]}}</td>	<td>{{ram[66]}}</td>	<td>{{ram[67]}}</td>    <td>name1</td>	<td>name1</td>	<td>name1</td>  <td>name1</td></tr>
+
 
         </table>
+
+
 
     </div>
 </body>
