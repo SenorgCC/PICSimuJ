@@ -34,21 +34,21 @@
 
         <table ng-if="ram" border="1">
 
-           <!-- <tr ng-repeat="row in ram">
-                <td ng-repeat="zelle in row track by $index">{{zelle}}</td>
-            </tr>-->
-           <!-- <tr><td>Indirect addr</td>	<td>{{Indirect addr}}</td>	<td>{{Indirect addr}}</td>	<td>Indirect addr</td></tr>
+            <tr><td>Indirect_addr</td>	<td>{{Indirect_addr}}</td>	<td>{{Indirect_addr}}</td>	<td>Indirect_addr</td></tr>
             <tr><td>TMR0</td>	<td>{{TMR0}}</td>	<td>{{OPTION_REG}}</td>	<td>OPTION_REG</td></tr>
             <tr><td>PCL</td>	<td>{{PCL}}</td>	<td>{{PCL}}</td>	<td>PCL</td></tr>
             <tr><td>STATUS</td>	<td>{{STATUS}}</td>	<td>{{STATUS}}</td>	<td>STATUS</td></tr>
             <tr><td>FSR</td>	<td>{{FSR}}</td>	<td>{{FSR}}</td>	<td>FSR</td></tr>
             <tr><td>PORTA</td>	<td>{{PORTA}}</td>	<td>{{TRISA}}</td>	<td>TRISA</td></tr>
             <tr><td>PORTB</td>	<td>{{PORTB}}</td>	<td>{{TRISB}}</td>	<td>TRISB</td></tr>
-            <tr><td>07</td>	<td></td>	<td></td>	<td>87</td></tr>
             <tr><td>EEDATA</td>	<td>{{EEDATA}}</td>	<td>{{EECON1}}</td>	<td>EECON1</td></tr>
             <tr><td>EEADR</td>	<td>{{EEADR}}</td>	<td>{{EECON2}}</td>	<td>EECON2</td></tr>
             <tr><td>PCLATH</td>	<td>{{PCLATH}}</td>	<td>{{PCLATH}}</td>	<td>PCLATH</td></tr>
-            <tr><td>INTCON</td>	<td>{{INTCON}}</td>	<td>{{INTCON}}</td>	<td>INTCON</td></tr>-->
+            <tr><td>INTCON</td>	<td>{{INTCON}}</td>	<td>{{INTCON}}</td>	<td>INTCON</td></tr>
+
+        </table>
+
+        <table ng-if="ram" border="1">
 
             <tr><td>{{ram[0]}}</td>	 <td>{{ram[1]}}</td>  <td>{{ram[2]}}</td>  <td>{{ram[3]}}</td>  <td>{{ram[4]}}</td>	 <td>{{ram[5]}}</td>  <td>{{ram[6]}}</td>  <td>{{ram[7]}}</td></tr>
             <tr><td>{{ram[8]}}</td>  <td>{{ram[9]}}</td>  <td>{{ram[10]}}</td> <td>{{ram[11]}}</td> <td>{{ram[12]}}</td> <td>{{ram[13]}}</td> <td>{{ram[14]}}</td> <td>{{ram[15]}}</td></tr>
@@ -62,8 +62,6 @@
 
 
         </table>
-
-        <p>TEST TESTSüpakfpsükfüpk</p>
 
 
     </div>
