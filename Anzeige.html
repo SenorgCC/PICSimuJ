@@ -5,6 +5,8 @@
     <title>PIC Simulator Anzeige</title>
     <script type="text/javascript" src="angular.min.js"></script>
     <script type="text/javascript" src="maincontroller.js"></script>
+    <link rel="stylesheet" href="PicSimu.css">
+
 
 </head>
 
@@ -22,7 +24,6 @@
 
         <!--<div ng-if="operations"> -->
         <!--    <pre ng-repeat="operation in operations">{{operation.zeile}} {{operation.befehl}}</pre> -->
-        <!-- </div>-->
 
 
 
@@ -32,7 +33,7 @@
 
             <h2>Hier:</h2>
 
-        <table ng-if="ram" border="1">
+        <table ng-if="ram" align="left" border="1">
 
             <tr><td>Indirect_addr</td>	<td>{{Indirect_addr}}</td>	<td>{{Indirect_addr}}</td>	<td>Indirect_addr</td></tr>
             <tr><td>TMR0</td>	<td>{{TMR0}}</td>	<td>{{OPTION_REG}}</td>	<td>OPTION_REG</td></tr>
@@ -58,12 +59,13 @@
             <tr><td>{{ram[40]}}</td> <td>{{ram[41]}}</td> <td>{{ram[42]}}</td> <td>{{ram[43]}}</td>	<td>{{ram[44]}}</td> <td>{{ram[45]}}</td> <td>{{ram[46]}}</td> <td>{{ram[47]}}</td></tr>
             <tr><td>{{ram[48]}}</td> <td>{{ram[49]}}</td> <td>{{ram[50]}}</td> <td>{{ram[51]}}</td>	<td>{{ram[52]}}</td> <td>{{ram[53]}}</td> <td>{{ram[54]}}</td> <td>{{ram[55]}}</td></tr>
             <tr><td>{{ram[56]}}</td> <td>{{ram[57]}}</td> <td>{{ram[58]}}</td> <td>{{ram[59]}}</td>	<td>{{ram[60]}}</td> <td>{{ram[61]}}</td> <td>{{ram[62]}}</td> <td>{{ram[63]}}</td></tr>
-            <tr><td>{{ram[64]}}</td> <td>{{ram[65]}}</td> <td>{{ram[66]}}</td> <td>{{ram[67]}}</td> <td>XX</td>	         <td>XX</td>          <td>XX</td>       <td>XX</td></tr>
+            <tr><td>{{ram[64]}}</td> <td>{{ram[65]}}</td> <td>{{ram[66]}}</td> <td>{{ram[67]}}</td> <!--<td>XX</td>	         <td>XX</td>          <td>XX</td>       <td>XX</td>--></tr>
 
 
         </table>
 
 
     </div>
+        </div>
 </body>
 </html>
