@@ -47,18 +47,16 @@ app.controller('Befehlsspeichercontroller',function($scope){
 app.controller('ramcontroller',function($scope){
 
 //Dummy zum befüllen des rams
-        befehlsspeicher = new Array();
-        for (var i = 0; i < 9; i++) {
-            befehlsspeicher[i]=new Array();
-            for (var j = 0; j < 8; j++) {
-
-                befehlsspeicher[i][j] ='00';
-            }
+    var GPR1 = new Array();
+        for (var i = 0; i < 68; i++) {
+            GPR1[i] ='00';
         }
 
-    $scope.ram=befehlsspeicher;
+    $scope.ram=GPR1;
 
-    var getValue=function (hexAdr) {
+    $scope.getValue= function(hexAdr) {
+
+        alert("TEST4");
 
         //Dekodierung zur Dezimalzahl
         var decAdr=parseInt(hexAdr,16);
@@ -67,30 +65,26 @@ app.controller('ramcontroller',function($scope){
         var ramAdr=decAdr-12;
 
         //Ifabfrage zum Bestimmen der Array Reihe
-        if(ramAdr<=7){
-            return $scope.ram[0][ramAdr];
-        }else if((ramAdr >=8)&&(ramAdr<=15)){
-            return $scope.ram[1][ramAdr];
-        }else if((ramAdr >=16)&&(ramAdr<=23)){
-            return $scope.ram[2][ramAdr];
-        }else if((ramAdr >=24)&&(ramAdr<=31)){
-            return $scope.ram[3][ramAdr];
-        }else if((ramAdr >=32)&&(ramAdr<=39)){
-            return $scope.ram[4][ramAdr];
-        }else if((ramAdr >=40)&&(ramAdr<=47)){
-            return $scope.ram[5][ramAdr];
-        }else if((ramAdr >=48)&&(ramAdr<=55)){
-            return $scope.ram[6][ramAdr];
-        }else if((ramAdr >=56)&&(ramAdr<=63)){
-            return $scope.ram[7][ramAdr];
-        }else if((ramAdr >=64)&&(ramAdr<=67)){
-            return $scope.ram[8][ramAdr];
-        }else{
-            alert("Falscher Ram zugriff!");
-            return 0;
-        }
 
-    }
+        if(ramAdr>67){
+            alert("Falsche Zuweisung!");
+            return 0;
+        }else{
+            alert ($scope.ram[decAdr]);
+            return $scope.ram[decAdr];
+        }
+    };
+
+    $scope.setValue= function(hexAdr, Wert){
+
+        //Dekodierung zur Dezimalzahl
+        var decAdr=parseInt(hexAdr,16);
+
+        //Der RAM begint bei 0Ch -> 12d damit ist die erste Position im Array nicht 0 sondern 12
+        var ramAdr=decAdr-12
+
+        $scope.ram[decAdr]=Wert;
+    };
 
 });
 //hh
