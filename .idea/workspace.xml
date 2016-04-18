@@ -4,7 +4,6 @@
     <list default="true" id="95edbda5-88aa-4e92-b017-0e2b7cfb48f1" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Anzeige.html" afterPath="$PROJECT_DIR$/Anzeige.html" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PicSimu.css" afterPath="$PROJECT_DIR$/PicSimu.css" />
     </list>
     <ignored path="PICSimuJ.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -28,7 +27,7 @@
       <file leaf-file-name="maincontroller.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/maincontroller.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-136">
+            <state relative-caret-position="-17">
               <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
               <folding />
             </state>
@@ -38,8 +37,8 @@
       <file leaf-file-name="Anzeige.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Anzeige.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="631">
-              <caret line="61" column="178" selection-start-line="61" selection-start-column="178" selection-end-line="61" selection-end-column="178" />
+            <state relative-caret-position="342">
+              <caret line="68" column="100" selection-start-line="68" selection-start-column="100" selection-end-line="68" selection-end-column="100" />
               <folding />
             </state>
           </provider>
@@ -72,8 +71,8 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/maincontroller.js" />
-        <option value="$PROJECT_DIR$/Anzeige.html" />
         <option value="$PROJECT_DIR$/PicSimu.css" />
+        <option value="$PROJECT_DIR$/Anzeige.html" />
       </list>
     </option>
   </component>
@@ -334,7 +333,7 @@
       <workItem from="1460971031949" duration="52000" />
       <workItem from="1460971112210" duration="3000" />
       <workItem from="1460977417567" duration="3594000" />
-      <workItem from="1460985974914" duration="3137000" />
+      <workItem from="1460985974914" duration="4659000" />
     </task>
     <task id="LOCAL-00001" summary="Ergänzung der Tabelle und schließung des div">
       <created>1460666240785</created>
@@ -364,11 +363,18 @@
       <option name="project" value="LOCAL" />
       <updated>1460987650029</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="CSS-Datei erstellt.">
+      <created>1460989206809</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1460989206809</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="9667000" />
+    <option name="totallyTimeSpent" value="11189000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -407,7 +413,8 @@
     <MESSAGE value="Ergänzung der Tabelle und schließung des div" />
     <MESSAGE value="Darstellung des RAM" />
     <MESSAGE value="Darstellung des RAM komplett mit GPR und SPR" />
-    <option name="LAST_COMMIT_MESSAGE" value="Darstellung des RAM komplett mit GPR und SPR" />
+    <MESSAGE value="CSS-Datei erstellt." />
+    <option name="LAST_COMMIT_MESSAGE" value="CSS-Datei erstellt." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -552,14 +559,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/maincontroller.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-136">
-          <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/PicSimu.css">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="68">
@@ -568,10 +567,18 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/maincontroller.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-17">
+          <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/Anzeige.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="631">
-          <caret line="61" column="178" selection-start-line="61" selection-start-column="178" selection-end-line="61" selection-end-column="178" />
+        <state relative-caret-position="342">
+          <caret line="68" column="100" selection-start-line="68" selection-start-column="100" selection-end-line="68" selection-end-column="100" />
           <folding />
         </state>
       </provider>
