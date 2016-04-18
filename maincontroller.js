@@ -47,10 +47,16 @@ app.controller('Befehlsspeichercontroller',function($scope){
 app.controller('CPU',function($scope){
 
     $scope.callOperation=function(hexOP){
+        var befehl;
+        var temp=parseInt(hexOP,16);
+        var tempbin=temp.toString(2);
+        var vergleichtemp=parseInt(tempbin,2);
 
-        var binOP=parseInt(16).toString(2);
-        alert(binOP);
-
+        if((parseInt(tempbin,2)&parseInt('11111111000000',2))=='11010000000'){
+            alert("kek");
+        }else{
+            alert((parseInt(tempbin,2)&parseInt('111111111000000',2)).toString(2));
+        }
     }
 
 });
