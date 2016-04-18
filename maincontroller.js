@@ -44,6 +44,17 @@ app.controller('Befehlsspeichercontroller',function($scope){
 
 });
 
+app.controller('CPU',function($scope){
+
+    $scope.callOperation=function(hexOP){
+
+        var binOP=parseInt(16).toString(2);
+        alert(binOP);
+
+    }
+
+});
+
 app.controller('ramcontroller',function($scope){
     $scope.Indirect_addr='00';
     $scope.TMR0='00';
