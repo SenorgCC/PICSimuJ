@@ -45,6 +45,20 @@ app.controller('Befehlsspeichercontroller',function($scope){
 });
 
 app.controller('ramcontroller',function($scope){
+    $scope.Indirect_addr='00';
+    $scope.TMR0='00';
+    $scope.OPTION_REG='00';
+    $scope.PCL='00';
+    $scope.STATUS='00';
+    $scope.FSR='00';
+    $scope.PORTA='00';
+    $scope.PORTB='00';
+    $scope.EEDATA='00';
+    $scope.EECON1='00';
+    $scope.EEADR='00';
+    $scope.EECON2='00';
+    $scope.PCLATH='00';
+    $scope.INTCON='00';
 
 //Dummy zum befüllen des rams
     var GPR1 = new Array();
