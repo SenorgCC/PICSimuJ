@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="95edbda5-88aa-4e92-b017-0e2b7cfb48f1" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Anzeige.html" afterPath="$PROJECT_DIR$/Anzeige.html" />
     </list>
     <ignored path="PICSimuJ.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -203,7 +202,7 @@
       <workItem from="1460919756137" duration="770000" />
       <workItem from="1460971031949" duration="52000" />
       <workItem from="1460971112210" duration="3000" />
-      <workItem from="1460977417567" duration="2278000" />
+      <workItem from="1460977417567" duration="2447000" />
     </task>
     <task id="LOCAL-00001" summary="Ergänzung der Tabelle und schließung des div">
       <created>1460666240785</created>
@@ -212,11 +211,18 @@
       <option name="project" value="LOCAL" />
       <updated>1460666240785</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Darstellung des RAM">
+      <created>1460984679692</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1460984679692</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="5214000" />
+    <option name="totallyTimeSpent" value="5383000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
@@ -253,7 +259,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Ergänzung der Tabelle und schließung des div" />
-    <option name="LAST_COMMIT_MESSAGE" value="Ergänzung der Tabelle und schließung des div" />
+    <MESSAGE value="Darstellung des RAM" />
+    <option name="LAST_COMMIT_MESSAGE" value="Darstellung des RAM" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
