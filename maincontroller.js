@@ -60,7 +60,7 @@ app.controller('CPU',function($scope){
             //ANDWF
             alert("ANDWF");
 
-        }else if((parseInt(tempbin,2)&parseInt('11111110000000',2)).toString(2)=="00110000000"){
+        }else if((parseInt(tempbin,2)&parseInt('11111110000000',2)).toString(2)=="110000000"){
             //CLRF
             alert("CLRF");
 
@@ -72,22 +72,30 @@ app.controller('CPU',function($scope){
             //COMF
             alert("COMF");
 
-        }else if(kek){
-
-        }else if(){
-
-        }else if(){
-
-        }else if(){
-
-        }else if(){
-
-        }else if(){
-
-        }else if(){
-
-        }else if(){
-
+        }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="1100000000"){
+            //DECF
+            alert("DECF");
+        }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="101100000000"){
+            //DECFSZ
+            alert("DECFSZ");
+        }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="101000000000"){
+            //INCF
+            alert("INCF");
+        }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="111100000000"){
+            //INCFSZ
+            alert("INCFSZ");
+        }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="10000000000"){
+            //IORWF
+            alert("IORWF");
+        }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="100000000000"){
+            //MOVF
+            alert("MOVF");
+        }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="10000000"){
+            //MOVWF
+            alert("MOVWF");
+        }else if(((parseInt(tempbin,2)&parseInt('11111111111111',2)).toString(2)=="0")|((parseInt(tempbin,2)&parseInt('11111111111111',2)).toString(2)=="1100000")){
+            //NOP
+            alert("NOP");
         }else if(){
 
         }else if(){
