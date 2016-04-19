@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="608339c7-3292-4417-9149-98dcc4249c29" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/maincontroller.js" afterPath="$PROJECT_DIR$/maincontroller.js" />
     </list>
     <ignored path="PICSimuJ.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -27,7 +26,7 @@
       <file leaf-file-name="maincontroller.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/maincontroller.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="810">
+            <state relative-caret-position="759">
               <caret line="103" column="0" selection-start-line="103" selection-start-column="0" selection-end-line="103" selection-end-column="0" />
               <folding />
             </state>
@@ -297,7 +296,7 @@
       <updated>1460883707018</updated>
       <workItem from="1460883708462" duration="5311000" />
       <workItem from="1461001799988" duration="603000" />
-      <workItem from="1461083610619" duration="3806000" />
+      <workItem from="1461083610619" duration="4463000" />
     </task>
     <task id="LOCAL-00001" summary="- Ram auslese der einzelnen Felder erstellt">
       <created>1460890794668</created>
@@ -313,11 +312,18 @@
       <option name="project" value="LOCAL" />
       <updated>1460922305822</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="- Ram auslese der einzelnen Felder erstellt&#10;+ Kommentare Hinzugefügt&#10;+Befehlsmaskierung fast beendet&#10;">
+      <created>1461091684904</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1461091684904</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="9840000" />
+    <option name="totallyTimeSpent" value="10497000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
@@ -373,7 +379,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="- Ram auslese der einzelnen Felder erstellt" />
     <MESSAGE value="- Ram auslese der einzelnen Felder erstellt&#10;+ Kommentare Hinzugefügt" />
-    <option name="LAST_COMMIT_MESSAGE" value="- Ram auslese der einzelnen Felder erstellt&#10;+ Kommentare Hinzugefügt" />
+    <MESSAGE value="- Ram auslese der einzelnen Felder erstellt&#10;+ Kommentare Hinzugefügt&#10;+Befehlsmaskierung fast beendet&#10;" />
+    <option name="LAST_COMMIT_MESSAGE" value="- Ram auslese der einzelnen Felder erstellt&#10;+ Kommentare Hinzugefügt&#10;+Befehlsmaskierung fast beendet&#10;" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -424,7 +431,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/maincontroller.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="810">
+        <state relative-caret-position="759">
           <caret line="103" column="0" selection-start-line="103" selection-start-column="0" selection-end-line="103" selection-end-column="0" />
           <folding />
         </state>
