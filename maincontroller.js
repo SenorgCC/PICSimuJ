@@ -46,17 +46,73 @@ app.controller('Befehlsspeichercontroller',function($scope){
 
 app.controller('CPU',function($scope){
 
-    $scope.callOperation=function(hexOP){
+    $scope.callOperation=function(hexOP) {
         var befehl;
-        var temp=parseInt(hexOP,16);
-        var tempbin=temp.toString(2);
-        var vergleichtemp=parseInt(tempbin,2);
+        var temp = parseInt(hexOP, 16);
+        var tempbin = temp.toString(2);
+        //abfrage auf den Befehl anführende "00" werden leider ausgeschnitten und js kann nativ kein binary
 
-        if((parseInt(tempbin,2)&parseInt('11111111000000',2))=='11010000000'){
-            alert("kek");
-        }else{
-            alert((parseInt(tempbin,2)&parseInt('111111111000000',2)).toString(2));
+        if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11100000000"){
+            //Befehl ADDWF
+            alert("ADDWF");
+
+        }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="10100000000"){
+            //ANDWF
+            alert("ANDWF");
+
+        }else if((parseInt(tempbin,2)&parseInt('11111110000000',2)).toString(2)=="00110000000"){
+            //CLRF
+            alert("CLRF");
+
+        }else if((parseInt(tempbin,2)&parseInt('11111110000000',2)).toString(2)=="100000000"){
+            //CLRW
+            alert("CLRW");
+
+        }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="100100000000"){
+            //COMF
+            alert("COMF");
+
+        }else if(){
+
+        }else if(){
+
+        }else if(){
+
+        }else if(){
+
+        }else if(){
+
+        }else if(){
+
+        }else if(){
+
+        }else if(){
+
+        }else if(){
+
+        }else if(){
+
+        }else if((parseInt(tempbin,2)&parseInt('11110000000000',2)).toString(2)=="1010000000000"){
+
+            //ausführung für den Befehl BSF kommt hierhin
+            ///TODO me: Lookuplists anschauen
+
+            alert("Befehl: BSF");
+
+        }else if((parseInt(tempbin,2)&parseInt('11110000000000',2)).toString(2)=="1000000000000"){
+
+            //call befehl BCF
+            alert("Befehl: BCF")
+        }else if((parseInt(tempbin,2)&parseInt('11110000000000',2)).toString(2)=="1100000000000"){
+            //call Befehel: BTFSC
+
+        }else if((parseInt(tempbin,2)&parseInt('11110000000000',2)).toString(2)=="1110000000000"){
+
+            //call Befehl: BTFSS
+
         }
+
+
     }
 
 });
