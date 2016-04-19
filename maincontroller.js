@@ -72,7 +72,7 @@ app.controller('CPU',function($scope){
             //COMF
             alert("COMF");
 
-        }else if(){
+        }else if(kek){
 
         }else if(){
 
