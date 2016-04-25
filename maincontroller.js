@@ -230,12 +230,14 @@ app.controller('CPU',function($scope){
 
             Befehlsausfuehrung["XORLW"](getLiteralfieldshort(tempbin));
         }
-    }
-
-
+    };
+        function Zeit(zyklen){
+            var zeit=(1/$scope.Takt)*zyklen;
+        return zeit;
+        }
     var Befehlsausfuehrung={
         "ADDWF":function(f,d){
-          //DO SOMETHING
+
         },
         "ANDWF":function(f,d){
             //DO SOMETHING
