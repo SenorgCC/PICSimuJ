@@ -49,7 +49,8 @@ app.controller('CPU',function($scope){
     $scope.callOperation=function(hexOP) {
         var befehl;
         var temp = parseInt(hexOP, 16);
-        var tempbin = temp.toString(2);
+        var tempbin = temp.toString(2)
+
         //abfrage auf den Befehl anführende "00" werden leider ausgeschnitten und js kann nativ kein binary
 
         if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11100000000"){
@@ -63,8 +64,7 @@ app.controller('CPU',function($scope){
         }else if((parseInt(tempbin,2)&parseInt('11111110000000',2)).toString(2)=="110000000"){
             //CLRF
             alert("CLRF");
-///TODO: CLRW AUSSCHREIBEN!
-        }else if((parseInt(tempbin,2)&parseInt('11111110000000',2)).toString(2)=="100000000"){
+        }else if(((parseInt(tempbin,2)&parseInt('11111110000000',2))>255)&((parseInt(tempbin,2)&parseInt('11111110000000',2))<384)){
             //CLRW
             alert("CLRW");
 
@@ -117,7 +117,7 @@ app.controller('CPU',function($scope){
         }else if((parseInt(tempbin,2)&parseInt('11110000000000',2)).toString(2)=="1010000000000"){
 
             //ausführung für den Befehl BSF kommt hierhin
-            ///TODO me: Lookuplists anschauen
+///TODO me: Lookuplists anschauen
 
             alert("Befehl: BSF");
 
