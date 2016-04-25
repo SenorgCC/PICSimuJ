@@ -46,134 +46,300 @@ app.controller('Befehlsspeichercontroller',function($scope){
 
 app.controller('CPU',function($scope){
 
+    function getDirectory(binOP){
+        var directory = parseInt(tempbin,2)&parseInt('00000010000000');
+        return directory;
+    }
+    function getFileregister(binOP){
+        var file = parseInt(tempbin,2)&parseInt('00000001111111');
+        return file;
+    }
+    function getbitAddress(binOP){
+        var bitAddress = parseInt(tempbin,2)&parseInt('00001110000000');
+        return bitAddress;
+    }
+    function getLiteralfieldshort(binOP){
+        var literalfield = parseInt(tempbin,2)&parseInt('00000011111111');
+        return literalfield;
+    }
+    function getLiteralfieldlong(binOP){
+        var literalfield = parseInt(tempbin,2)&parseInt('00011111111111');
+        return literalfield;
+    }
+
     $scope.callOperation=function(hexOP) {
         var befehl;
         var temp = parseInt(hexOP, 16);
-        var tempbin = temp.toString(2)
+        var tempbin = temp.toString(2);
 
         //abfrage auf den Befehl anführende "00" werden leider ausgeschnitten und js kann nativ kein binary
 
         if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11100000000"){
             //Befehl ADDWF
-            alert("ADDWF");
+
+            Befehlsausfuehrung["ADDWF"](getFileregister(tempbin),getDirectory(tempbin));
 
         }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="10100000000"){
             //ANDWF
-            alert("ANDWF");
+            Befehlsausfuehrung["ANDWF"](getFileregister(tempbin),getDirectory(tempbin));
 
         }else if((parseInt(tempbin,2)&parseInt('11111110000000',2)).toString(2)=="110000000"){
             //CLRF
-            alert("CLRF");
+            Befehlsausfuehrung["ADDWF"](getFileregister(tempbin),getDirectory(tempbin));
+
         }else if(((parseInt(tempbin,2)&parseInt('11111110000000',2))>255)&((parseInt(tempbin,2)&parseInt('11111110000000',2))<384)){
             //CLRW
-            alert("CLRW");
+            Befehlsausfuehrung["CLRW"]();
 
         }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="100100000000"){
             //COMF
-            alert("COMF");
+            Befehlsausfuehrung["COMF"](getFileregister(tempbin),getDirectory(tempbin));
 
         }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="1100000000"){
             //DECF
-            alert("DECF");
+            Befehlsausfuehrung["DECF"](getFileregister(tempbin),getDirectory(tempbin));
+
         }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="101100000000"){
             //DECFSZ
-            alert("DECFSZ");
+            Befehlsausfuehrung["DECFSZ"](getFileregister(tempbin),getDirectory(tempbin));
+
         }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="101000000000"){
             //INCF
-            alert("INCF");
+            Befehlsausfuehrung["INCF"](getFileregister(tempbin),getDirectory(tempbin));
+
         }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="111100000000"){
             //INCFSZ
-            alert("INCFSZ");
+            Befehlsausfuehrung["INCFSZ"](getFileregister(tempbin),getDirectory(tempbin));
+
         }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="10000000000"){
             //IORWF
-            alert("IORWF");
+            Befehlsausfuehrung["IORWF"](getFileregister(tempbin),getDirectory(tempbin));
+
         }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="100000000000"){
             //MOVF
             alert("MOVF");
         }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="10000000"){
             //MOVWF
-            alert("MOVWF");
+            Befehlsausfuehrung["MOVWF"](getFileregister(tempbin));
+
         }else if(((parseInt(tempbin,2)&parseInt('11111111111111',2)).toString(2)=="0")
             |((parseInt(tempbin,2)&parseInt('11111111111111',2)).toString(2)=="100000")
             |((parseInt(tempbin,2)&parseInt('11111111111111',2)).toString(2)=="1000000")
             |((parseInt(tempbin,2)&parseInt('11111111111111',2)).toString(2)=="1100000")){
             //NOP
-            alert("NOP");
+            Befehlsausfuehrung["NOP"]();
+
         }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="110100000000"){
             //RLF
-            alert("RLF");
+            Befehlsausfuehrung["RLF"](getFileregister(tempbin),getDirectory(tempbin));
+
         }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="110000000000") {
             //RRF
-            alert("RRF");
+            Befehlsausfuehrung["RRF"](getFileregister(tempbin),getDirectory(tempbin));
+
         } else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="1000000000") {
             //SUBWF
-            alert("SUBWF");
+            Befehlsausfuehrung["SUBWF"](getFileregister(tempbin),getDirectory(tempbin));
+
         }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="111000000000") {
             //SWAPF
-            alert("SWAPF");
+            Befehlsausfuehrung["SWAPF"](getFileregister(tempbin),getDirectory(tempbin));
+
         }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11000000000"){
             //XORWF
-            alert("XORWF");
-        }else if((parseInt(tempbin,2)&parseInt('11110000000000',2)).toString(2)=="1010000000000"){
-
-            //ausführung für den Befehl BSF kommt hierhin
-///TODO me: Lookuplists anschauen
-
-            alert("Befehl: BSF");
+            Befehlsausfuehrung["XORWF"](getFileregister(tempbin),getDirectory(tempbin));
 
         }else if((parseInt(tempbin,2)&parseInt('11110000000000',2)).toString(2)=="1000000000000"){
 
-            //call befehl BCF
-            alert("Befehl: BCF")
+            //BCF
+            Befehlsausfuehrung["BCF"](getFileregister(tempbin),getbitAddress(tempbin));
+
+        }else if((parseInt(tempbin,2)&parseInt('11110000000000',2)).toString(2)=="1010000000000"){
+            //BSF
+            Befehlsausfuehrung["BSF"](getFileregister(tempbin),getbitAddress(tempbin));
+
         }else if((parseInt(tempbin,2)&parseInt('11110000000000',2)).toString(2)=="1100000000000"){
             //call Befehel: BTFSC
+            Befehlsausfuehrung["BTFSC"](getFileregister(tempbin),getbitAddress(tempbin));
 
         }else if((parseInt(tempbin,2)&parseInt('11110000000000',2)).toString(2)=="1110000000000"){
 
             //call Befehl: BTFSS
+            Befehlsausfuehrung["BTFSS"](getFileregister(tempbin),getbitAddress(tempbin));
 
         }else if(((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11111000000000")
                  |(parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11111100000000") {
             //ADDLW
-            alert("ADDLW");
+            Befehlsausfuehrung["ADDLW"](getLiteralfieldshort(tempbin));
+
         }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11100100000000"){
             //ANDLW
-            alert("ANDLW");
+            Befehlsausfuehrung["ANDLW"](getLiteralfieldshort(tempbin));
+
         }else if((parseInt(tempbin,2)&parseInt('11100000000000',2)).toString(2)=="11100000000000"){
             //CALL
+            Befehlsausfuehrung["CALL"](getLiteralfieldlong(tempbin));
+
         }else if((parseInt(tempbin,2)&parseInt('11111111111111',2)).toString(2)=="1100100"){
             //CLRWDT
+            Befehlsausfuehrung["CLRWDT"]();
+
         }else if((parseInt(tempbin,2)&parseInt('11100000000000',2)).toString(2)=="10100000000000"){
             //GOTO
+            Befehlsausfuehrung["GOTO"](getLiteralfieldlong(tempbin));
+
         }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11100000000000"){
             //IORLW
+            Befehlsausfuehrung["IORLW"](getLiteralfieldshort(tempbin));
+
         }else if(((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11000000000000")
                 |((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11000100000000")
                 |((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11001000000000")
                 |((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11001100000000")){
 
             //MOVLW
+            Befehlsausfuehrung["MOVLW"](getLiteralfieldshort(tempbin));
+
         }else if((parseInt(tempbin,2)&parseInt('11111111111111',2)).toString(2)=="1001"){
             //RETFIE
+            Befehlsausfuehrung["RETFIE"]();
+
         }else if(((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="1101000000")
                 |((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="1101010000")
                 |((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="1101100000")
                 |((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="1101110000")){
 
                     //RETLW
+            Befehlsausfuehrung["RETLW"](getLiteralfieldshort(tempbin));
+
         }else if((parseInt(tempbin,2)&parseInt('11111111111111',2)).toString(2)=="1000"){
                 //RETURN
+            Befehlsausfuehrung["RETURN"]();
+
         }else if((parseInt(tempbin,2)&parseInt('11111111111111',2)).toString(2)=="110011"){
             //SLEEP
+            Befehlsausfuehrung["SLEEP"]();
         }else if(((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11110000000000")
                 |((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11110100000000")){
 
                 //SUBLW
+            Befehlsausfuehrung["SUBLW"](getLiteralfieldshort(tempbin));
+
          }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11101000000000"){
             //XORLW
+
+            Befehlsausfuehrung["XORLW"](getLiteralfieldshort(tempbin));
         }
     }
 
+
+    var Befehlsausfuehrung={
+        "ADDWF":function(f,d){
+          //DO SOMETHING
+        },
+        "ANDWF":function(f,d){
+            //DO SOMETHING
+        },
+        "CLRF":function(f){
+            //DO SOMETHING
+        },
+        "CLRW":function(){
+            //DO SOMETHING
+        },
+        "COMF":function(f,d){
+            //DO SOMETHING
+        },
+        "DECF":function(f,d){
+            //DO SOMETHING
+        },
+        "DECFSZ":function(f,d){
+            //DO SOMETHING
+        },
+        "INCF":function(f,d){
+            //DO SOMETHING
+        },
+        "INCFSZ":function(f,d){
+            //DO SOMETHING
+        },
+        "IORWF":function(f,d){
+            //DO SOMETHING
+        },
+        "MOVF":function(f,d){
+            //DO SOMETHING
+        },
+        "MOVWF":function(f){
+            //DO SOMETHING
+        },
+        "NOP":function(){
+            //DO SOMETHING
+        },
+        "RLF":function(f,d){
+            //DO SOMETHING
+        },
+        "RRF":function(f,d){
+            //DO SOMETHING
+        },
+        "SUBWF":function(f,d){
+            //DO SOMETHING
+        },
+        "SWAPF":function(f,d){
+            //DO SOMETHING
+        },
+        "XORWF":function(f,d){
+            //DO SOMETHING
+        },
+        "BCF":function(f,b){
+            //DO SOMETHING
+        },
+        "BSF":function(f,b){
+            //DO SOMETHING
+        },
+        "BTFSC":function(f,b){
+            //DO SOMETHING
+        },
+        "BTFSS":function(f,b){
+            //DO SOMETHING
+        },
+        "ADDLW":function(k){
+            //DO SOMETHING
+        },
+        "ANDLW":function(k){
+            //DO SOMETHING
+        },
+        "CALL":function(k){
+            //DO SOMETHING
+        },
+        "CRLWDT":function(){
+            //DO SOMETHING
+        },
+        "GOTO":function(k){
+            //DO SOMETHING
+        },
+        "IORLW":function(k){
+            //DO SOMETHING
+        },
+        "MOVLW":function(k){
+            //DO SOMETHING
+        },
+        "RETFIE":function(){
+            //DO SOMETHING
+        },
+        "RETLW":function(k){
+            //DO SOMETHING
+        },
+        "RETURN":function(){
+            //DO SOMETHING
+        },
+        "SLEEP":function(){
+            //DO SOMETHING
+        },
+        "SUBLW":function(k){
+            //DO SOMETHING
+        },
+        "XORLW":function(k){
+            //DO SOMETHING
+        }
+    };
 });
 
 app.controller('ramcontroller',function($scope){
