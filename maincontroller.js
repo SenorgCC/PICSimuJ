@@ -219,6 +219,7 @@ app.controller('CPU',function($scope){
         }else if((parseInt(tempbin,2)&parseInt('11111111111111',2)).toString(2)=="110011"){
             //SLEEP
             Befehlsausfuehrung["SLEEP"]();
+
         }else if(((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11110000000000")
                 |((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11110100000000")){
 
@@ -272,6 +273,7 @@ app.controller('CPU',function($scope){
         },
         "NOP":function(){
             //DO SOMETHING
+            alert("JAN DU ELENDIGER SACK");
         },
         "RLF":function(f,d){
             //DO SOMETHING
