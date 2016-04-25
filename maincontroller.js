@@ -63,7 +63,7 @@ app.controller('CPU',function($scope){
         }else if((parseInt(tempbin,2)&parseInt('11111110000000',2)).toString(2)=="110000000"){
             //CLRF
             alert("CLRF");
-
+///TODO: CLRW AUSSCHREIBEN!
         }else if((parseInt(tempbin,2)&parseInt('11111110000000',2)).toString(2)=="100000000"){
             //CLRW
             alert("CLRW");
@@ -93,7 +93,10 @@ app.controller('CPU',function($scope){
         }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="10000000"){
             //MOVWF
             alert("MOVWF");
-        }else if(((parseInt(tempbin,2)&parseInt('11111111111111',2)).toString(2)=="0")|((parseInt(tempbin,2)&parseInt('11111111111111',2)).toString(2)=="1100000")){
+        }else if(((parseInt(tempbin,2)&parseInt('11111111111111',2)).toString(2)=="0")
+            |((parseInt(tempbin,2)&parseInt('11111111111111',2)).toString(2)=="100000")
+            |((parseInt(tempbin,2)&parseInt('11111111111111',2)).toString(2)=="1000000")
+            |((parseInt(tempbin,2)&parseInt('11111111111111',2)).toString(2)=="1100000")){
             //NOP
             alert("NOP");
         }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="110100000000"){
@@ -129,17 +132,46 @@ app.controller('CPU',function($scope){
 
             //call Befehl: BTFSS
 
-        }else if(((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11111000000000")|(parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11111100000000") {
-
+        }else if(((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11111000000000")
+                 |(parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11111100000000") {
             //ADDLW
             alert("ADDLW");
         }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11100100000000"){
             //ANDLW
             alert("ANDLW");
-        }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)==""){
+        }else if((parseInt(tempbin,2)&parseInt('11100000000000',2)).toString(2)=="11100000000000"){
+            //CALL
+        }else if((parseInt(tempbin,2)&parseInt('11111111111111',2)).toString(2)=="1100100"){
+            //CLRWDT
+        }else if((parseInt(tempbin,2)&parseInt('11100000000000',2)).toString(2)=="10100000000000"){
+            //GOTO
+        }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11100000000000"){
+            //IORLW
+        }else if(((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11000000000000")
+                |((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11000100000000")
+                |((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11001000000000")
+                |((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11001100000000")){
 
+            //MOVLW
+        }else if((parseInt(tempbin,2)&parseInt('11111111111111',2)).toString(2)=="1001"){
+            //RETFIE
+        }else if(((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="1101000000")
+                |((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="1101010000")
+                |((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="1101100000")
+                |((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="1101110000")){
+
+                    //RETLW
+        }else if((parseInt(tempbin,2)&parseInt('11111111111111',2)).toString(2)=="1000"){
+                //RETURN
+        }else if((parseInt(tempbin,2)&parseInt('11111111111111',2)).toString(2)=="110011"){
+            //SLEEP
+        }else if(((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11110000000000")
+                |((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11110100000000")){
+
+                //SUBLW
+         }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11101000000000"){
+            //XORLW
         }
-
     }
 
 });
