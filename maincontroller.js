@@ -96,10 +96,21 @@ app.controller('CPU',function($scope){
         }else if(((parseInt(tempbin,2)&parseInt('11111111111111',2)).toString(2)=="0")|((parseInt(tempbin,2)&parseInt('11111111111111',2)).toString(2)=="1100000")){
             //NOP
             alert("NOP");
-        }else if(){
-
-        }else if(){
-
+        }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="110100000000"){
+            //RLF
+            alert("RLF");
+        }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="110000000000") {
+            //RRF
+            alert("RRF");
+        } else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="1000000000") {
+            //SUBWF
+            alert("SUBWF");
+        }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="111000000000") {
+            //SWAPF
+            alert("SWAPF");
+        }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11000000000"){
+            //XORWF
+            alert("XORWF");
         }else if((parseInt(tempbin,2)&parseInt('11110000000000',2)).toString(2)=="1010000000000"){
 
             //ausführung für den Befehl BSF kommt hierhin
@@ -118,8 +129,16 @@ app.controller('CPU',function($scope){
 
             //call Befehl: BTFSS
 
-        }
+        }else if(((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11111000000000")|(parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11111100000000") {
 
+            //ADDLW
+            alert("ADDLW");
+        }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11100100000000"){
+            //ANDLW
+            alert("ANDLW");
+        }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)==""){
+
+        }
 
     }
 
