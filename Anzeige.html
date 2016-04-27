@@ -7,7 +7,7 @@
     <script type="text/javascript" src="maincontroller.js"></script>
     <link rel="stylesheet" href="PicSimu.css">
 </head>
-<body>
+<body ng-controller="ramcontroller">
     <div ng-controller="Befehlsspeichercontroller">
         <h1>
             Aufgabe 1 Texteinlesen
@@ -36,7 +36,7 @@
 
 
 
-         <div ng-if="content" ng-controller="ramcontroller">
+         <div ng-if="content" >
 
             <h1> RAM anzeige</h1>
 
@@ -123,7 +123,10 @@
         </div>
     </div>
     <div ng-controller="CPU">
-        <button ng-click="callOperation('20')">test</button>
+        <button ng-click="callOperation('7B7')">test</button>
+        <label>DigitalCarry:{{digitalCarry}}</label>
+        <label>ZeroFlag:{{zeroFlag}}</label>
+        <label>CarryFlag:{{carry}}</label>
     </div>
 
 </body>
