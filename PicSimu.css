@@ -7,11 +7,12 @@ table{
 }
 
 .codeanzeige{
+    position: static;
     float: left;
     width: 50%;
-    height: 550px;
+    height: 100%;
     overflow: scroll;
-    position: static;
+
 }
 .ram{
     float: left;
