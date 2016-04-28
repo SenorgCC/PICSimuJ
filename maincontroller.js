@@ -1,40 +1,40 @@
 /**
  * Created by Alex on 06.04.2016.
  */
-//TODO: Bit Größe des Registers rausfinden! ->
 //es werden das Register (Reg), Instructionpointer (IP) und Flags: Zero (ZF), Carry(CY) und Faultflag (Fl)
+///TODO: Instructioncounter in den richtigen scope legen
+var intstructioncounter = 0;
 
-    var intstructioncounter=0;
-
-var app=angular.module('pic',[]);
+var app = angular.module('pic', []);
 //die Maincontroller Funktion steuert sämtliche eingaben auf der Hauptseite
-app.controller('Befehlsspeichercontroller',function($scope){
+app.controller('Befehlsspeichercontroller', function ($scope) {
 
     // ShowConten Visualisiert die eingegebene Datei und erstellt ein Objekt Array für die weitere Verarbeitung
-    $scope.showContent = function($fileContent){
-        var befehlssatz=new Array();                            //[]
+    $scope.showContent = function ($fileContent) {
+        var befehlssatz = new Array();                            //[]
         befehlssatz = $fileContent.split('\n');                 //[0001 ORG 0, ....]
         $scope.content = befehlssatz;                           //Array ausgabe mittels ng-repeat simpel
 
-        var tempbefehlsarray=new Array();                       //befehlszwischenspeicher
+        var tempbefehlsarray = new Array();                       //befehlszwischenspeicher
 
         //Unsicher, ob operations abgebildet werden soll
         $scope.operations = new Array();                        //Echter Befehlsspeicher Objektarray
 
         //Schleife filter die wichtigen Befehle aus dem Quellcode
-        for(var i=0; i<=befehlssatz.length-1;i++) {
+        for (var i = 0; i <= befehlssatz.length - 1; i++) {
 
             //Regulärer Ausdruck überprüft auf Befehlszeilen, bestehe aus 2 Hexblöcken : 001A 145F
             if (/[0-9a-fA-F]{4}\s*[0-9a-fA-F]{4}/.test(befehlssatz[i])) {
 
                 //Der Zeilencounter und befehl sind mit einem Blank getrennt, split teilt dieses array auf
-                tempbefehlsarray=befehlssatz[i].split(' '); [0000,1683,,,,,,,00016]
+                tempbefehlsarray = befehlssatz[i].split(' ');
+                [0000, 1683, , , , , , , 00016]
 
                 //Die zwei werte werden zur übergabe an die CPU im Operations - Objekt Array gespeichert
                 //Da die Befelszeile in ein Array gesplittet -> ersten 2 Stellen der Zeilencounter und der Befehl
                 //Befehlscounter dient zur korrekten sortierung von Befehlen
 
-                $scope.operations.push({zeile:tempbefehlsarray[0],befehl:tempbefehlsarray[1]});
+                $scope.operations.push({zeile: tempbefehlsarray[0], befehl: tempbefehlsarray[1]});
             }
 
         }
@@ -44,380 +44,469 @@ app.controller('Befehlsspeichercontroller',function($scope){
 
 });
 
-app.controller('CPU',function($scope){
+app.controller('CPU', function ($scope) {
 
-    function getDirectory(binOP){
-        var directory = parseInt(tempbin,2)&parseInt('00000010000000');
+    function getDirectory(binOP) {
+        var directory = parseInt(binOP, 2) & parseInt('00000010000000', 2);
         return directory;
     }
-    function getFileregister(binOP){
-        var file = parseInt(tempbin,2)&parseInt('00000001111111');
+
+    function getFileregister(binOP) {
+        var file = parseInt(binOP, 2) & parseInt('00000001111111', 2);
         return file;
     }
-    function getbitAddress(binOP){
-        var bitAddress = parseInt(tempbin,2)&parseInt('00001110000000');
+
+    function getbitAddress(binOP) {
+        var bitAddress = parseInt(binOP, 2) & parseInt('00001110000000', 2);
         return bitAddress;
     }
-    function getLiteralfieldshort(binOP){
-        var literalfield = parseInt(tempbin,2)&parseInt('00000011111111');
-        return literalfield;
-    }
-    function getLiteralfieldlong(binOP){
-        var literalfield = parseInt(tempbin,2)&parseInt('00011111111111');
+
+    function getLiteralfieldshort(binOP) {
+        var literalfield = parseInt(binOP, 2) & parseInt('00000011111111', 2);
         return literalfield;
     }
 
-    $scope.callOperation=function(hexOP) {
+    function getLiteralfieldlong(binOP) {
+        var literalfield = parseInt(binOP, 2) & parseInt('00011111111111', 2);
+        return literalfield;
+    }
+
+    function getBinaryArray(hexVal) {
+
+        //Sowohl der Inhalt des W Registers als auch des File Registers sind in Hex kodiert
+        //Die meisten Funktionen benötigen aber bitweise operationen -> Umwandlungsfunktion, liefert ein Bitarray
+        var tempHex_Val = parseInt(hexVal, 16);
+        var result_Binary = [];
+
+        for (var i = 0; i < 8; i++) {
+            result_Binary[7 - i] = (tempHex_Val >> i) & 1;
+        }
+        return result_Binary;
+
+    }
+
+    $scope.callOperation = function (hexOP) {
+
         var befehl;
         var temp = parseInt(hexOP, 16);
         var tempbin = temp.toString(2);
 
         //abfrage auf den Befehl anführende "00" werden leider ausgeschnitten und js kann nativ kein binary
 
-        if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11100000000"){
+        if ((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "11100000000") {
             //Befehl ADDWF
 
-            Befehlsausfuehrung["ADDWF"](getFileregister(tempbin),getDirectory(tempbin));
+            Befehlsausfuehrung["ADDWF"](getFileregister(tempbin), getDirectory(tempbin));
 
-        }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="10100000000"){
+        } else if ((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "10100000000") {
             //ANDWF
-            Befehlsausfuehrung["ANDWF"](getFileregister(tempbin),getDirectory(tempbin));
+            Befehlsausfuehrung["ANDWF"](getFileregister(tempbin), getDirectory(tempbin));
 
-        }else if((parseInt(tempbin,2)&parseInt('11111110000000',2)).toString(2)=="110000000"){
+        } else if ((parseInt(tempbin, 2) & parseInt('11111110000000', 2)).toString(2) == "110000000") {
             //CLRF
-            Befehlsausfuehrung["ADDWF"](getFileregister(tempbin),getDirectory(tempbin));
+            Befehlsausfuehrung["ADDWF"](getFileregister(tempbin), getDirectory(tempbin));
 
-        }else if(((parseInt(tempbin,2)&parseInt('11111110000000',2))>255)&((parseInt(tempbin,2)&parseInt('11111110000000',2))<384)){
+        } else if (((parseInt(tempbin, 2) & parseInt('11111110000000', 2)) > 255) & ((parseInt(tempbin, 2) & parseInt('11111110000000', 2)) < 384)) {
             //CLRW
             Befehlsausfuehrung["CLRW"]();
 
-        }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="100100000000"){
+        } else if ((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "100100000000") {
             //COMF
-            Befehlsausfuehrung["COMF"](getFileregister(tempbin),getDirectory(tempbin));
+            Befehlsausfuehrung["COMF"](getFileregister(tempbin), getDirectory(tempbin));
 
-        }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="1100000000"){
+        } else if ((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "1100000000") {
             //DECF
-            Befehlsausfuehrung["DECF"](getFileregister(tempbin),getDirectory(tempbin));
+            Befehlsausfuehrung["DECF"](getFileregister(tempbin), getDirectory(tempbin));
 
-        }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="101100000000"){
+        } else if ((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "101100000000") {
             //DECFSZ
-            Befehlsausfuehrung["DECFSZ"](getFileregister(tempbin),getDirectory(tempbin));
+            Befehlsausfuehrung["DECFSZ"](getFileregister(tempbin), getDirectory(tempbin));
 
-        }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="101000000000"){
+        } else if ((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "101000000000") {
             //INCF
-            Befehlsausfuehrung["INCF"](getFileregister(tempbin),getDirectory(tempbin));
+            Befehlsausfuehrung["INCF"](getFileregister(tempbin), getDirectory(tempbin));
 
-        }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="111100000000"){
+        } else if ((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "111100000000") {
             //INCFSZ
-            Befehlsausfuehrung["INCFSZ"](getFileregister(tempbin),getDirectory(tempbin));
+            Befehlsausfuehrung["INCFSZ"](getFileregister(tempbin), getDirectory(tempbin));
 
-        }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="10000000000"){
+        } else if ((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "10000000000") {
             //IORWF
-            Befehlsausfuehrung["IORWF"](getFileregister(tempbin),getDirectory(tempbin));
+            Befehlsausfuehrung["IORWF"](getFileregister(tempbin), getDirectory(tempbin));
 
-        }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="100000000000"){
+        } else if ((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "100000000000") {
             //MOVF
             alert("MOVF");
-        }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="10000000"){
+        } else if ((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "10000000") {
             //MOVWF
             Befehlsausfuehrung["MOVWF"](getFileregister(tempbin));
 
-        }else if(((parseInt(tempbin,2)&parseInt('11111111111111',2)).toString(2)=="0")
-            |((parseInt(tempbin,2)&parseInt('11111111111111',2)).toString(2)=="100000")
-            |((parseInt(tempbin,2)&parseInt('11111111111111',2)).toString(2)=="1000000")
-            |((parseInt(tempbin,2)&parseInt('11111111111111',2)).toString(2)=="1100000")){
+        } else if (((parseInt(tempbin, 2) & parseInt('11111111111111', 2)).toString(2) == "0")
+            | ((parseInt(tempbin, 2) & parseInt('11111111111111', 2)).toString(2) == "100000")
+            | ((parseInt(tempbin, 2) & parseInt('11111111111111', 2)).toString(2) == "1000000")
+            | ((parseInt(tempbin, 2) & parseInt('11111111111111', 2)).toString(2) == "1100000")) {
             //NOP
             Befehlsausfuehrung["NOP"]();
 
-        }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="110100000000"){
+        } else if ((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "110100000000") {
             //RLF
-            Befehlsausfuehrung["RLF"](getFileregister(tempbin),getDirectory(tempbin));
+            Befehlsausfuehrung["RLF"](getFileregister(tempbin), getDirectory(tempbin));
 
-        }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="110000000000") {
+        } else if ((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "110000000000") {
             //RRF
-            Befehlsausfuehrung["RRF"](getFileregister(tempbin),getDirectory(tempbin));
+            Befehlsausfuehrung["RRF"](getFileregister(tempbin), getDirectory(tempbin));
 
-        } else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="1000000000") {
+        } else if ((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "1000000000") {
             //SUBWF
-            Befehlsausfuehrung["SUBWF"](getFileregister(tempbin),getDirectory(tempbin));
+            Befehlsausfuehrung["SUBWF"](getFileregister(tempbin), getDirectory(tempbin));
 
-        }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="111000000000") {
+        } else if ((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "111000000000") {
             //SWAPF
-            Befehlsausfuehrung["SWAPF"](getFileregister(tempbin),getDirectory(tempbin));
+            Befehlsausfuehrung["SWAPF"](getFileregister(tempbin), getDirectory(tempbin));
 
-        }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11000000000"){
+        } else if ((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "11000000000") {
             //XORWF
-            Befehlsausfuehrung["XORWF"](getFileregister(tempbin),getDirectory(tempbin));
+            Befehlsausfuehrung["XORWF"](getFileregister(tempbin), getDirectory(tempbin));
 
-        }else if((parseInt(tempbin,2)&parseInt('11110000000000',2)).toString(2)=="1000000000000"){
+        } else if ((parseInt(tempbin, 2) & parseInt('11110000000000', 2)).toString(2) == "1000000000000") {
 
             //BCF
-            Befehlsausfuehrung["BCF"](getFileregister(tempbin),getbitAddress(tempbin));
+            Befehlsausfuehrung["BCF"](getFileregister(tempbin), getbitAddress(tempbin));
 
-        }else if((parseInt(tempbin,2)&parseInt('11110000000000',2)).toString(2)=="1010000000000"){
+        } else if ((parseInt(tempbin, 2) & parseInt('11110000000000', 2)).toString(2) == "1010000000000") {
             //BSF
-            Befehlsausfuehrung["BSF"](getFileregister(tempbin),getbitAddress(tempbin));
+            Befehlsausfuehrung["BSF"](getFileregister(tempbin), getbitAddress(tempbin));
 
-        }else if((parseInt(tempbin,2)&parseInt('11110000000000',2)).toString(2)=="1100000000000"){
+        } else if ((parseInt(tempbin, 2) & parseInt('11110000000000', 2)).toString(2) == "1100000000000") {
             //call Befehel: BTFSC
-            Befehlsausfuehrung["BTFSC"](getFileregister(tempbin),getbitAddress(tempbin));
+            Befehlsausfuehrung["BTFSC"](getFileregister(tempbin), getbitAddress(tempbin));
 
-        }else if((parseInt(tempbin,2)&parseInt('11110000000000',2)).toString(2)=="1110000000000"){
+        } else if ((parseInt(tempbin, 2) & parseInt('11110000000000', 2)).toString(2) == "1110000000000") {
 
             //call Befehl: BTFSS
-            Befehlsausfuehrung["BTFSS"](getFileregister(tempbin),getbitAddress(tempbin));
+            Befehlsausfuehrung["BTFSS"](getFileregister(tempbin), getbitAddress(tempbin));
 
-        }else if(((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11111000000000")
-                 |(parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11111100000000") {
+        } else if (((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "11111000000000")
+            | (parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "11111100000000") {
             //ADDLW
             Befehlsausfuehrung["ADDLW"](getLiteralfieldshort(tempbin));
 
-        }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11100100000000"){
+        } else if ((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "11100100000000") {
             //ANDLW
             Befehlsausfuehrung["ANDLW"](getLiteralfieldshort(tempbin));
 
-        }else if((parseInt(tempbin,2)&parseInt('11100000000000',2)).toString(2)=="11100000000000"){
+        } else if ((parseInt(tempbin, 2) & parseInt('11100000000000', 2)).toString(2) == "11100000000000") {
             //CALL
             Befehlsausfuehrung["CALL"](getLiteralfieldlong(tempbin));
 
-        }else if((parseInt(tempbin,2)&parseInt('11111111111111',2)).toString(2)=="1100100"){
+        } else if ((parseInt(tempbin, 2) & parseInt('11111111111111', 2)).toString(2) == "1100100") {
             //CLRWDT
             Befehlsausfuehrung["CLRWDT"]();
 
-        }else if((parseInt(tempbin,2)&parseInt('11100000000000',2)).toString(2)=="10100000000000"){
+        } else if ((parseInt(tempbin, 2) & parseInt('11100000000000', 2)).toString(2) == "10100000000000") {
             //GOTO
             Befehlsausfuehrung["GOTO"](getLiteralfieldlong(tempbin));
 
-        }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11100000000000"){
+        } else if ((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "11100000000000") {
             //IORLW
             Befehlsausfuehrung["IORLW"](getLiteralfieldshort(tempbin));
 
-        }else if(((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11000000000000")
-                |((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11000100000000")
-                |((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11001000000000")
-                |((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11001100000000")){
+        } else if (((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "11000000000000")
+            | ((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "11000100000000")
+            | ((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "11001000000000")
+            | ((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "11001100000000")) {
 
             //MOVLW
             Befehlsausfuehrung["MOVLW"](getLiteralfieldshort(tempbin));
 
-        }else if((parseInt(tempbin,2)&parseInt('11111111111111',2)).toString(2)=="1001"){
+        } else if ((parseInt(tempbin, 2) & parseInt('11111111111111', 2)).toString(2) == "1001") {
             //RETFIE
             Befehlsausfuehrung["RETFIE"]();
 
-        }else if(((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="1101000000")
-                |((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="1101010000")
-                |((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="1101100000")
-                |((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="1101110000")){
+        } else if (((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "1101000000")
+            | ((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "1101010000")
+            | ((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "1101100000")
+            | ((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "1101110000")) {
 
-                    //RETLW
+            //RETLW
             Befehlsausfuehrung["RETLW"](getLiteralfieldshort(tempbin));
 
-        }else if((parseInt(tempbin,2)&parseInt('11111111111111',2)).toString(2)=="1000"){
-                //RETURN
+        } else if ((parseInt(tempbin, 2) & parseInt('11111111111111', 2)).toString(2) == "1000") {
+            //RETURN
             Befehlsausfuehrung["RETURN"]();
 
-        }else if((parseInt(tempbin,2)&parseInt('11111111111111',2)).toString(2)=="110011"){
+        } else if ((parseInt(tempbin, 2) & parseInt('11111111111111', 2)).toString(2) == "110011") {
             //SLEEP
             Befehlsausfuehrung["SLEEP"]();
 
-        }else if(((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11110000000000")
-                |((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11110100000000")){
+        } else if (((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "11110000000000")
+            | ((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "11110100000000")) {
 
-                //SUBLW
+            //SUBLW
             Befehlsausfuehrung["SUBLW"](getLiteralfieldshort(tempbin));
 
-         }else if((parseInt(tempbin,2)&parseInt('11111100000000',2)).toString(2)=="11101000000000"){
+        } else if ((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "11101000000000") {
             //XORLW
 
             Befehlsausfuehrung["XORLW"](getLiteralfieldshort(tempbin));
         }
     };
-        function Zeit(zyklen){
-            var zeit=(1/$scope.Takt)*zyklen;
-        return zeit;
-        }
-    var Befehlsausfuehrung={
-        "ADDWF":function(f,d){
+
+
+    var Befehlsausfuehrung = {
+        "ADDWF": function (f, d) {
+            var tempW_Reg = parseInt($scope.w_reg, 16);
+            var addresult = tempW_Reg + parseInt($scope.ram[f], 16);
+            addresult = addresult.toString(16);
+            var tempW_RegArray = getBinaryArray($scope.w_reg);
+            var tempaddresult_Array = getBinaryArray(addresult);
+            var wReg_firstN,addresresult_FirstN;
+
+            ///TODO Diese Funktionen lassen sich gut refactorn
+
+            wReg_firstN = tempW_RegArray[4].toString()+ tempW_RegArray[5].toString()+ tempW_RegArray[6].toString()+ tempW_RegArray[7].toString();
+            addresresult_FirstN = tempaddresult_Array[3].toString() + tempaddresult_Array[4].toString() + tempaddresult_Array[5].toString() + tempaddresult_Array[6].toString() + tempaddresult_Array[7].toString();
+
+            if (parseInt(addresult, 16) > 255) {
+
+                var temp = parseInt(addresult, 16);
+                $scope.carry = 1;
+                temp = temp - 256;
+                addresult = temp.toString(16);
+            }
+
+            if(parseInt(addresult,16)==0){
+                $scope.zeroFlag=1;
+            }
+
+            if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15)) {
+                $scope.digitalCarry = 1;
+            }
+
+            if (d == 128) {
+
+                $scope.ram[f] = addresult;
+            } else {
+                $scope.w_reg = addresult;
+            }
+
 
         },
-        "ANDWF":function(f,d){
+        "ANDWF": function (f, d) {
             //DO SOMETHING
         },
-        "CLRF":function(f){
+        "CLRF": function (f) {
             //DO SOMETHING
         },
-        "CLRW":function(){
+        "CLRW": function () {
             //DO SOMETHING
         },
-        "COMF":function(f,d){
+        "COMF": function (f, d) {
             //DO SOMETHING
         },
-        "DECF":function(f,d){
+        "DECF": function (f, d) {
             //DO SOMETHING
         },
-        "DECFSZ":function(f,d){
+        "DECFSZ": function (f, d) {
             //DO SOMETHING
         },
-        "INCF":function(f,d){
+        "INCF": function (f, d) {
             //DO SOMETHING
         },
-        "INCFSZ":function(f,d){
+        "INCFSZ": function (f, d) {
             //DO SOMETHING
         },
-        "IORWF":function(f,d){
+        "IORWF": function (f, d) {
             //DO SOMETHING
         },
-        "MOVF":function(f,d){
+        "MOVF": function (f, d) {
             //DO SOMETHING
         },
-        "MOVWF":function(f){
+        "MOVWF": function (f) {
             //DO SOMETHING
         },
-        "NOP":function(){
-            //DO SOMETHING
-            alert("JAN DU ELENDIGER SACK");
-        },
-        "RLF":function(f,d){
-            //DO SOMETHING
-        },
-        "RRF":function(f,d){
+        "NOP": function () {
+
+            $scope.ram[22] = 11;
+            alert($scope.ram[22]);
             //DO SOMETHING
         },
-        "SUBWF":function(f,d){
+        "RLF": function (f, d) {
             //DO SOMETHING
         },
-        "SWAPF":function(f,d){
+        "RRF": function (f, d) {
             //DO SOMETHING
         },
-        "XORWF":function(f,d){
+        "SUBWF": function (f, d) {
             //DO SOMETHING
         },
-        "BCF":function(f,b){
+        "SWAPF": function (f, d) {
             //DO SOMETHING
         },
-        "BSF":function(f,b){
+        "XORWF": function (f, d) {
             //DO SOMETHING
         },
-        "BTFSC":function(f,b){
+        "BCF": function (f, b) {
             //DO SOMETHING
         },
-        "BTFSS":function(f,b){
+        "BSF": function (f, b) {
             //DO SOMETHING
         },
-        "ADDLW":function(k){
+        "BTFSC": function (f, b) {
             //DO SOMETHING
         },
-        "ANDLW":function(k){
+        "BTFSS": function (f, b) {
             //DO SOMETHING
         },
-        "CALL":function(k){
+        "ADDLW": function (k) {
+            var tempW_Reg = parseInt($scope.w_reg, 16);
+            var addresult = tempW_Reg +k;
+            addresult = addresult.toString(16);
+            var tempW_RegArray = getBinaryArray($scope.w_reg);
+            var tempaddresult_Array = getBinaryArray(addresult);
+            var wReg_firstN,addresresult_FirstN;
+
+            ///TODO Diese Funktionen lassen sich gut refactorn
+
+            wReg_firstN = tempW_RegArray[4].toString()+ tempW_RegArray[5].toString()+ tempW_RegArray[6].toString()+ tempW_RegArray[7].toString();
+            addresresult_FirstN = tempaddresult_Array[3].toString() + tempaddresult_Array[4].toString() + tempaddresult_Array[5].toString() + tempaddresult_Array[6].toString() + tempaddresult_Array[7].toString();
+
+            if (parseInt(addresult, 16) > 255) {
+
+                var temp = parseInt(addresult, 16);
+                $scope.carry = 1;
+                temp = temp - 256;
+                addresult = temp.toString(16);
+            }
+
+            if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15)) {
+                $scope.digitalCarry = 1;
+            }
+
+            if(parseInt(addresult,16)==0){
+                $scope.zeroFlag=1;
+            }
+
+                $scope.w_reg = addresult;
+
+            alert("w-reg after:"+$scope.w_reg);
+        },
+        "ANDLW": function (k) {
             //DO SOMETHING
         },
-        "CRLWDT":function(){
+        "CALL": function (k) {
             //DO SOMETHING
         },
-        "GOTO":function(k){
+        "CRLWDT": function () {
             //DO SOMETHING
         },
-        "IORLW":function(k){
+        "GOTO": function (k) {
             //DO SOMETHING
         },
-        "MOVLW":function(k){
+        "IORLW": function (k) {
             //DO SOMETHING
         },
-        "RETFIE":function(){
+        "MOVLW": function (k) {
             //DO SOMETHING
         },
-        "RETLW":function(k){
+        "RETFIE": function () {
             //DO SOMETHING
         },
-        "RETURN":function(){
+        "RETLW": function (k) {
             //DO SOMETHING
         },
-        "SLEEP":function(){
+        "RETURN": function () {
             //DO SOMETHING
         },
-        "SUBLW":function(k){
+        "SLEEP": function () {
             //DO SOMETHING
         },
-        "XORLW":function(k){
+        "SUBLW": function (k) {
+            //DO SOMETHING
+        },
+        "XORLW": function (k) {
             //DO SOMETHING
         }
     };
 });
 
-app.controller('ramcontroller',function($scope){
-    $scope.Indirect_addr='00';
-    $scope.TMR0='00';
-    $scope.OPTION_REG='00';
-    $scope.PCL='00';
-    $scope.STATUS='00';
-    $scope.FSR='00';
-    $scope.PORTA='00';
-    $scope.PORTB='00';
-    $scope.EEDATA='00';
-    $scope.EECON1='00';
-    $scope.EEADR='00';
-    $scope.EECON2='00';
-    $scope.PCLATH='00';
-    $scope.INTCON='00';
+app.controller('ramcontroller', function ($scope) {
+    //Deklaration Arbeitsregister und die Flags
+    $scope.w_reg = "42";
+    $scope.digitalCarry = 0;
+    $scope.zeroFlag = 0;
+    $scope.carry = 0;
+
+    //Deklaration Specialfunction Register
+    $scope.Indirect_addr = '00';
+    $scope.TMR0 = '00';
+    $scope.OPTION_REG = '00';
+    $scope.PCL = '00';
+    $scope.STATUS = '00';
+    $scope.FSR = '00';
+    $scope.PORTA = '00';
+    $scope.PORTB = '00';
+    $scope.EEDATA = '00';
+    $scope.EECON1 = '00';
+    $scope.EEADR = '00';
+    $scope.EECON2 = '00';
+    $scope.PCLATH = '00';
+    $scope.INTCON = '00';
 
 //Dummy zum befüllen des rams
     var GPR1 = new Array();
-        for (var i = 0; i < 68; i++) {
-            GPR1[i] ='00';
-        }
+    for (var i = 0; i < 68; i++) {
+        GPR1[i] = 0x00;
+    }
 
-    $scope.ram=GPR1;
+    $scope.ram = GPR1;
 
-    $scope.getValue= function(hexAdr) {
-
-        alert("TEST4");
-
+    $scope.getValue = function (hexAdr) {
         //Dekodierung zur Dezimalzahl
-        var decAdr=parseInt(hexAdr,16);
+        var decAdr = parseInt(hexAdr, 16);
 
         //Der RAM begint bei 0Ch -> 12d damit ist die erste Position im Array nicht 0 sondern 12
-        var ramAdr=decAdr-12;
+        var ramAdr = decAdr - 12;
 
         //Ifabfrage zum Bestimmen der Array Reihe
 
-        if(ramAdr>67){
+        if (ramAdr > 67) {
             alert("Falsche Zuweisung!");
             return 0;
-        }else{
-            alert ($scope.ram[decAdr]);
+        } else {
+            alert($scope.ram[decAdr]);
             return $scope.ram[decAdr];
         }
     };
 
-    $scope.setValue= function(hexAdr, Wert){
+    $scope.setValue = function (hexAdr, Wert) {
 
         //Dekodierung zur Dezimalzahl
-        var decAdr=parseInt(hexAdr,16);
+        var decAdr = parseInt(hexAdr, 16);
 
         //Der RAM begint bei 0Ch -> 12d damit ist die erste Position im Array nicht 0 sondern 12
-        var ramAdr=decAdr-12
+        var ramAdr = decAdr - 12
 
-        $scope.ram[decAdr]=Wert;
+        $scope.ram[decAdr] = Wert;
     };
 
 });
-//hh
+
 
 //Angularmagic zum Parsen von Dateien
+//Schwarze Magie
 app.directive('onReadFile', function ($parse) {
     return {
         restrict: 'A',
         scope: false,
-        link: function(scope, element, attrs) {
+        link: function (scope, element, attrs) {
             var fn = $parse(attrs.onReadFile);
 
-            element.on('change', function(onChangeEvent) {
+            element.on('change', function (onChangeEvent) {
                 var reader = new FileReader();
-                reader.onload = function(onLoadEvent) {
-                    scope.$apply(function() {
-                        fn(scope, {$fileContent:onLoadEvent.target.result});
+                reader.onload = function (onLoadEvent) {
+                    scope.$apply(function () {
+                        fn(scope, {$fileContent: onLoadEvent.target.result});
                     });
                 };
 
