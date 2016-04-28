@@ -28,7 +28,7 @@ app.controller('Befehlsspeichercontroller', function ($scope) {
 
                 //Der Zeilencounter und befehl sind mit einem Blank getrennt, split teilt dieses array auf
                 tempbefehlsarray = befehlssatz[i].split(' ');
-                [0000, 1683, , , , , , , 00016]
+                //[0000, 1683, , , , , , , 00016]
 
                 //Die zwei werte werden zur übergabe an die CPU im Operations - Objekt Array gespeichert
                 //Da die Befelszeile in ein Array gesplittet -> ersten 2 Stellen der Zeilencounter und der Befehl
@@ -48,6 +48,7 @@ app.controller('CPU', function ($scope) {
 
     function getDirectory(binOP) {
         var directory = parseInt(binOP, 2) & parseInt('00000010000000', 2);
+        directory = directory >> 7;
         return directory;
     }
 
@@ -58,6 +59,7 @@ app.controller('CPU', function ($scope) {
 
     function getbitAddress(binOP) {
         var bitAddress = parseInt(binOP, 2) & parseInt('00001110000000', 2);
+        bitAddress = bitAddress >> 7;
         return bitAddress;
     }
 
@@ -79,10 +81,21 @@ app.controller('CPU', function ($scope) {
         var result_Binary = [];
 
         for (var i = 0; i < 8; i++) {
-            result_Binary[7 - i] = (tempHex_Val >> i) & 1;
+            result_Binary[i] = (tempHex_Val >> i) & 1;
         }
         return result_Binary;
 
+    }
+
+    function convertArrayToHex(binValue){
+        var result="";
+        result =  binValue[7].toString() + binValue[6].toString()
+                + binValue[5].toString() + binValue[4].toString()
+                + binValue[3].toString() + binValue[2].toString()
+                + binValue[1].toString() + binValue[0].toString();
+        result=parseInt(result,2);
+        result=result.toString(16);
+        return result;
     }
 
     $scope.callOperation = function (hexOP) {
@@ -260,12 +273,12 @@ app.controller('CPU', function ($scope) {
             addresult = addresult.toString(16);
             var tempW_RegArray = getBinaryArray($scope.w_reg);
             var tempaddresult_Array = getBinaryArray(addresult);
-            var wReg_firstN,addresresult_FirstN;
+            var wReg_firstN, addresresult_FirstN;
 
             ///TODO Diese Funktionen lassen sich gut refactorn
 
-            wReg_firstN = tempW_RegArray[4].toString()+ tempW_RegArray[5].toString()+ tempW_RegArray[6].toString()+ tempW_RegArray[7].toString();
-            addresresult_FirstN = tempaddresult_Array[3].toString() + tempaddresult_Array[4].toString() + tempaddresult_Array[5].toString() + tempaddresult_Array[6].toString() + tempaddresult_Array[7].toString();
+            wReg_firstN = tempW_RegArray[3].toString() + tempW_RegArray[2].toString() + tempW_RegArray[1].toString() + tempW_RegArray[0].toString();
+            addresresult_FirstN = tempaddresult_Array[4].toString() + tempaddresult_Array[3].toString() + tempaddresult_Array[2].toString() + tempaddresult_Array[1].toString() + tempaddresult_Array[0].toString();
 
             if (parseInt(addresult, 16) > 255) {
 
@@ -275,15 +288,15 @@ app.controller('CPU', function ($scope) {
                 addresult = temp.toString(16);
             }
 
-            if(parseInt(addresult,16)==0){
-                $scope.zeroFlag=1;
+            if (parseInt(addresult, 16) == 0) {
+                $scope.zeroFlag = 1;
             }
 
             if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15)) {
                 $scope.digitalCarry = 1;
             }
 
-            if (d == 128) {
+            if (d == 1) {
 
                 $scope.ram[f] = addresult;
             } else {
@@ -293,7 +306,20 @@ app.controller('CPU', function ($scope) {
 
         },
         "ANDWF": function (f, d) {
-            //DO SOMETHING
+            var fileRegValue = $scope.ram[f];
+            var andresult = ((parseInt($scope.w_reg, 16)) & (parseInt(fileRegValue, 16)));
+            andresult = andresult.toString(16);
+
+            if (parseInt(andresult, 16) == 0) {
+                $scope.zeroFlag = 1;
+            }
+
+            if (d == 1) {
+
+                $scope.ram[f] = andresult;
+            } else {
+                $scope.w_reg = andresult;
+            }
         },
         "CLRF": function (f) {
             //DO SOMETHING
@@ -326,9 +352,6 @@ app.controller('CPU', function ($scope) {
             //DO SOMETHING
         },
         "NOP": function () {
-
-            $scope.ram[22] = 11;
-            alert($scope.ram[22]);
             //DO SOMETHING
         },
         "RLF": function (f, d) {
@@ -347,10 +370,20 @@ app.controller('CPU', function ($scope) {
             //DO SOMETHING
         },
         "BCF": function (f, b) {
-            //DO SOMETHING
+            var result;
+            var tempFile = getBinaryArray($scope.ram[f]);
+            tempFile[b] = 0;
+            result=convertArrayToHex(tempFile);
+            $scope.ram[f]=result;
         },
         "BSF": function (f, b) {
-            //DO SOMETHING
+            $scope.ram[f]="40";
+            var result = "";
+            var tempFile = getBinaryArray($scope.ram[f]);
+            tempFile[b] = 1;
+            result=convertArrayToHex(tempFile);
+            $scope.ram[f]=result;
+
         },
         "BTFSC": function (f, b) {
             //DO SOMETHING
@@ -360,16 +393,16 @@ app.controller('CPU', function ($scope) {
         },
         "ADDLW": function (k) {
             var tempW_Reg = parseInt($scope.w_reg, 16);
-            var addresult = tempW_Reg +k;
+            var addresult = tempW_Reg + k;
             addresult = addresult.toString(16);
             var tempW_RegArray = getBinaryArray($scope.w_reg);
             var tempaddresult_Array = getBinaryArray(addresult);
-            var wReg_firstN,addresresult_FirstN;
+            var wReg_firstN, addresresult_FirstN;
 
             ///TODO Diese Funktionen lassen sich gut refactorn
 
-            wReg_firstN = tempW_RegArray[4].toString()+ tempW_RegArray[5].toString()+ tempW_RegArray[6].toString()+ tempW_RegArray[7].toString();
-            addresresult_FirstN = tempaddresult_Array[3].toString() + tempaddresult_Array[4].toString() + tempaddresult_Array[5].toString() + tempaddresult_Array[6].toString() + tempaddresult_Array[7].toString();
+            wReg_firstN = tempW_RegArray[3].toString() + tempW_RegArray[2].toString() + tempW_RegArray[1].toString() + tempW_RegArray[0].toString();
+            addresresult_FirstN = tempaddresult_Array[4].toString() + tempaddresult_Array[3].toString() + tempaddresult_Array[2].toString() + tempaddresult_Array[1].toString() + tempaddresult_Array[0].toString();
 
             if (parseInt(addresult, 16) > 255) {
 
@@ -383,16 +416,21 @@ app.controller('CPU', function ($scope) {
                 $scope.digitalCarry = 1;
             }
 
-            if(parseInt(addresult,16)==0){
-                $scope.zeroFlag=1;
+            if (parseInt(addresult, 16) == 0) {
+                $scope.zeroFlag = 1;
             }
 
-                $scope.w_reg = addresult;
+            $scope.w_reg = addresult;
 
-            alert("w-reg after:"+$scope.w_reg);
+            alert("w-reg after:" + $scope.w_reg);
         },
         "ANDLW": function (k) {
-            //DO SOMETHING
+            var andresult = ((parseInt($scope.w_reg, 16)) & (k));
+            andresult = andresult.toString(16);
+            if (parseInt(andresult, 16) == 0) {
+                $scope.zeroFlag = 1;
+            }
+            $scope.w_reg = andresult;
         },
         "CALL": function (k) {
             //DO SOMETHING
@@ -432,7 +470,7 @@ app.controller('CPU', function ($scope) {
 
 app.controller('ramcontroller', function ($scope) {
     //Deklaration Arbeitsregister und die Flags
-    $scope.w_reg = "42";
+    $scope.w_reg = "62";
     $scope.digitalCarry = 0;
     $scope.zeroFlag = 0;
     $scope.carry = 0;
