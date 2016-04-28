@@ -4,3 +4,24 @@ body {
 table{
     font-size: small;
 }
+
+.codeanzeige{
+    float: left;
+    width: 50%;
+    height: 500px;
+    overflow: scroll;
+    position: static;
+}
+.ram{
+    float: left;
+    position: relative;
+    width: 50%;
+}
+
+.buttons{
+    float: left;
+}
+.cpu{
+    position:relative;
+    float: left;
+}

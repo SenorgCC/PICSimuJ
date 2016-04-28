@@ -13,16 +13,18 @@
             Aufgabe 1 Texteinlesen
         </h1>
         <br>
+        <div class="codeanzeige">
         <input type="file" on-read-file="showContent($fileContent)" />
         <div ng-if="content">
             <h2>File content is:</h2>
                <pre ng-repeat="line in content">{{line}}</pre>
         </div>
+        </div>
 
         <!--<div ng-if="operations"> -->
         <!--    <pre ng-repeat="operation in operations">{{operation.zeile}} {{operation.befehl}}</pre> -->
 
-    <div>
+    <div class="buttons">
         <button type="button">Start</button>
         <button type="button">Ein Schritt</button>
         <button type="button">Stop</button>
@@ -36,7 +38,7 @@
 
 
 
-         <div ng-if="content" >
+         <div ng-if="content" class="ram">
 
             <h1> RAM anzeige</h1>
 
@@ -122,7 +124,7 @@
             </table>
         </div>
     </div>
-    <div ng-controller="CPU">
+    <div ng-controller="CPU" class="cpu">
         <button ng-click="callOperation('3E6F')">test</button>
         <label>DigitalCarry:{{digitalCarry}}</label>
         <label>ZeroFlag:{{zeroFlag}}</label>
