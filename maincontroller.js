@@ -1,9 +1,8 @@
 /**
  * Created by Alex on 06.04.2016.
  */
-//TODO: Bit Größe des Registers rausfinden! ->
 //es werden das Register (Reg), Instructionpointer (IP) und Flags: Zero (ZF), Carry(CY) und Faultflag (Fl)
-
+///TODO: Instructioncounter in den richtigen scope legen
 var intstructioncounter = 0;
 
 var app = angular.module('pic', []);
@@ -256,32 +255,17 @@ app.controller('CPU', function ($scope) {
 
     var Befehlsausfuehrung = {
         "ADDWF": function (f, d) {
-            var tempW_RegOld = parseInt($scope.w_reg, 16);
             var tempW_Reg = parseInt($scope.w_reg, 16);
             var addresult = tempW_Reg + parseInt($scope.ram[f], 16);
             addresult = addresult.toString(16);
             var tempW_RegArray = getBinaryArray($scope.w_reg);
             var tempaddresult_Array = getBinaryArray(addresult);
-            var wReg_firstN = "";
-            var addresresult_FirstN = "";
+            var wReg_firstN,addresresult_FirstN;
 
-            for (var i = 7; i >= 4; i--) {
-                wReg_firstN = wReg_firstN.toString() + tempW_RegArray[i].toString();
-            }
+            ///TODO Diese Funktionen lassen sich gut refactorn
 
-            for (var i = 7; i >= 3; i--) {
-                addresresult_FirstN = addresresult_FirstN.toString() + tempaddresult_Array[i].toString();
-            }
-
-            if ((((parseInt(addresresult_FirstN, 2) - parseInt(wReg_firstN, 2)) > 15)) && (parseInt(wReg_firstN, 2) < 16)) {
-                $scope.digitalCarry = 1;
-            }
-
-
-            // var tempF_RegArray=getBinaryArray($scope.ram[f]);
-
-            //alert(b[7]+""+b[6]+""+b[5]+""+b[4]+""+b[3]+""+b[2]+""+b[1]+""+b[0]);
-
+            wReg_firstN = tempW_RegArray[4].toString()+ tempW_RegArray[5].toString()+ tempW_RegArray[6].toString()+ tempW_RegArray[7].toString();
+            addresresult_FirstN = tempaddresult_Array[3].toString() + tempaddresult_Array[4].toString() + tempaddresult_Array[5].toString() + tempaddresult_Array[6].toString() + tempaddresult_Array[7].toString();
 
             if (parseInt(addresult, 16) > 255) {
 
@@ -289,6 +273,14 @@ app.controller('CPU', function ($scope) {
                 $scope.carry = 1;
                 temp = temp - 256;
                 addresult = temp.toString(16);
+            }
+
+            if(parseInt(addresult,16)==0){
+                $scope.zeroFlag=1;
+            }
+
+            if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15)) {
+                $scope.digitalCarry = 1;
             }
 
             if (d == 128) {
@@ -299,7 +291,6 @@ app.controller('CPU', function ($scope) {
             }
 
 
-            //DO SOMETHING
         },
         "ANDWF": function (f, d) {
             //DO SOMETHING
@@ -368,7 +359,37 @@ app.controller('CPU', function ($scope) {
             //DO SOMETHING
         },
         "ADDLW": function (k) {
-            //DO SOMETHING
+            var tempW_Reg = parseInt($scope.w_reg, 16);
+            var addresult = tempW_Reg +k;
+            addresult = addresult.toString(16);
+            var tempW_RegArray = getBinaryArray($scope.w_reg);
+            var tempaddresult_Array = getBinaryArray(addresult);
+            var wReg_firstN,addresresult_FirstN;
+
+            ///TODO Diese Funktionen lassen sich gut refactorn
+
+            wReg_firstN = tempW_RegArray[4].toString()+ tempW_RegArray[5].toString()+ tempW_RegArray[6].toString()+ tempW_RegArray[7].toString();
+            addresresult_FirstN = tempaddresult_Array[3].toString() + tempaddresult_Array[4].toString() + tempaddresult_Array[5].toString() + tempaddresult_Array[6].toString() + tempaddresult_Array[7].toString();
+
+            if (parseInt(addresult, 16) > 255) {
+
+                var temp = parseInt(addresult, 16);
+                $scope.carry = 1;
+                temp = temp - 256;
+                addresult = temp.toString(16);
+            }
+
+            if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15)) {
+                $scope.digitalCarry = 1;
+            }
+
+            if(parseInt(addresult,16)==0){
+                $scope.zeroFlag=1;
+            }
+
+                $scope.w_reg = addresult;
+
+            alert("w-reg after:"+$scope.w_reg);
         },
         "ANDLW": function (k) {
             //DO SOMETHING
@@ -411,7 +432,7 @@ app.controller('CPU', function ($scope) {
 
 app.controller('ramcontroller', function ($scope) {
     //Deklaration Arbeitsregister und die Flags
-    $scope.w_reg = "4f";
+    $scope.w_reg = "42";
     $scope.digitalCarry = 0;
     $scope.zeroFlag = 0;
     $scope.carry = 0;
@@ -470,9 +491,10 @@ app.controller('ramcontroller', function ($scope) {
     };
 
 });
-//hh
+
 
 //Angularmagic zum Parsen von Dateien
+//Schwarze Magie
 app.directive('onReadFile', function ($parse) {
     return {
         restrict: 'A',
