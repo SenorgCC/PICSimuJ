@@ -398,7 +398,7 @@ app.controller('CPU', function ($scope) {
             var tempW_RegArray = getBinaryArray($scope.w_reg);
             var tempaddresult_Array = getBinaryArray(addresult);
             var wReg_firstN, addresresult_FirstN;
-
+            //kommentar
             ///TODO Diese Funktionen lassen sich gut refactorn
 
             wReg_firstN = tempW_RegArray[3].toString() + tempW_RegArray[2].toString() + tempW_RegArray[1].toString() + tempW_RegArray[0].toString();
@@ -422,7 +422,6 @@ app.controller('CPU', function ($scope) {
 
             $scope.w_reg = addresult;
 
-            alert("w-reg after:" + $scope.w_reg);
         },
         "ANDLW": function (k) {
             var andresult = ((parseInt($scope.w_reg, 16)) & (k));
@@ -512,7 +511,6 @@ app.controller('ramcontroller', function ($scope) {
             alert("Falsche Zuweisung!");
             return 0;
         } else {
-            alert($scope.ram[decAdr]);
             return $scope.ram[decAdr];
         }
     };
