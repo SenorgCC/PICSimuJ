@@ -1,5 +1,6 @@
 body {
     font-family: sans-serif;
+    background-color: Moccasin ;
 }
 table{
     font-size: small;
@@ -8,7 +9,7 @@ table{
 .codeanzeige{
     float: left;
     width: 50%;
-    height: 500px;
+    height: 550px;
     overflow: scroll;
     position: static;
 }

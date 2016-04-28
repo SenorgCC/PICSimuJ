@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="608339c7-3292-4417-9149-98dcc4249c29" name="Default" comment="">
+    <list default="true" id="608339c7-3292-4417-9149-98dcc4249c29" name="Default" comment="Überschrift in Anzeige hinzugefügt">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Anzeige.html" afterPath="$PROJECT_DIR$/Anzeige.html" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PicSimu.css" afterPath="$PROJECT_DIR$/PicSimu.css" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/angular.min.js" afterPath="$PROJECT_DIR$/sources/angular.min.js" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/maincontroller.js" afterPath="$PROJECT_DIR$/scripts/maincontroller.js" />
     </list>
     <list id="947c54d3-9efe-4562-a9ed-e2e68fc33138" name="New changelist" comment="" />
     <ignored path="PICSimuJ.iws" />
@@ -26,18 +29,11 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file leaf-file-name="maincontroller.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/maincontroller.js">
+        <entry file="file://$PROJECT_DIR$/scripts/maincontroller.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="8789">
+            <state relative-caret-position="2210">
               <caret line="553" column="0" selection-start-line="553" selection-start-column="0" selection-end-line="553" selection-end-column="0" />
-              <folding>
-                <marker date="1461868931971" expanded="true" signature="411:1577" placeholder="{...}" />
-                <marker date="1461868931971" expanded="true" signature="575:1577" placeholder="{...}" />
-                <marker date="1461868931971" expanded="true" signature="1215:1577" placeholder="{...}" />
-                <marker date="1461868931971" expanded="true" signature="1389:1577" placeholder="{...}" />
-                <marker date="1461868931971" expanded="true" signature="19660:19709" placeholder="{...}" />
-                <marker date="1461868931971" expanded="true" signature="19660:19715" placeholder="{...}" />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -45,8 +41,8 @@
       <file leaf-file-name="Anzeige.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Anzeige.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="10" column="17" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
+            <state relative-caret-position="204">
+              <caret line="12" column="12" selection-start-line="12" selection-start-column="12" selection-end-line="12" selection-end-column="12" />
               <folding />
             </state>
           </provider>
@@ -55,8 +51,8 @@
       <file leaf-file-name="PicSimu.css" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/PicSimu.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="306">
-              <caret line="18" column="1" selection-start-line="18" selection-start-column="1" selection-end-line="18" selection-end-column="1" />
+            <state relative-caret-position="221">
+              <caret line="13" column="21" selection-start-line="13" selection-start-column="21" selection-end-line="13" selection-end-column="21" />
               <folding />
             </state>
           </provider>
@@ -73,8 +69,8 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/maincontroller.js" />
-        <option value="$PROJECT_DIR$/PicSimu.css" />
         <option value="$PROJECT_DIR$/Anzeige.html" />
+        <option value="$PROJECT_DIR$/PicSimu.css" />
       </list>
     </option>
   </component>
@@ -86,8 +82,8 @@
   <component name="ProjectFrameBounds">
     <option name="x" value="-8" />
     <option name="y" value="-8" />
-    <option name="width" value="1382" />
-    <option name="height" value="744" />
+    <option name="width" value="1936" />
+    <option name="height" value="1056" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -114,8 +110,8 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scratches" />
       <pane id="Scope" />
+      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -144,116 +140,13 @@
     <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../cupcoffeelogin" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
+    <property name="js-jscs-nodeInterpreter" value="C:\Program Files (x86)\nodejs\node.exe" />
   </component>
-  <component name="RestoreUpdateTree" date="Moments ago" ActionInfo="_Update">
-    <UpdatedFiles>
-      <FILE-GROUP>
-        <option name="myUpdateName" value="Updated from server" />
-        <option name="myStatusName" value="Changed on server" />
-        <option name="mySupportsDeletion" value="false" />
-        <option name="myCanBeAbsent" value="false" />
-        <option name="myId" value="CHANGED_ON_SERVER" />
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Updated" />
-          <option name="myStatusName" value="Changed" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="UPDATED" />
-          <PATH vcs="Git" revision="">$PROJECT_DIR$/maincontroller.js</PATH>
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Created" />
-          <option name="myStatusName" value="Created" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="CREATED" />
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Deleted" />
-          <option name="myStatusName" value="Deleted" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="true" />
-          <option name="myId" value="REMOVED_FROM_REPOSITORY" />
-        </FILE-GROUP>
-        <FILE-GROUP>
-          <option name="myUpdateName" value="Restored" />
-          <option name="myStatusName" value="Will be restored" />
-          <option name="mySupportsDeletion" value="false" />
-          <option name="myCanBeAbsent" value="false" />
-          <option name="myId" value="RESTORED" />
-        </FILE-GROUP>
-      </FILE-GROUP>
-      <FILE-GROUP>
-        <option name="myUpdateName" value="Modified" />
-        <option name="myStatusName" value="Modified" />
-        <option name="mySupportsDeletion" value="false" />
-        <option name="myCanBeAbsent" value="false" />
-        <option name="myId" value="MODIFIED" />
-      </FILE-GROUP>
-      <FILE-GROUP>
-        <option name="myUpdateName" value="Skipped" />
-        <option name="myStatusName" value="Skipped" />
-        <option name="mySupportsDeletion" value="false" />
-        <option name="myCanBeAbsent" value="false" />
-        <option name="myId" value="SKIPPED" />
-      </FILE-GROUP>
-      <FILE-GROUP>
-        <option name="myUpdateName" value="Merged with conflicts" />
-        <option name="myStatusName" value="Will be merged with conflicts" />
-        <option name="mySupportsDeletion" value="false" />
-        <option name="myCanBeAbsent" value="false" />
-        <option name="myId" value="MERGED_WITH_CONFLICTS" />
-      </FILE-GROUP>
-      <FILE-GROUP>
-        <option name="myUpdateName" value="Merged with tree conflicts" />
-        <option name="myStatusName" value="Merged with tree conflicts" />
-        <option name="mySupportsDeletion" value="false" />
-        <option name="myCanBeAbsent" value="false" />
-        <option name="myId" value="MERGED_WITH_TREE_CONFLICT" />
-      </FILE-GROUP>
-      <FILE-GROUP>
-        <option name="myUpdateName" value="Merged with property conflicts" />
-        <option name="myStatusName" value="Will be merged with property conflicts" />
-        <option name="mySupportsDeletion" value="false" />
-        <option name="myCanBeAbsent" value="false" />
-        <option name="myId" value="MERGED_WITH_PROPERTY_CONFLICT" />
-      </FILE-GROUP>
-      <FILE-GROUP>
-        <option name="myUpdateName" value="Merged" />
-        <option name="myStatusName" value="Will be merged" />
-        <option name="mySupportsDeletion" value="false" />
-        <option name="myCanBeAbsent" value="false" />
-        <option name="myId" value="MERGED" />
-      </FILE-GROUP>
-      <FILE-GROUP>
-        <option name="myUpdateName" value="Not in repository" />
-        <option name="myStatusName" value="Not in repository" />
-        <option name="mySupportsDeletion" value="true" />
-        <option name="myCanBeAbsent" value="false" />
-        <option name="myId" value="UNKNOWN" />
-      </FILE-GROUP>
-      <FILE-GROUP>
-        <option name="myUpdateName" value="Locally added" />
-        <option name="myStatusName" value="Locally added" />
-        <option name="mySupportsDeletion" value="false" />
-        <option name="myCanBeAbsent" value="false" />
-        <option name="myId" value="LOCALLY_ADDED" />
-      </FILE-GROUP>
-      <FILE-GROUP>
-        <option name="myUpdateName" value="Locally removed" />
-        <option name="myStatusName" value="Locally removed" />
-        <option name="mySupportsDeletion" value="false" />
-        <option name="myCanBeAbsent" value="false" />
-        <option name="myId" value="LOCALLY_REMOVED" />
-      </FILE-GROUP>
-      <FILE-GROUP>
-        <option name="myUpdateName" value="Switched" />
-        <option name="myStatusName" value="Switched" />
-        <option name="mySupportsDeletion" value="false" />
-        <option name="myCanBeAbsent" value="false" />
-        <option name="myId" value="SWITCHED" />
-      </FILE-GROUP>
-    </UpdatedFiles>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Onlinespeicher\Onedrive\Studium\Entwicklungsumgebungen\Webstorm\PICSimuJ\scripts" />
+      <recent name="D:\Onlinespeicher\Onedrive\Studium\Entwicklungsumgebungen\Webstorm\PICSimuJ\sources" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration default="true" type="DartCommandLineRunConfigurationType" factoryName="Dart Command Line Application">
@@ -339,7 +232,8 @@
       <workItem from="1461857103010" duration="326000" />
       <workItem from="1461862459658" duration="4542000" />
       <workItem from="1461867731365" duration="248000" />
-      <workItem from="1461868842868" duration="399000" />
+      <workItem from="1461868842868" duration="2340000" />
+      <workItem from="1461873679801" duration="2118000" />
     </task>
     <task id="LOCAL-00001" summary="- Ram auslese der einzelnen Felder erstellt">
       <created>1460890794668</created>
@@ -383,11 +277,18 @@
       <option name="project" value="LOCAL" />
       <updated>1461866838036</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="Überschrift in Anzeige hinzugefügt">
+      <created>1461869259715</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1461869259715</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="36945000" />
+    <option name="totallyTimeSpent" value="41004000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -399,10 +300,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18005952" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1796875" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329653" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32569557" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -456,7 +357,8 @@
     <MESSAGE value="- Ram auslese der einzelnen Felder erstellt&#10;+ Kommentare Hinzugefügt&#10;+Befehlsmaskierung fast beendet&#10;" />
     <MESSAGE value="Zeitfunktion hinzugefügt" />
     <MESSAGE value="Anzeige und css-file  überarbeitet und die Elemente anders angeordnet." />
-    <option name="LAST_COMMIT_MESSAGE" value="Anzeige und css-file  überarbeitet und die Elemente anders angeordnet." />
+    <MESSAGE value="Überschrift in Anzeige hinzugefügt" />
+    <option name="LAST_COMMIT_MESSAGE" value="Überschrift in Anzeige hinzugefügt" />
     <option name="PRESELECT_EXISTING_CHANGELIST" value="false" />
   </component>
   <component name="XDebuggerManager">
@@ -466,18 +368,11 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/maincontroller.js">
+    <entry file="file://$PROJECT_DIR$/scripts/maincontroller.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="8789">
-          <caret line="517" column="0" selection-start-line="517" selection-start-column="0" selection-end-line="517" selection-end-column="0" />
-          <folding>
-            <marker date="1461868931971" expanded="true" signature="411:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="575:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="1215:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="1389:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="19660:19709" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="19660:19715" placeholder="{...}" />
-          </folding>
+        <state relative-caret-position="9401">
+          <caret line="553" column="0" selection-start-line="553" selection-start-column="0" selection-end-line="553" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -497,18 +392,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/maincontroller.js">
+    <entry file="file://$PROJECT_DIR$/scripts/maincontroller.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="8789">
           <caret line="517" column="0" selection-start-line="517" selection-start-column="0" selection-end-line="517" selection-end-column="0" />
-          <folding>
-            <marker date="1461868931971" expanded="true" signature="411:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="575:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="1215:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="1389:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="19660:19709" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="19660:19715" placeholder="{...}" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -528,18 +416,35 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/maincontroller.js">
+    <entry file="file://$PROJECT_DIR$/scripts/maincontroller.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="8789">
+          <caret line="517" column="0" selection-start-line="517" selection-start-column="0" selection-end-line="517" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/Anzeige.html">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1461868931971" expanded="true" signature="411:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="575:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="1215:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="1389:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="19660:19709" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="19660:19715" placeholder="{...}" />
-          </folding>
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PicSimu.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="306">
+          <caret line="18" column="1" selection-start-line="18" selection-start-column="1" selection-end-line="18" selection-end-column="1" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scripts/maincontroller.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -551,18 +456,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/maincontroller.js">
+    <entry file="file://$PROJECT_DIR$/scripts/maincontroller.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1461868931971" expanded="true" signature="411:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="575:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="1215:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="1389:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="19660:19709" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="19660:19715" placeholder="{...}" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -574,18 +472,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/maincontroller.js">
+    <entry file="file://$PROJECT_DIR$/scripts/maincontroller.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1461868931971" expanded="true" signature="411:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="575:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="1215:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="1389:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="19660:19709" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="19660:19715" placeholder="{...}" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -597,18 +488,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/maincontroller.js">
+    <entry file="file://$PROJECT_DIR$/scripts/maincontroller.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1461868931971" expanded="true" signature="411:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="575:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="1215:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="1389:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="19660:19709" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="19660:19715" placeholder="{...}" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -620,18 +504,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/maincontroller.js">
+    <entry file="file://$PROJECT_DIR$/scripts/maincontroller.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1461868931971" expanded="true" signature="411:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="575:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="1215:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="1389:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="19660:19709" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="19660:19715" placeholder="{...}" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -643,18 +520,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/maincontroller.js">
+    <entry file="file://$PROJECT_DIR$/scripts/maincontroller.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1461868931971" expanded="true" signature="411:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="575:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="1215:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="1389:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="19660:19709" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="19660:19715" placeholder="{...}" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -666,18 +536,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/maincontroller.js">
+    <entry file="file://$PROJECT_DIR$/scripts/maincontroller.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1461868931971" expanded="true" signature="411:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="575:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="1215:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="1389:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="19660:19709" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="19660:19715" placeholder="{...}" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -689,18 +552,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/maincontroller.js">
+    <entry file="file://$PROJECT_DIR$/scripts/maincontroller.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1461868931971" expanded="true" signature="411:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="575:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="1215:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="1389:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="19660:19709" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="19660:19715" placeholder="{...}" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -712,18 +568,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/maincontroller.js">
+    <entry file="file://$PROJECT_DIR$/scripts/maincontroller.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1461868931971" expanded="true" signature="411:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="575:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="1215:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="1389:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="19660:19709" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="19660:19715" placeholder="{...}" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -735,18 +584,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/maincontroller.js">
+    <entry file="file://$PROJECT_DIR$/scripts/maincontroller.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1461868931971" expanded="true" signature="411:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="575:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="1215:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="1389:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="19660:19709" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="19660:19715" placeholder="{...}" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -758,18 +600,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/maincontroller.js">
+    <entry file="file://$PROJECT_DIR$/scripts/maincontroller.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1461868931971" expanded="true" signature="411:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="575:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="1215:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="1389:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="19660:19709" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="19660:19715" placeholder="{...}" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -781,18 +616,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/maincontroller.js">
+    <entry file="file://$PROJECT_DIR$/scripts/maincontroller.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1461868931971" expanded="true" signature="411:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="575:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="1215:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="1389:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="19660:19709" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="19660:19715" placeholder="{...}" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -804,18 +632,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/maincontroller.js">
+    <entry file="file://$PROJECT_DIR$/scripts/maincontroller.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding>
-            <marker date="1461868931971" expanded="true" signature="411:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="575:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="1215:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="1389:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="19660:19709" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="19660:19715" placeholder="{...}" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -827,33 +648,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/maincontroller.js">
+    <entry file="file://$PROJECT_DIR$/scripts/maincontroller.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="8789">
+        <state relative-caret-position="2210">
           <caret line="553" column="0" selection-start-line="553" selection-start-column="0" selection-end-line="553" selection-end-column="0" />
-          <folding>
-            <marker date="1461868931971" expanded="true" signature="411:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="575:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="1215:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="1389:1577" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="19660:19709" placeholder="{...}" />
-            <marker date="1461868931971" expanded="true" signature="19660:19715" placeholder="{...}" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/PicSimu.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="306">
-          <caret line="18" column="1" selection-start-line="18" selection-start-column="1" selection-end-line="18" selection-end-column="1" />
+        <state relative-caret-position="221">
+          <caret line="13" column="21" selection-start-line="13" selection-start-column="21" selection-end-line="13" selection-end-column="21" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/Anzeige.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="17" selection-start-line="10" selection-start-column="17" selection-end-line="10" selection-end-column="17" />
+        <state relative-caret-position="204">
+          <caret line="12" column="12" selection-start-line="12" selection-start-column="12" selection-end-line="12" selection-end-column="12" />
           <folding />
         </state>
       </provider>
