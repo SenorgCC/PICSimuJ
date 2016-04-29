@@ -349,7 +349,21 @@ app.controller('CPU', function ($scope) {
             }
         },
         "IORWF": function (f, d) {
-            //DO SOMETHING
+            ///TODO: TESTEN!
+            var fileRegValue = $scope.ram[f];
+            var andresult = ((parseInt($scope.w_reg, 16)) | (parseInt(fileRegValue, 16)));
+            andresult = andresult.toString(16);
+
+            if (parseInt(andresult, 16) == 0) {
+                $scope.zeroFlag = 1;
+            }
+
+            if (d == 1) {
+
+                $scope.ram[f] = andresult;
+            } else {
+                $scope.w_reg = andresult;
+            }
         },
         "MOVF": function (f, d) {
             //DO SOMETHING
@@ -460,7 +474,12 @@ app.controller('CPU', function ($scope) {
             //DO SOMETHING
         },
         "IORLW": function (k) {
-            //DO SOMETHING
+            var andresult = ((parseInt($scope.w_reg, 16)) | (k));
+            andresult = andresult.toString(16);
+            if (parseInt(andresult, 16) == 0) {
+                $scope.zeroFlag = 1;
+            }
+            $scope.w_reg = andresult;
         },
         "MOVLW": function (k) {
             //DO SOMETHING

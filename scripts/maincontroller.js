@@ -5,7 +5,7 @@
 ///TODO: Instructioncounter in den richtigen scope legen
 var intstructioncounter = 0;
 
-var app = angular.module('pic', []);
+var app = angular.module('pic', ['ui.bootstrap']);
 
 //Angularmagic zum Parsen von Dateien
 //Schwarze Magie
