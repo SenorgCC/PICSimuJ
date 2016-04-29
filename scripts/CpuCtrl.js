@@ -52,6 +52,19 @@ app.controller('CPU', function ($scope) {
         return result;
     }
 
+    function getComArray(binArray){
+        var complement=new Array();
+        for (var i=0; i<8;i++){
+            if(binArray[i]==0){
+                complement[i]=1;
+            }else {
+                complement[i]=0;
+            }
+        }
+        return complement;
+
+    }
+
     $scope.callOperation = function (hexOP) {
 
         var befehl;
@@ -62,7 +75,6 @@ app.controller('CPU', function ($scope) {
 
         if ((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "11100000000") {
             //Befehl ADDWF
-
             Befehlsausfuehrung["ADDWF"](getFileregister(tempbin), getDirectory(tempbin));
 
         } else if ((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "10100000000") {
@@ -162,7 +174,7 @@ app.controller('CPU', function ($scope) {
             //ANDLW
             Befehlsausfuehrung["ANDLW"](getLiteralfieldshort(tempbin));
 
-        } else if ((parseInt(tempbin, 2) & parseInt('11100000000000', 2)).toString(2) == "11100000000000") {
+        } else if ((parseInt(tempbin, 2) & parseInt('11100000000000', 2)).toString(2) == "10000000000000") {
             //CALL
             Befehlsausfuehrung["CALL"](getLiteralfieldlong(tempbin));
 
@@ -214,7 +226,6 @@ app.controller('CPU', function ($scope) {
 
         } else if ((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "11101000000000") {
             //XORLW
-
             Befehlsausfuehrung["XORLW"](getLiteralfieldshort(tempbin));
         }
     };
@@ -285,7 +296,18 @@ app.controller('CPU', function ($scope) {
             $scope.zeroFlag = 1;
         },
         "COMF": function (f, d) {
-            //DO SOMETHING
+            var tempcomresult = getBinaryArray($scope.ram[f]);
+            var comresult=getComArray(tempcomresult);
+            comresult = convertArrayToHex(comresult);
+            if (parseInt(comresult, 16) == 0) {
+                $scope.zeroFlag = 1;
+            }
+            if (d == 1) {
+
+                $scope.ram[f] = comresult;
+            } else {
+                $scope.w_reg = comresult;
+            }
         },
         "DECF": function (f, d) {
             //DO SOMETHING
@@ -387,7 +409,23 @@ app.controller('CPU', function ($scope) {
             //DO SOMETHING
         },
         "XORWF": function (f, d) {
-            //DO SOMETHING
+            $scope.w_reg='ff';
+            $scope.ram[f]='44';
+            var fileRegValue = $scope.ram[f];
+            var xorresult = ((parseInt($scope.w_reg, 16)) ^ (parseInt(fileRegValue, 16)));
+            xorresult = xorresult.toString(16);
+
+            if (parseInt(xorresult, 16) == 0) {
+                $scope.zeroFlag = 1;
+            }
+
+            if (d == 1) {
+
+                $scope.ram[f] = xorresult;
+            } else {
+                $scope.w_reg = xorresult;
+            }
+            alert(xorresult);
         },
         "BCF": function (f, b) {
             ///TODO: Testen!
@@ -500,7 +538,13 @@ app.controller('CPU', function ($scope) {
             //DO SOMETHING
         },
         "XORLW": function (k) {
-            //DO SOMETHING
+            $scope.w_reg='44';
+            var xorlresult = ((parseInt($scope.w_reg, 16)) ^ (k));
+            xorlresult = xorlresult.toString(16);
+            if (parseInt(xorlresult, 16) == 0) {
+                $scope.zeroFlag = 1;
+            }
+            $scope.w_reg = xorlresult;
         }
     };
 });
