@@ -26,7 +26,7 @@ app.controller('CPU', function ($scope) {
         var literalfield = parseInt(binOP, 2) & parseInt('00011111111111', 2);
         return literalfield;
     }
-
+//kek
     function getBinaryArray(hexVal) {
 
         //Sowohl der Inhalt des W Registers als auch des File Registers sind in Hex kodiert
