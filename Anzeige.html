@@ -25,12 +25,12 @@
         <!--<div ng-if="operations"> -->
         <!--    <pre ng-repeat="operation in operations">{{operation.zeile}} {{operation.befehl}}</pre> -->
 
-    <div class="buttons">
-        <button type="button">Start</button>
+    <div class="buttons" ng-init="myswitch=false">
+        <button type="button" ng-click="myswitch=true">Start</button>
         <button type="button">Ein Schritt</button>
         <button type="button">Stop</button>
-        <button type="button">Reset</button>
-        <select>
+        <button type="button" ng-click="myswitch=false">Reset</button>
+        <select id="select" ng-disabled="myswitch">
             <option selected="selected" value="2 MHz">2 MHz</option>
             <option value="4 MHz">4 MHz</option>
         </select>

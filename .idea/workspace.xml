@@ -3,6 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="608339c7-3292-4417-9149-98dcc4249c29" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/Anzeige.html" afterPath="$PROJECT_DIR$/Anzeige.html" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/PicSimu.css" afterPath="$PROJECT_DIR$/PicSimu.css" />
     </list>
     <list id="947c54d3-9efe-4562-a9ed-e2e68fc33138" name="New changelist" comment="" />
@@ -25,31 +26,21 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="maincontroller.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/scripts/maincontroller.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="2210">
-              <caret line="553" column="0" selection-start-line="553" selection-start-column="0" selection-end-line="553" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Anzeige.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="Anzeige.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/Anzeige.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="204">
-              <caret line="12" column="12" selection-start-line="12" selection-start-column="12" selection-end-line="12" selection-end-column="12" />
+            <state relative-caret-position="459">
+              <caret line="36" column="64" selection-start-line="36" selection-start-column="64" selection-end-line="36" selection-end-column="64" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PicSimu.css" pinned="false" current-in-tab="true">
+      <file leaf-file-name="PicSimu.css" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/PicSimu.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="238">
-              <caret line="14" column="4" selection-start-line="14" selection-start-column="4" selection-end-line="14" selection-end-column="4" />
+            <state relative-caret-position="510">
+              <caret line="30" column="4" selection-start-line="30" selection-start-column="4" selection-end-line="30" selection-end-column="4" />
               <folding />
             </state>
           </provider>
@@ -66,8 +57,8 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/maincontroller.js" />
-        <option value="$PROJECT_DIR$/Anzeige.html" />
         <option value="$PROJECT_DIR$/PicSimu.css" />
+        <option value="$PROJECT_DIR$/Anzeige.html" />
       </list>
     </option>
   </component>
@@ -79,8 +70,8 @@
   <component name="ProjectFrameBounds">
     <option name="x" value="-8" />
     <option name="y" value="-8" />
-    <option name="width" value="1936" />
-    <option name="height" value="1056" />
+    <option name="width" value="1382" />
+    <option name="height" value="744" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -107,8 +98,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -129,6 +118,8 @@
           </PATH>
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="Scratches" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -230,7 +221,8 @@
       <workItem from="1461862459658" duration="4542000" />
       <workItem from="1461867731365" duration="248000" />
       <workItem from="1461868842868" duration="2340000" />
-      <workItem from="1461873679801" duration="4482000" />
+      <workItem from="1461873679801" duration="4594000" />
+      <workItem from="1461905656415" duration="1907000" />
     </task>
     <task id="LOCAL-00001" summary="- Ram auslese der einzelnen Felder erstellt">
       <created>1460890794668</created>
@@ -288,11 +280,18 @@
       <option name="project" value="LOCAL" />
       <updated>1461876146629</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Keine Ahnung mehr was ich alles geändert habe aber es funktioniert noch">
+      <created>1461882631549</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1461882631549</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="43368000" />
+    <option name="totallyTimeSpent" value="45387000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -304,10 +303,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1796875" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.17931548" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.329653" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32569557" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -363,7 +362,8 @@
     <MESSAGE value="Anzeige und css-file  überarbeitet und die Elemente anders angeordnet." />
     <MESSAGE value="Überschrift in Anzeige hinzugefügt" />
     <MESSAGE value="Überschriften aktualisiert und Ordner Sources und Scripts angelegt und erste aufräumarbeiten begonnen" />
-    <option name="LAST_COMMIT_MESSAGE" value="Überschriften aktualisiert und Ordner Sources und Scripts angelegt und erste aufräumarbeiten begonnen" />
+    <MESSAGE value="Keine Ahnung mehr was ich alles geändert habe aber es funktioniert noch" />
+    <option name="LAST_COMMIT_MESSAGE" value="Keine Ahnung mehr was ich alles geändert habe aber es funktioniert noch" />
     <option name="PRESELECT_EXISTING_CHANGELIST" value="false" />
   </component>
   <component name="XDebuggerManager">
@@ -373,6 +373,22 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
+    <entry file="file://$PROJECT_DIR$/Anzeige.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="12" column="12" selection-start-line="12" selection-start-column="12" selection-end-line="12" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/PicSimu.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/scripts/maincontroller.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="9401">
@@ -661,18 +677,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/Anzeige.html">
+    <entry file="file://$PROJECT_DIR$/PicSimu.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="204">
-          <caret line="12" column="12" selection-start-line="12" selection-start-column="12" selection-end-line="12" selection-end-column="12" />
+        <state relative-caret-position="510">
+          <caret line="30" column="4" selection-start-line="30" selection-start-column="4" selection-end-line="30" selection-end-column="4" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/PicSimu.css">
+    <entry file="file://$PROJECT_DIR$/Anzeige.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="14" column="4" selection-start-line="14" selection-start-column="4" selection-end-line="14" selection-end-column="4" />
+        <state relative-caret-position="459">
+          <caret line="36" column="64" selection-start-line="36" selection-start-column="64" selection-end-line="36" selection-end-column="64" />
           <folding />
         </state>
       </provider>
