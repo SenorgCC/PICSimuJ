@@ -87,14 +87,14 @@ app.controller('CPU', function ($scope) {
 
     }
 
-    function convertArrayToHex(binValue){
-        var result="";
-        result =  binValue[7].toString() + binValue[6].toString()
-                + binValue[5].toString() + binValue[4].toString()
-                + binValue[3].toString() + binValue[2].toString()
-                + binValue[1].toString() + binValue[0].toString();
-        result=parseInt(result,2);
-        result=result.toString(16);
+    function convertArrayToHex(binValue) {
+        var result = "";
+        result = binValue[7].toString() + binValue[6].toString()
+            + binValue[5].toString() + binValue[4].toString()
+            + binValue[3].toString() + binValue[2].toString()
+            + binValue[1].toString() + binValue[0].toString();
+        result = parseInt(result, 2);
+        result = result.toString(16);
         return result;
     }
 
@@ -322,22 +322,60 @@ app.controller('CPU', function ($scope) {
             }
         },
         "CLRF": function (f) {
-            //DO SOMETHING
+            $scope.ram[f] = '00';
+            $scope.zeroFlag = 1;
         },
         "CLRW": function () {
-            //DO SOMETHING
+            $scope.w_reg = '00';
+            $scope.zeroFlag = 1;
         },
         "COMF": function (f, d) {
             //DO SOMETHING
         },
         "DECF": function (f, d) {
             //DO SOMETHING
+            var result = parseInt($scope.ram[f], 16) - 1;
+            if (result == 0) {
+                $scope.zeroFlag = 1;
+            }
+            result = result.toString(16);
+
+            if (d == 1) {
+                $scope.ram[f] = result;
+            } else {
+                $scope.w_reg = result;
+            }
+
         },
         "DECFSZ": function (f, d) {
-            //DO SOMETHING
+            ///TODO: Testen!
+            var result = parseInt($scope.ram[f], 16) - 1;
+            //Wenn das register um 1 dekrementiert wird und damit 0 ergibt,
+            //wird statt dem nächsten Befehl ein NOP ausgeführt
+            if (result == 0) {
+                $scope.callOperation('00');
+            } else {
+                ///TODO: InstructionCounter müsste hier kommen!
+            }
+            result = result.toString(16);
+            if (d == 1) {
+                $scope.ram[f] = result;
+            } else {
+                $scope.w_reg = result;
+            }
+
         },
         "INCF": function (f, d) {
-            //DO SOMETHING
+            var result = parseInt($scope.ram[f], 16) + 1;
+            result = result.toString(16);
+            if (d == 1) {
+                $scope.ram[f] = result;
+            } else {
+                $scope.w_reg = result;
+            }
+            if (result == 0) {
+                $scope.zeroFlag = 1;
+            }
         },
         "INCFSZ": function (f, d) {
             //DO SOMETHING
@@ -370,26 +408,39 @@ app.controller('CPU', function ($scope) {
             //DO SOMETHING
         },
         "BCF": function (f, b) {
+            ///TODO: Testen!
             var result;
             var tempFile = getBinaryArray($scope.ram[f]);
             tempFile[b] = 0;
-            result=convertArrayToHex(tempFile);
-            $scope.ram[f]=result;
+            result = convertArrayToHex(tempFile);
+            $scope.ram[f] = result;
         },
         "BSF": function (f, b) {
-            $scope.ram[f]="40";
             var result = "";
             var tempFile = getBinaryArray($scope.ram[f]);
             tempFile[b] = 1;
-            result=convertArrayToHex(tempFile);
-            $scope.ram[f]=result;
+            result = convertArrayToHex(tempFile);
+            $scope.ram[f] = result;
 
         },
         "BTFSC": function (f, b) {
             //DO SOMETHING
+            var tempFle = getBinaryArray($scope.ram[f]);
+            if (tempFle[b] == 0) {
+                //bei gesetztem bit wird statt dem nächsten Befehl ein NOP aufgerufen
+                $scope.callOperation("0");
+            } else {
+                ///TODO: InstructionCounter muss her!
+            }
         },
         "BTFSS": function (f, b) {
-            //DO SOMETHING
+            var tempFle = getBinaryArray($scope.ram[f]);
+            if (tempFle[b] == 1) {
+                //bei gesetztem bit wird statt dem nächsten Befehl ein NOP aufgerufen
+                $scope.callOperation("0");
+            } else {
+                ///TODO: InstructionCounter muss her!
+            }
         },
         "ADDLW": function (k) {
             var tempW_Reg = parseInt($scope.w_reg, 16);
