@@ -230,6 +230,7 @@ app.controller('CPU', function ($scope) {
             var wReg_firstN, addresresult_FirstN;
 
             ///TODO Diese Funktionen lassen sich gut refactorn
+            ///TODO: Subtraktionsweg überlegen
 
             wReg_firstN = tempW_RegArray[3].toString() + tempW_RegArray[2].toString() + tempW_RegArray[1].toString() + tempW_RegArray[0].toString();
             addresresult_FirstN = tempaddresult_Array[4].toString() + tempaddresult_Array[3].toString() + tempaddresult_Array[2].toString() + tempaddresult_Array[1].toString() + tempaddresult_Array[0].toString();
@@ -302,7 +303,6 @@ app.controller('CPU', function ($scope) {
 
         },
         "DECFSZ": function (f, d) {
-            ///TODO: Testen!
             var result = parseInt($scope.ram[f], 16) - 1;
             //Wenn das register um 1 dekrementiert wird und damit 0 ergibt,
             //wird statt dem nächsten Befehl ein NOP ausgeführt
@@ -333,6 +333,20 @@ app.controller('CPU', function ($scope) {
         },
         "INCFSZ": function (f, d) {
             //DO SOMETHING
+            var result = parseInt($scope.ram[f], 16) + 1;
+            //Wenn das register um 1 dekrementiert wird und damit 0 ergibt,
+            //wird statt dem nächsten Befehl ein NOP ausgeführt
+            if (result == 0) {
+                $scope.callOperation('00');
+            } else {
+                ///TODO: InstructionCounter müsste hier kommen!
+            }
+            result = result.toString(16);
+            if (d == 1) {
+                $scope.ram[f] = result;
+            } else {
+                $scope.w_reg = result;
+            }
         },
         "IORWF": function (f, d) {
             //DO SOMETHING
