@@ -8,7 +8,9 @@
     <script type="text/javascript" src="scripts/BefehlsspeicherCtrl.js"></script>
     <script type="text/javascript" src="scripts/CpuCtrl.js"></script>
     <script type="text/javascript" src="scripts/RamCtrl.js"></script>
+    <script type="text/javascript" src="scripts/CounterCtrl.js"></script>
     <link rel="stylesheet" href="PicSimu.css">
+    <link rel="stylesheet" href="sources\bootsrap-3.3.6-dist\css\bootstrap.min.css">
 </head>
 <body ng-controller="ramcontroller">
 <h1 align="center">PIC Simulator 16F84</h1>
@@ -33,10 +35,11 @@
         <button type="button">Ein Schritt</button>
         <button type="button">Stop</button>
         <button type="button">Reset</button>
-        <select>
-            <option selected="selected" value="2 MHz">2 MHz</option>
-            <option value="4 MHz">4 MHz</option>
+        <select name="taktauswahl" ng-controller="Counter" ng-model="Takt" onchange="Instructioncounter(Takt)">
+            <option selected="selected" value="Takt=2">2 MHz</option>
+            <option value="{{Takt=4}}">4 MHz</option>
         </select>
+        <label>{{Takt}}</label>
         <label>Laufzeitzähler</label><label>{{Laufzeit}}</label>
     </div>
 
