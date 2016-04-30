@@ -67,7 +67,6 @@ app.controller('CPU', function ($scope) {
 
     $scope.callOperation = function (hexOP) {
 
-        var befehl;
         var temp = parseInt(hexOP, 16);
         var tempbin = temp.toString(2);
 
@@ -115,8 +114,8 @@ app.controller('CPU', function ($scope) {
 
         } else if ((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "100000000000") {
             //MOVF
-            alert("MOVF");
-        } else if ((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "10000000") {
+            Befehlsausfuehrung["MOVF"](getFileregister(tempbin),getDirectory(tempbin));
+        } else if ((parseInt(tempbin, 2) & parseInt('11111110000000', 2)).toString(2) == "10000000") {
             //MOVWF
             Befehlsausfuehrung["MOVWF"](getFileregister(tempbin));
 
@@ -269,7 +268,6 @@ app.controller('CPU', function ($scope) {
                 $scope.w_reg = addresult;
             }
 
-
         },
         "ANDWF": function (f, d) {
             var fileRegValue = $scope.ram[f];
@@ -388,19 +386,70 @@ app.controller('CPU', function ($scope) {
             }
         },
         "MOVF": function (f, d) {
-            //DO SOMETHING
+            var movffile=$scope.ram[f];
+            if(movffile==0){
+                $scope.zeroFlag=1;
+            }
+            if(d==1){
+                $scope.ram[f]=movffile;
+            }else{
+                $scope.ram=movffile;
+            }
         },
         "MOVWF": function (f) {
+            $scope.w_reg="4f";
+            $scope.ram[f]=$scope.w_reg;
+
             //DO SOMETHING
         },
         "NOP": function () {
-            //DO SOMETHING
+            //DO NOTHING ?
         },
         "RLF": function (f, d) {
-            //DO SOMETHING
+            $scope.ram[f]="b6";
+            var rlfresult=new Array();
+            var oldfile=getBinaryArray($scope.ram[f]);
+            var tempCarry=$scope.carry;
+
+            $scope.carry=oldfile[7];
+
+            for(var i=7; i>=0;i--){
+                if(i==0){
+                    rlfresult[i]=tempCarry;
+                }else{
+                    rlfresult[i]=oldfile[i-1];
+                }
+            }
+            rlfresult=convertArrayToHex(rlfresult);
+            if(d==1){
+                $scope.ram[f]=rlfresult;
+            }else{
+                $scope.w_reg=rlfresult;
+            }
+
         },
         "RRF": function (f, d) {
-            //DO SOMETHING
+            $scope.ram[f]="b6";
+            var rrfresult=new Array();
+            var oldfile=getBinaryArray($scope.ram[f]);
+            var tempCarry=$scope.carry;
+
+            $scope.carry=oldfile[0];
+
+            for(var i=0; i<=7;i++){
+                if(i==7){
+                    rrfresult[i]=tempCarry;
+                }else{
+                    rrfresult[i]=oldfile[i+1];
+                }
+            }
+            rrfresult=convertArrayToHex(rrfresult);
+            if(d==1){
+                $scope.ram[f]=rrfresult;
+            }else{
+                $scope.w_reg=rrfresult;
+            }
+
         },
         "SUBWF": function (f, d) {
             //DO SOMETHING
@@ -492,7 +541,6 @@ app.controller('CPU', function ($scope) {
             }
 
             $scope.w_reg = addresult;
-
         },
         "ANDLW": function (k) {
             var andresult = ((parseInt($scope.w_reg, 16)) & (k));
@@ -520,7 +568,9 @@ app.controller('CPU', function ($scope) {
             $scope.w_reg = andresult;
         },
         "MOVLW": function (k) {
-            //DO SOMETHING
+            $scope.w_reg=k.toString(16);
+            alert($scope.w_reg);
+
         },
         "RETFIE": function () {
             //DO SOMETHING
