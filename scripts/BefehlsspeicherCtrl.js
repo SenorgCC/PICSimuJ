@@ -4,8 +4,7 @@ app.controller('Befehlsspeichercontroller', function ($scope) {
     $scope.showContent = function ($fileContent) {
         var befehlssatz = new Array();                            //[]
         befehlssatz = $fileContent.split('\n');                 //[0001 ORG 0, ....]
-        $scope.content = befehlssatz;                           //Array ausgabe mittels ng-repeat simpel
-
+        $scope.content = befehlssatz;//Array ausgabe mittels ng-repeat simpel
         var tempbefehlsarray = new Array();                       //befehlszwischenspeicher
 
         //Unsicher, ob operations abgebildet werden soll
@@ -28,31 +27,7 @@ app.controller('Befehlsspeichercontroller', function ($scope) {
                 $scope.operations.push({zeile: tempbefehlsarray[0], befehl: tempbefehlsarray[1]});
             }
 
-        }
 
-    };
-
-
-});
-//Angularmagic zum Parsen von Dateien
-//Schwarze Magie
-app.directive('onReadFile', function ($parse) {
-    return {
-        restrict: 'A',
-        scope: false,
-        link: function (scope, element, attrs) {
-            var fn = $parse(attrs.onReadFile);
-
-            element.on('change', function (onChangeEvent) {
-                var reader = new FileReader();
-                reader.onload = function (onLoadEvent) {
-                    scope.$apply(function () {
-                        fn(scope, {$fileContent: onLoadEvent.target.result});
-                    });
-                };
-
-                reader.readAsText((onChangeEvent.srcElement || onChangeEvent.target).files[0]);
-            });
         }
     };
 });
