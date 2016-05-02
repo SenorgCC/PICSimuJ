@@ -1,30 +1,24 @@
 /**
  * Created by harmi on 29.04.2016.
  */
-app.controller('DropdownCtrl', function ($scope, $log) {
-    $scope.items = [
-        'The first choice!',
-        'And another choice for you.',
-        'but wait! A third!'
-    ];
+app.controller('DropdownCtrl', function ($scope) {
 
-    $scope.status = {
-        isopen: false
-    };
 
-    $scope.toggled = function(open) {
-        $log.log('Dropdown is now: ', open);
-    };
+    $(document).ready(function () {
+        $('.selectpicker').selectpicker({
+            style: 'btn-info'
+        });
+        $('.selectpicker').on('change',function () {
+            $scope.Takt = $(this).val();
+            alert($scope.Takt);
 
-    $scope.toggleDropdown = function($event) {
-        $event.preventDefault();
-        $event.stopPropagation();
-        $scope.status.isopen = !$scope.status.isopen;
-    };
+        });
 
-    $scope.appendToEl = angular.element(document.querySelector('#dropdown-long-content'));
+
+    });
 });
 
-document.getElementById("uploadBtn").onchange = function () {
+
+/*document.getElementById("uploadBtn").onchange = function () {
     document.getElementById("uploadFile").value = this.value;
-};
+};*/
