@@ -533,6 +533,7 @@ app.controller('CPU', function ($scope) {
             }
 
             if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15)) {
+                alert("aufruf geht");
                 $scope.digitalCarry = 1;
             }
 
