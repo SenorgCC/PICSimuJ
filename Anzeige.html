@@ -78,6 +78,7 @@
 
 
     <div class="buttons">
+        <!--Dropdownmenü Taktauswahl-->
         <select id="Taktauswahl" class="selectpicker" ng-controller="DropdownCtrl" >
             <option value="0.032767">32,767 kHz</option>
             <option value="0.5">500 kHz</option>
@@ -89,16 +90,16 @@
             <option value="20">20 MHz</option>
             <option value="32">32 MHz</option>
         </select>
-        <label>{{Takt}}</label>
 
-        <label>Laufzeitzähler</label><label>{{Laufzeit}}</label>
+        <label>Laufzeitzähler: {{Laufzeit}}</label>
+
     </div>
 
 
 
          <div ng-if="content" class="ram">
 
-            <h2>Speicherinhalt</h2>
+            <h2>SFR</h2>
 
             <table ng-if="ram" align="left" class="table table-striped">
 
@@ -148,7 +149,10 @@
                 </tr>
 
             </table>
+         </div>
+    <div ng-if="content" class="ram">
 
+        <h2>GPR</h2>
             <table ng-if="ram" class="table table-striped">
 
                 <tr>
