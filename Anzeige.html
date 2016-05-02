@@ -3,31 +3,35 @@
 <head>
     <meta charset="UTF-8">
     <title>PIC Simulator Anzeige</title>
+    <!--Einbinden von AngularJS-->
     <script type="text/javascript" src="sources/angular.min.js"></script>
-
+    <!--Einbinden von JQuery-->
     <script type="text/javascript" src="sources/jquery-2.1.4.min.js"></script>
+    <!--Einbinden von Bootstrap Javascript-Teil-->
     <script type="text/javascript" src="sources/bootstrap-3.3.6-dist/js/bootstrap.js"></script>
+    <!--Einbinden von bootstrap-select für die Taktauswahl-->
     <script type="text/javascript" src="sources/bootstrap-3.3.6-dist/js/bootstrap-select.min.js"></script>
-
+    <!--Einbinden von Bootstrap mit AngularJS für die Dateiauswahl-->
     <script type="text/javascript" src="sources/angularbootstrap/angular-animate.js"></script>
     <script type="text/javascript" src="sources/angularbootstrap/angular-touch.js"></script>
     <script type="text/javascript" src="sources/angularbootstrap/ui-bootstrap-tpls-1.3.2.min.js"></script>
-
+    <!--Aufgeteilte AngularJS-Controller zur besseren Orientierung-->
     <script type="text/javascript" src="scripts/maincontroller.js"></script>
     <script type="text/javascript" src="scripts/BefehlsspeicherCtrl.js"></script>
     <script type="text/javascript" src="scripts/CpuCtrl.js"></script>
     <script type="text/javascript" src="scripts/RamCtrl.js"></script>
     <script type="text/javascript" src="scripts/CounterCtrl.js"></script>
     <script type="text/javascript" src="scripts/DarstellungCtrl.js"></script>
-
+    <!--Eigene CSS-Datei zur Anordnung-->
     <link rel="stylesheet" href="PicSimu.css">
+    <!--Einbinden von Bootstrap-select-CSS für die Taktauswahl-->
     <link rel="stylesheet" href="sources/bootstrap-3.3.6-dist/css/bootstrap-select.min.css">
+    <!--Einbinden der allgemeinen Bootstrap-CSS für die grundsätzliche Darstellung-->
     <link rel="stylesheet" href="sources/bootstrap-3.3.6-dist/css/bootstrap.min.css">
 
 </head>
 <body ng-controller="ramcontroller">
-
-
+<!--Begin der Navbar-->
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -38,28 +42,29 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">PIC Simulator 16F84</a>
+            <a class="navbar-brand">PIC Simulator 16F84</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-            <ul class="nav navbar-nav"> <!--Linke Seite der Navbar-->
-               <li> <form class="navbar-form navbar-left" role="search">
-                    <button type="submit" class="btn btn-default">Start</button>
-                   <button type="submit" class="btn btn-default">Ein Schritt</button>
-                   <button type="submit" class="btn btn-default">Stop</button>
-                   <button type="submit" class="btn btn-default">Reset</button>
-                </form></li>
-
-
+            <!--Linke Seite der Navbar-->
+            <ul class="nav navbar-nav">
+               <li>
+                   <form class="navbar-form navbar-left" role="search" >
+                       <button type="submit" class="btn btn-default">Start</button>
+                       <button type="submit" class="btn btn-default">Ein Schritt</button>
+                       <button type="submit" class="btn btn-default">Stop</button>
+                       <button type="submit" class="btn btn-default">Reset</button>
+                   </form>
+               </li>
             </ul>
-
-            <ul class="nav navbar-nav navbar-right"><!--Rechte Seite der Navbar-->
+            <!--Rechte Seite der Navbar-->
+            <ul class="nav navbar-nav navbar-right">
                 <li><a href="#">Hilfe</a></li>
             </ul>
         </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
-</nav>
+</nav><!--Ende der Navbar-->
 
 <div ng-controller="Befehlsspeichercontroller">
         <!--Einlesen des Programmcodes-->
@@ -68,11 +73,15 @@
                 <span>Upload</span>
                 <input id="uploadBtn" input type="file" on-read-file="showContent($fileContent)" class="upload" />
             </div>
+            <!--Anzeige des Dateinamens der Hochgeladenen Datei-->
             <input id="uploadFile" placeholder="Datei auswählen" disabled="disabled" on-read-file="showContent($fileContent)"/>
         <!--Ausgabe des Programmcodes-->
         <div ng-if="content">
             <h2>Programmcode</h2>
-               <pre class=".pre-scrollable"><p ng-repeat="line in content">{{line}}</p></pre>
+               <pre class=".pre-scrollable">
+                   <!--Schleife für die Zeilenweise Ausgabe des Dateiinhalts-->
+                   <p ng-repeat="line in content">{{line}}</p>
+               </pre>
         </div>
         </div>
 
@@ -90,19 +99,16 @@
             <option value="20">20 MHz</option>
             <option value="32">32 MHz</option>
         </select>
-
+        <!--Anzeige Laufzeitzähler-->
         <label>Laufzeitzähler: {{Laufzeit}}</label>
-
     </div>
 
 
 
          <div ng-if="content" class="ram">
-
+             <!--Anzeige der Special Function Registers-->
             <h2>SFR</h2>
-
             <table ng-if="ram" align="left" class="table table-striped">
-
                 <tr>
                     <td>Indirect_addr</td> <td>{{Indirect_addr}}</td>
                     <td>{{Indirect_addr}}</td> <td>Indirect_addr</td>
@@ -147,14 +153,12 @@
                     <td>INTCON</td>	<td>{{INTCON}}</td>
                     <td>{{INTCON}}</td>	<td>INTCON</td>
                 </tr>
-
             </table>
          </div>
     <div ng-if="content" class="ram">
-
+        <!--Anzeige der General Purpose Registers-->
         <h2>GPR</h2>
             <table ng-if="ram" class="table table-striped">
-
                 <tr>
                     <td>{{ram[0]}}</td>	 <td>{{ram[1]}}</td>  <td>{{ram[2]}}</td>  <td>{{ram[3]}}</td>  <td>{{ram[4]}}</td>	 <td>{{ram[5]}}</td>  <td>{{ram[6]}}</td>  <td>{{ram[7]}}</td>
                 </tr>
@@ -182,10 +186,10 @@
                 <tr>
                     <td>{{ram[64]}}</td> <td>{{ram[65]}}</td> <td>{{ram[66]}}</td> <td>{{ram[67]}}</td>
                 </tr>
-
             </table>
         </div>
     </div>
+<!--Zusätzliche Labels für verschiedene Anzeigen-->
     <div ng-controller="CPU" class="cpu">
         <button ng-click="callOperation('3E6F')">test</button>
         <label>DigitalCarry:{{digitalCarry}}</label>
