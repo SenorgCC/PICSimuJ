@@ -20,11 +20,11 @@ app.controller('DropdownCtrl', function ($scope) {
 
 app.controller('UploadCtrl', function ($scope) {
     $(document).ready(function () {
-        $('#uploadBtn').on('change', function () {
-            alert("upload");
-            
-        });
 
+        $('#uploadBtn').change(function() {
+            var filename = $('#uploadBtn').val().split('\\').pop();
+            $('#uploadFile').val(filename);
+        });
 
     });
 
