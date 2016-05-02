@@ -62,21 +62,16 @@
 </nav>
 
 <div ng-controller="Befehlsspeichercontroller">
-        <h2>
-            Programmcode
-        </h2>
-        <br>
+        <!--Einlesen des Programmcodes-->
         <div class="codeanzeige" ng-controller="UploadCtrl">
-        <input type="file" on-read-file="showContent($fileContent)" />
-            <input id="uploadFile" placeholder="Choose File" disabled="disabled" on-read-file="showContent($fileContent)"/>
             <div class="fileUpload btn btn-primary">
                 <span>Upload</span>
                 <input id="uploadBtn" input type="file" on-read-file="showContent($fileContent)" class="upload" />
             </div>
-<!--TODO DOM änderungen anlegen Quelle: http://geniuscarrier.com/how-to-style-a-html-file-upload-button-in-pure-css/-->
-
+            <input id="uploadFile" placeholder="Datei auswählen" disabled="disabled" on-read-file="showContent($fileContent)"/>
+        <!--Ausgabe des Programmcodes-->
         <div ng-if="content">
-            <h2>File content is:</h2>
+            <h2>Programmcode</h2>
                <pre class=".pre-scrollable"><p ng-repeat="line in content">{{line}}</p></pre>
         </div>
         </div>
@@ -84,8 +79,15 @@
 
     <div class="buttons">
         <select id="Taktauswahl" class="selectpicker" ng-controller="DropdownCtrl" >
+            <option value="0.032767">32,767 kHz</option>
+            <option value="0.5">500 kHz</option>
+            <option value="1">1 MHz</option>
             <option value="2" selected="selected">2 MHz</option>
             <option value="4">4 MHz</option>
+            <option value="8">8 MHz</option>
+            <option value="16">16 MHz</option>
+            <option value="20">20 MHz</option>
+            <option value="32">32 MHz</option>
         </select>
         <label>{{Takt}}</label>
 
