@@ -26,7 +26,7 @@ app.controller('CPU', function ($scope) {
         var literalfield = parseInt(binOP, 2) & parseInt('00011111111111', 2);
         return literalfield;
     }
-//kek
+
     function getBinaryArray(hexVal) {
 
         //Sowohl der Inhalt des W Registers als auch des File Registers sind in Hex kodiert
@@ -63,6 +63,14 @@ app.controller('CPU', function ($scope) {
         }
         return complement;
 
+    }
+
+    function getZweierKomplement(hexValue){
+        var zweierKompResult= getBinaryArray(zweierKompResult)
+        zweierKompResult= getComArray(hexValue);
+        zweierKompResult = convertArrayToHex(zweierKompResult);
+        zweierKompResult= parseInt(zweierKompResult,2)+1;
+        return zweierKompResult;
     }
 
     $scope.callOperation = function (hexOP) {
@@ -586,7 +594,38 @@ app.controller('CPU', function ($scope) {
             //DO SOMETHING
         },
         "SUBLW": function (k) {
-            //DO SOMETHING
+            $scope.w_reg="4f";
+            var tempW_Reg = parseInt($scope.w_reg, 16);
+            var zahl1= getZweierKomplement(k);
+            var zahl2= getZweierKomplement($scope.w_reg);
+            var result = zahl1+zahl2-1;
+            alert(zahl1);
+            alert(zahl2);
+            result=result.toString(16);
+            var tempW_RegArray = getBinaryArray($scope.w_reg);
+            var tempaddresult_Array = getBinaryArray(result);
+            var wReg_firstN, addresresult_FirstN;
+
+            wReg_firstN = tempW_RegArray[3].toString() + tempW_RegArray[2].toString() + tempW_RegArray[1].toString() + tempW_RegArray[0].toString();
+            addresresult_FirstN = tempaddresult_Array[4].toString() + tempaddresult_Array[3].toString() + tempaddresult_Array[2].toString() + tempaddresult_Array[1].toString() + tempaddresult_Array[0].toString();
+
+            if (parseInt(result, 16) > 255) {
+
+                var temp = parseInt(result, 16);
+                $scope.carry = 1;
+                temp = temp - 256;
+                result = temp.toString(16);
+            }
+
+            if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15)) {
+                $scope.digitalCarry = 1;
+            }
+
+            if (parseInt(result, 16) == 0) {
+                $scope.zeroFlag = 1;
+            }
+            alert(result);
+            $scope.w_reg = result;
         },
         "XORLW": function (k) {
             $scope.w_reg='44';
