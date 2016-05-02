@@ -66,12 +66,12 @@
             Programmcode
         </h2>
         <br>
-        <div class="codeanzeige">
+        <div class="codeanzeige" ng-controller="UploadCtrl">
         <input type="file" on-read-file="showContent($fileContent)" />
-
+            <input id="uploadFile" placeholder="Choose File" disabled="disabled" on-read-file="showContent($fileContent)"/>
             <div class="fileUpload btn btn-primary">
                 <span>Upload</span>
-                <input type="file" class="upload" />
+                <input id="uploadBtn" input type="file" on-read-file="showContent($fileContent)" class="upload" />
             </div>
 <!--TODO DOM änderungen anlegen Quelle: http://geniuscarrier.com/how-to-style-a-html-file-upload-button-in-pure-css/-->
 
@@ -81,8 +81,6 @@
         </div>
         </div>
 
-        <!--<div ng-if="operations"> -->
-        <!--    <pre ng-repeat="operation in operations">{{operation.zeile}} {{operation.befehl}}</pre> -->
 
     <div class="buttons">
         <select id="Taktauswahl" class="selectpicker" ng-controller="DropdownCtrl" >
@@ -90,29 +88,7 @@
             <option value="4">4 MHz</option>
         </select>
         <label>{{Takt}}</label>
-        <!--Test TODO Fertigbauen Quelle: https://angular-ui.github.io/bootstrap/
 
-
-            <div class="btn-group" uib-dropdown is-open="status.isopen">
-                <button id="single-button" type="button" class="btn btn-primary" uib-dropdown-toggle ng-disabled="disabled">
-                    {{Takt}} Button dropdown <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" uib-dropdown-menu role="menu" aria-labelledby="single-button">
-                    <li role="menuitem" ><a href="#" ng-click="$.scope.Takt=2">2 MHz</a></li>
-                    <li role="menuitem"><a href="#">4 MHz</a></li>
-                    <li role="menuitem"><a href="#">Something else here</a></li>
-                </ul>
-            </div>
-        </div>
-
-
-
-
-
-
-
-
-        -->
         <label>Laufzeitzähler</label><label>{{Laufzeit}}</label>
     </div>
 

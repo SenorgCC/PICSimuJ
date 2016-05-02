@@ -18,7 +18,16 @@ app.controller('DropdownCtrl', function ($scope) {
     });
 });
 
+app.controller('UploadCtrl', function ($scope) {
+    $(document).ready(function () {
+        $('#uploadBtn').on('change', function () {
+            alert("upload");
+            
+        });
 
-/*document.getElementById("uploadBtn").onchange = function () {
-    document.getElementById("uploadFile").value = this.value;
-};*/
+
+    });
+
+
+});
+
