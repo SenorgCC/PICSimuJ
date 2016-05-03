@@ -4,6 +4,7 @@
 //es werden das Register (Reg), Instructionpointer (IP) und Flags: Zero (ZF), Carry(CY) und Faultflag (Fl)
 ///TODO: Instructioncounter in den richtigen scope legen
 var intstructioncounter = 0;
+var Laufzeit=0;
 
 var app = angular.module('pic', ['ui.bootstrap']);
 
@@ -29,4 +30,36 @@ app.directive('onReadFile', function ($parse) {
         }
 
     };
+});
+
+app.factory('meineDaten',function(){
+
+    return {
+
+        nachricht:'Das ist mein Text'
+
+}
+});
+
+app.controller('Zeit', function ($scope,meineDaten) {
+    function getlaufzeit(Takte) {
+        Laufzeit = Laufzeit + (1 / Takt * Takte);
+        alert(Laufzeit);
+
+    }
+    function ausgabe() {
+        alert(JSON.stringify(meineDaten));
+        
+    }
+    $scope.ausgabe=function () {
+        ausgabe();
+        
+    };
+    $scope.getZeit = function (Takte) {
+        getlaufzeit(Takte)
+        alert(Laufzeit);
+    };
+
+
+    
 });
