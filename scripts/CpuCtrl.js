@@ -66,10 +66,10 @@ app.controller('CPU', function ($scope) {
     }
 
     function getZweierKomplement(hexValue){
-        var zweierKompResult= getBinaryArray(zweierKompResult)
-        zweierKompResult= getComArray(hexValue);
+        var zweierKompResult= getBinaryArray(hexValue)
+        zweierKompResult= getComArray(zweierKompResult);
         zweierKompResult = convertArrayToHex(zweierKompResult);
-        zweierKompResult= parseInt(zweierKompResult,2)+1;
+        zweierKompResult= parseInt(zweierKompResult,16)+1;
         return zweierKompResult;
     }
 
@@ -247,9 +247,6 @@ app.controller('CPU', function ($scope) {
             var tempaddresult_Array = getBinaryArray(addresult);
             var wReg_firstN, addresresult_FirstN;
 
-            ///TODO Diese Funktionen lassen sich gut refactorn
-            ///TODO: Subtraktionsweg überlegen
-
             wReg_firstN = tempW_RegArray[3].toString() + tempW_RegArray[2].toString() + tempW_RegArray[1].toString() + tempW_RegArray[0].toString();
             addresresult_FirstN = tempaddresult_Array[4].toString() + tempaddresult_Array[3].toString() + tempaddresult_Array[2].toString() + tempaddresult_Array[1].toString() + tempaddresult_Array[0].toString();
 
@@ -328,7 +325,6 @@ app.controller('CPU', function ($scope) {
             } else {
                 $scope.w_reg = result;
             }
-
         },
         "DECFSZ": function (f, d) {
             var result = parseInt($scope.ram[f], 16) - 1;
@@ -377,7 +373,6 @@ app.controller('CPU', function ($scope) {
             }
         },
         "IORWF": function (f, d) {
-            ///TODO: TESTEN!
             var fileRegValue = $scope.ram[f];
             var andresult = ((parseInt($scope.w_reg, 16)) | (parseInt(fileRegValue, 16)));
             andresult = andresult.toString(16);
@@ -407,14 +402,11 @@ app.controller('CPU', function ($scope) {
         "MOVWF": function (f) {
             $scope.w_reg="4f";
             $scope.ram[f]=$scope.w_reg;
-
-            //DO SOMETHING
         },
         "NOP": function () {
             //DO NOTHING ?
         },
         "RLF": function (f, d) {
-            $scope.ram[f]="b6";
             var rlfresult=new Array();
             var oldfile=getBinaryArray($scope.ram[f]);
             var tempCarry=$scope.carry;
@@ -437,7 +429,6 @@ app.controller('CPU', function ($scope) {
 
         },
         "RRF": function (f, d) {
-            $scope.ram[f]="b6";
             var rrfresult=new Array();
             var oldfile=getBinaryArray($scope.ram[f]);
             var tempCarry=$scope.carry;
@@ -460,14 +451,54 @@ app.controller('CPU', function ($scope) {
 
         },
         "SUBWF": function (f, d) {
-            //DO SOMETHING
+
+            var zahl1=parseInt($scope.ram[f],16);
+            var zahl2= getZweierKomplement($scope.w_reg);
+            var result = zahl1+zahl2;
+            result=result.toString(16);
+            var tempW_RegArray = getBinaryArray($scope.w_reg);
+            var tempaddresult_Array = getBinaryArray(result);
+            var wReg_firstN, addresresult_FirstN;
+
+            wReg_firstN = tempW_RegArray[3].toString() + tempW_RegArray[2].toString() + tempW_RegArray[1].toString() + tempW_RegArray[0].toString();
+            addresresult_FirstN =tempaddresult_Array[3].toString() + tempaddresult_Array[2].toString() + tempaddresult_Array[1].toString() + tempaddresult_Array[0].toString();
+
+            if (parseInt(result, 16) > 255) {
+
+                var temp = parseInt(result, 16)-256;
+                $scope.carry = 1;
+                result = temp.toString(16);
+            }
+            ///TODO: DC ÜBERDENKEN!!!
+            if ((parseInt(wReg_firstN, 2)>(parseInt(addresresult_FirstN, 2)))){
+                $scope.digitalCarry = 1;
+            }
+
+            if (parseInt(result, 16) == 0) {
+                $scope.zeroFlag = 1;
+            }
+            if (d == 1) {
+                $scope.ram[f] = result;
+            } else {
+                $scope.w_reg = result;
+            }
         },
         "SWAPF": function (f, d) {
-            //DO SOMETHING
+            var tempArray=getBinaryArray($scope.ram[f]);
+            var nibble1=tempArray[3].toString()+tempArray[2].toString()+tempArray[1].toString()+tempArray[0].toString();
+            var nibble2=tempArray[7].toString()+tempArray[6].toString()+tempArray[5].toString()+tempArray[4].toString();
+            var swapResult=nibble1+nibble2;
+            swapResult=parseInt(swapResult,2);
+            swapResult=swapResult.toString(16);
+
+            if (d == 1) {
+                $scope.ram[f] = swapResult;
+            } else {
+                $scope.w_reg = swapResult;
+            }
         },
         "XORWF": function (f, d) {
-            $scope.w_reg='ff';
-            $scope.ram[f]='44';
+
             var fileRegValue = $scope.ram[f];
             var xorresult = ((parseInt($scope.w_reg, 16)) ^ (parseInt(fileRegValue, 16)));
             xorresult = xorresult.toString(16);
@@ -482,10 +513,8 @@ app.controller('CPU', function ($scope) {
             } else {
                 $scope.w_reg = xorresult;
             }
-            alert(xorresult);
         },
         "BCF": function (f, b) {
-            ///TODO: Testen!
             var result;
             var tempFile = getBinaryArray($scope.ram[f]);
             tempFile[b] = 0;
@@ -498,7 +527,6 @@ app.controller('CPU', function ($scope) {
             tempFile[b] = 1;
             result = convertArrayToHex(tempFile);
             $scope.ram[f] = result;
-
         },
         "BTFSC": function (f, b) {
             //DO SOMETHING
@@ -564,6 +592,9 @@ app.controller('CPU', function ($scope) {
         },
         "CRLWDT": function () {
             //DO SOMETHING
+            $scope.watchdogtimer='00';
+            $scope.TimeOutbit=1;
+            $scope.PowerDownbit=1;
         },
         "GOTO": function (k) {
             //DO SOMETHING
@@ -594,37 +625,31 @@ app.controller('CPU', function ($scope) {
             //DO SOMETHING
         },
         "SUBLW": function (k) {
-            $scope.w_reg="4f";
-            var tempW_Reg = parseInt($scope.w_reg, 16);
-            var zahl1= getZweierKomplement(k);
+            var zahl1=k;
             var zahl2= getZweierKomplement($scope.w_reg);
-            var result = zahl1+zahl2-1;
-            alert(zahl1);
-            alert(zahl2);
+            var result = zahl1+zahl2;
             result=result.toString(16);
             var tempW_RegArray = getBinaryArray($scope.w_reg);
             var tempaddresult_Array = getBinaryArray(result);
             var wReg_firstN, addresresult_FirstN;
 
             wReg_firstN = tempW_RegArray[3].toString() + tempW_RegArray[2].toString() + tempW_RegArray[1].toString() + tempW_RegArray[0].toString();
-            addresresult_FirstN = tempaddresult_Array[4].toString() + tempaddresult_Array[3].toString() + tempaddresult_Array[2].toString() + tempaddresult_Array[1].toString() + tempaddresult_Array[0].toString();
+            addresresult_FirstN =tempaddresult_Array[3].toString() + tempaddresult_Array[2].toString() + tempaddresult_Array[1].toString() + tempaddresult_Array[0].toString();
 
             if (parseInt(result, 16) > 255) {
 
-                var temp = parseInt(result, 16);
+                var temp = parseInt(result, 16)-256;
                 $scope.carry = 1;
-                temp = temp - 256;
                 result = temp.toString(16);
             }
-
-            if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15)) {
+            ///TODO: DC ÜBERDENKEN!!!
+            if ((parseInt(wReg_firstN, 2)>(parseInt(addresresult_FirstN, 2)))){
                 $scope.digitalCarry = 1;
             }
 
             if (parseInt(result, 16) == 0) {
                 $scope.zeroFlag = 1;
             }
-            alert(result);
             $scope.w_reg = result;
         },
         "XORLW": function (k) {
