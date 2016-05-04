@@ -31,6 +31,30 @@ app.directive('onReadFile', function ($parse) {
 
     };
 });
+
+    pic.factory('storage', function () {
+        var collection = [];
+
+        var get = function () {
+            return collection;
+        };
+
+        var add = function (item) {
+            collection.push(item);
+        };
+
+        var remove = function (index) {
+            collection.splice(index, 1);
+        };
+
+        // Reveal public API.
+        return {
+            getItems: get,
+            addItem: add,
+            removeItem: remove
+        };
+    });
+
 /*
 app.factory('meineDaten',function(){
 

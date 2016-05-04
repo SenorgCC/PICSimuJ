@@ -88,6 +88,7 @@
 
 
         <div class="buttons" ng-controller="DropdownCtrl">
+            <div ng-controller="Counter">
             <!--Dropdownmenü Taktauswahl--
             <select id="Taktauswahl" class="selectpicker" ng-controller="DropdownCtrl" ng-model="$scope.Takt">
                 <option value="0.032767">32,767 kHz</option>
@@ -104,6 +105,7 @@
             <!--Anzeige Laufzeitzähler-->
             <label>{{selectedItem.Takt}}</label>
             <label>Laufzeitzähler: {{Laufzeit}}</label>
+        </div>
         </div>
 
 

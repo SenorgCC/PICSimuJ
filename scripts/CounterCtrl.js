@@ -1,9 +1,11 @@
-app.controller('Counter', function ($scope){
-    $scope.Takt=1;
+app.controller('Counter', function ($scope, storage){
     $scope.Laufzeit=0;
+
+    $scope.items = storage.get();
+
    $scope.Zeit = function (takte){
-        $scope.Laufzeit = $scope.Laufzeit + ((1 / $scope.Takt) * takte);
+        $scope.Laufzeit = $scope.Laufzeit + ((1 / $scope.selectedItem.Takt) * takte);
         alert ($scope.Laufzeit);
+       alert($scope.items);
     };
-    //$scope.Counter=Zeit(takte);
 });
