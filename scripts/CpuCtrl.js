@@ -1,4 +1,5 @@
 app.controller('CPU', function ($scope) {
+    $scope.Instructioncounter=0;
 
     function getDirectory(binOP) {
         var directory = parseInt(binOP, 2) & parseInt('00000010000000', 2);
@@ -36,6 +37,18 @@ app.controller('CPU', function ($scope) {
 
         for (var i = 0; i < 8; i++) {
             result_Binary[i] = (tempHex_Val >> i) & 1;
+        }
+        return result_Binary;
+
+    }
+    function getBinaryLiteralArray(IntVal) {
+
+        //Das k Literalfeld wird mit 11 Bit Kodiert der Programmcounter Benötigt 13, diese 11 werden in einem BinArray
+        //gespeichert
+        var result_Binary = [];
+
+        for (var i = 0; i < 11; i++) {
+            result_Binary[i] = (IntVal >> i) & 1;
         }
         return result_Binary;
 
@@ -272,6 +285,7 @@ app.controller('CPU', function ($scope) {
             } else {
                 $scope.w_reg = addresult;
             }
+            $scope.Instructioncounter++;
 
         },
         "ANDWF": function (f, d) {
@@ -356,14 +370,14 @@ app.controller('CPU', function ($scope) {
             }
         },
         "INCFSZ": function (f, d) {
-            //DO SOMETHING
+
             var result = parseInt($scope.ram[f], 16) + 1;
             //Wenn das register um 1 dekrementiert wird und damit 0 ergibt,
             //wird statt dem nächsten Befehl ein NOP ausgeführt
             if (result == 0) {
                 $scope.callOperation('00');
             } else {
-                ///TODO: InstructionCounter müsste hier kommen!
+                $scope.Instructioncounter++;
             }
             result = result.toString(16);
             if (d == 1) {
@@ -404,7 +418,8 @@ app.controller('CPU', function ($scope) {
             $scope.ram[f]=$scope.w_reg;
         },
         "NOP": function () {
-            //DO NOTHING ?
+            //Der NOP Befehl erhöt nur den IC, Keine weitere Funktion
+            $scope.Instructioncounter++;
         },
         "RLF": function (f, d) {
             var rlfresult=new Array();
@@ -469,8 +484,7 @@ app.controller('CPU', function ($scope) {
                 $scope.carry = 1;
                 result = temp.toString(16);
             }
-            ///TODO: DC ÜBERDENKEN!!!
-            if ((parseInt(wReg_firstN, 2)>(parseInt(addresresult_FirstN, 2)))){
+            if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15)) {
                 $scope.digitalCarry = 1;
             }
 
@@ -535,7 +549,7 @@ app.controller('CPU', function ($scope) {
                 //bei gesetztem bit wird statt dem nächsten Befehl ein NOP aufgerufen
                 $scope.callOperation("0");
             } else {
-                ///TODO: InstructionCounter muss her!
+                $scope.Instructioncounter++;
             }
         },
         "BTFSS": function (f, b) {
@@ -544,7 +558,7 @@ app.controller('CPU', function ($scope) {
                 //bei gesetztem bit wird statt dem nächsten Befehl ein NOP aufgerufen
                 $scope.callOperation("0");
             } else {
-                ///TODO: InstructionCounter muss her!
+                $scope.Instructioncounter++;
             }
         },
         "ADDLW": function (k) {
@@ -588,7 +602,36 @@ app.controller('CPU', function ($scope) {
             $scope.w_reg = andresult;
         },
         "CALL": function (k) {
-            //DO SOMETHING
+            ///Das Eingegebene Literal muss zunächt in ein 13 Bit Array umgewandelt werden
+            var literalArray=getBinaryLiteralArray(k);
+
+            //Das PCLATH wird als Hex Zahl gelagert, zum verarbeiten wird es aber als Bit array Benötigt, daher Umwandlung
+            var PCLATHarray=getBinaryArray($scope.PCLATH);
+
+            //Zur Vereinfachten Weiterverarbeitung wird ein neues Array mit einer 2 Bit größe erstellt
+            //In dieses werden das 4. und 3. Bit des PCLATH gespeichert
+            var PCLATH43=new Array(2);
+
+            //ProgramSTack ist die Stack funltion, auf dem wird der Nächste Befehl gespeichert
+            $scope.ProgramStack.push($scope.operations[$scope.Instructioncounter+1].befehl);
+
+            //Laden der 2 PCLATH bits in das Verarbeitungsarray
+            PCLATH43[0]=PCLATHarray[3];
+            PCLATH43[1]=PCLATHarray[4];
+
+            //Das Literalarray enthält 11 Bit und PCLATH 2 Bit damit der PC die nötigen 13 Bit größe bekommt,
+            //Müssen diese mit dem Concat Befehl konkateniert werden
+            $scope.ProgramCounter= PCLATH43.concat(literalArray);
+
+            //Der Join Befehl enfernt die "," aus einem Array. Dadurch entsteht eine Binäre Zahl, die zu einem Int
+            //Umgewandelt werden kann
+            var PCLBefehl=parseInt($scope.ProgramCounter.join(''),2);
+
+            //Umwandlung der Integer Zahl in einen Hex String wert
+            PCLBefehl = PCLBefehl.toString(16);
+
+            //Der Hex String wird zur übergabe des neuen Befehels benötigt
+            callOperation(PCLBefehl);
         },
         "CRLWDT": function () {
             //DO SOMETHING
@@ -598,6 +641,7 @@ app.controller('CPU', function ($scope) {
         },
         "GOTO": function (k) {
             //DO SOMETHING
+
         },
         "IORLW": function (k) {
             var andresult = ((parseInt($scope.w_reg, 16)) | (k));
@@ -613,7 +657,10 @@ app.controller('CPU', function ($scope) {
 
         },
         "RETFIE": function () {
-            //DO SOMETHING
+            ///TODO me: Muss getestet werden!
+            $scope.GlobalInteruptEnable=1;
+            $scope.ProgramCounter=$scope.ProgramStack[$scope.ProgramStack.length -1];
+            $scope.ProgramStack.pop();
         },
         "RETLW": function (k) {
             //DO SOMETHING

@@ -8,7 +8,10 @@ app.controller('Befehlsspeichercontroller', function ($scope) {
         var tempbefehlsarray = new Array();                       //befehlszwischenspeicher
 
         //Unsicher, ob operations abgebildet werden soll
-        $scope.operations = new Array();                        //Echter Befehlsspeicher Objektarray
+        $scope.operations = new Array(); //Echter Befehlsspeicher Objektarray
+        $scope.ProgramStack= new Array();   //Wird für die Call Operation benötigt, um die Korrekte einsprunstelle wieder zu finden
+        $scope.ProgramCounter= new Array(13); //ProgrammCounter hat eine vordefinierte länge von 13 Bit
+
 
         //Schleife filter die wichtigen Befehle aus dem Quellcode
         for (var i = 0; i <= befehlssatz.length - 1; i++) {
