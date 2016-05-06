@@ -1,6 +1,5 @@
 app.controller('CPU', function ($scope) {
-    $scope.Instructioncounter=0;
-
+    
     function getDirectory(binOP) {
         //Das D-Bit befindet sich bei den meisten Befehlen an der Selben Position, daher kann es ausmaskiert werden
         var directory = parseInt(binOP, 2) & parseInt('00000010000000', 2);
@@ -268,8 +267,7 @@ app.controller('CPU', function ($scope) {
             Befehlsausfuehrung["XORLW"](getLiteralfieldshort(tempbin));
         }
     };
-
-
+    
     var Befehlsausfuehrung = {
         "ADDWF": function (f, d) {
             var tempW_Reg = parseInt($scope.w_reg, 16);
@@ -295,7 +293,7 @@ app.controller('CPU', function ($scope) {
             }
 
             if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15)) {
-                $scope.digitalCarry = 1;
+                $scope.digitCarry = 1;
             }
 
             if (d == 1) {
@@ -304,7 +302,6 @@ app.controller('CPU', function ($scope) {
             } else {
                 $scope.w_reg = addresult;
             }
-            $scope.Instructioncounter++;
 
         },
         "ANDWF": function (f, d) {
@@ -433,7 +430,6 @@ app.controller('CPU', function ($scope) {
             }
         },
         "MOVWF": function (f) {
-            $scope.w_reg="4f";
             $scope.ram[f]=$scope.w_reg;
         },
         "NOP": function () {
@@ -485,7 +481,6 @@ app.controller('CPU', function ($scope) {
 
         },
         "SUBWF": function (f, d) {
-
             var zahl1=parseInt($scope.ram[f],16);
             var zahl2= getZweierKomplement($scope.w_reg);
             var result = zahl1+zahl2;
@@ -504,7 +499,7 @@ app.controller('CPU', function ($scope) {
                 result = temp.toString(16);
             }
             if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15)) {
-                $scope.digitalCarry = 1;
+                $scope.digitCarry = 1;
             }
 
             if (parseInt(result, 16) == 0) {
@@ -603,7 +598,7 @@ app.controller('CPU', function ($scope) {
 
             if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15)) {
 
-                $scope.digitalCarry = 1;
+                $scope.digitCarry = 1;
             }
 
             if (parseInt(addresult, 16) == 0) {
@@ -663,7 +658,7 @@ app.controller('CPU', function ($scope) {
 
             //Das PCLATH wird als Hex Zahl gelagert, zum verarbeiten wird es aber als Bit array Benötigt, daher Umwandlung
             var PCLATHarray=getBinaryArray($scope.PCLATH);
-
+            var literalArray=getBinaryLiteralArray(k);
             //Zur Vereinfachten Weiterverarbeitung wird ein neues Array mit einer 2 Bit größe erstellt
             //In dieses werden das 4. und 3. Bit des PCLATH gespeichert
             var PCLATH43=new Array(2);
@@ -696,7 +691,6 @@ app.controller('CPU', function ($scope) {
         },
         "MOVLW": function (k) {
             $scope.w_reg=k.toString(16);
-            alert($scope.w_reg);
 
         },
         "RETFIE": function () {
@@ -752,7 +746,7 @@ app.controller('CPU', function ($scope) {
             }
             ///TODO: DC ÜBERDENKEN!!!
             if ((parseInt(wReg_firstN, 2)>(parseInt(addresresult_FirstN, 2)))){
-                $scope.digitalCarry = 1;
+                $scope.digitCarry = 1;
             }
 
             if (parseInt(result, 16) == 0) {

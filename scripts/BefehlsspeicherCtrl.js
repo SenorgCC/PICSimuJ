@@ -30,7 +30,6 @@ app.controller('Befehlsspeichercontroller', function ($scope) {
                 $scope.operations.push({zeile: tempbefehlsarray[0], befehl: tempbefehlsarray[1]});
             }
 
-
         }
     };
 });

@@ -1,7 +1,7 @@
 /**
  * Created by harmi on 29.04.2016.
  */
-app.controller('DropdownCtrl',['$scope', function ($scope, storage) {
+app.controller('DropdownCtrl',['$scope', function ($scope) {
    /*Controller für den Dropdownbutton der Taktauswahl*
     $(document).ready(function () {
         $('.selectpicker').selectpicker({
@@ -26,7 +26,7 @@ app.controller('DropdownCtrl',['$scope', function ($scope, storage) {
     $scope.selectedItem = $scope.items[0];
 
     $scope.save = function (data) {
-        storage.add(data);
+        //storage.add(data);
     };
     $scope.save($scope.selectedItem.Takt);
 

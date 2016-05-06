@@ -1,7 +1,7 @@
 app.controller('ramcontroller', function ($scope) {
     //Deklaration Arbeitsregister und die Flags
-    $scope.w_reg = "62";
-    $scope.digitalCarry = 0;
+    $scope.w_reg = '00';
+    $scope.digitCarry = 0;
     $scope.zeroFlag = 0;
     $scope.carry = 0;
 

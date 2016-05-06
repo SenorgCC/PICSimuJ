@@ -22,148 +22,147 @@
     <script type="text/javascript" src="scripts/RamCtrl.js"></script>
     <script type="text/javascript" src="scripts/CounterCtrl.js"></script>
     <script type="text/javascript" src="scripts/DarstellungCtrl.js"></script>
+    <script type="text/javascript" src="scripts/AblaufsCtrl.js"></script>
     <!--Eigene CSS-Datei zur Anordnung-->
     <link rel="stylesheet" href="PicSimu.css">
     <!--Einbinden von Bootstrap-select-CSS für die Taktauswahl-->
     <link rel="stylesheet" href="sources/bootstrap-3.3.6-dist/css/bootstrap-select.min.css">
     <!--Einbinden der allgemeinen Bootstrap-CSS für die grundsätzliche Darstellung-->
     <link rel="stylesheet" href="sources/bootstrap-3.3.6-dist/css/bootstrap.min.css">
-
 </head>
 <body ng-controller="ramcontroller">
-    <!--Begin der Navbar-->
-    <div ng-controller="CPU">
-    <nav class="navbar navbar-default">
-        <div class="container-fluid" ng-controller="Counter">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand">PIC Simulator 16F84</a>
-            </div>
-
-            <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <!--Linke Seite der Navbar-->
-                <ul class="nav navbar-nav">
-                   <li>
-                       <form class="navbar-form navbar-left" role="search" >
-                           <button type="submit" class="btn btn-default" ng-click="callOperation('3E6F')">Start</button>
-                           <button type="submit" class="btn btn-default" ng-click="Zeit(2)">Ein Schritt</button>
-                           <button type="submit" class="btn btn-default">Stop</button>
-                           <button type="submit" class="btn btn-default">Reset</button>
-                       </form>
-                   </li>
-                </ul>
-                <!--Rechte Seite der Navbar-->
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#">Hilfe</a></li>
-                </ul>
-            </div><!-- /.navbar-collapse -->
-        </div><!-- /.container-fluid -->
-    </nav><!--Ende der Navbar-->
-
     <div ng-controller="Befehlsspeichercontroller">
-            <!--Einlesen des Programmcodes-->
-            <div class="codeanzeige" ng-controller="UploadCtrl">
-                <div class="fileUpload btn btn-primary">
-                    <span>Upload</span>
-                    <input id="uploadBtn" input type="file" on-read-file="showContent($fileContent)" class="upload" />
+    <div ng-controller="CPU">
+        <!--Begin der Navbar-->
+        <div ng-controller="AblaufsCtrl">
+            <nav class="navbar navbar-default">
+                <div class="container-fluid" ng-controller="Counter">
+                    <!-- Brand and toggle get grouped for better mobile display -->
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                            <span class="sr-only">Toggle navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand">PIC Simulator 16F84</a>
+                    </div>
+
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <!--Linke Seite der Navbar-->
+                        <ul class="nav navbar-nav">
+                           <li>
+                               <form class="navbar-form navbar-left" role="search" >
+                                   <button type="submit" class="btn btn-default" ng-disable="content" ng-click="Startapp()">Start</button>
+                                   <button type="submit" class="btn btn-default" ng-click="Zeit(2)">Ein Schritt</button>
+                                   <button type="submit" class="btn btn-default" ng-click="stoppapp()">Stop</button>
+                                   <button type="submit" class="btn btn-default" ng-click="reset()">Reset</button>
+                               </form>
+                           </li>
+                        </ul>
+                        <!--Rechte Seite der Navbar-->
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="#">Hilfe</a></li>
+                        </ul>
+                    </div><!-- /.navbar-collapse -->
+                </div><!-- /.container-fluid -->
+            </nav><!--Ende der Navbar-->
+
+            <div >
+                <!--Einlesen des Programmcodes-->
+                <div class="codeanzeige" ng-controller="UploadCtrl">
+                    <div class="fileUpload btn btn-primary">
+                        <span>Upload</span>
+                        <input id="uploadBtn" input type="file" on-read-file="showContent($fileContent)" class="upload" />
+                    </div>
+                    <!--Anzeige des Dateinamens der Hochgeladenen Datei-->
+                    <input id="uploadFile" placeholder="Datei auswählen" disabled="disabled" on-read-file="showContent($fileContent)"/>
+                <!--Ausgabe des Programmcodes-->
+                    <div ng-if="content">
+                        <h2>Programmcode</h2>
+                           <pre class=".pre-scrollable">
+                               <!--Schleife für die Zeilenweise Ausgabe des Dateiinhalts-->
+                               <p ng-repeat="line in content">{{line}}</p>
+                           </pre>
+                    </div>
                 </div>
-                <!--Anzeige des Dateinamens der Hochgeladenen Datei-->
-                <input id="uploadFile" placeholder="Datei auswählen" disabled="disabled" on-read-file="showContent($fileContent)"/>
-            <!--Ausgabe des Programmcodes-->
-            <div ng-if="content">
-                <h2>Programmcode</h2>
-                   <pre class=".pre-scrollable">
-                       <!--Schleife für die Zeilenweise Ausgabe des Dateiinhalts-->
-                       <p ng-repeat="line in content">{{line}}</p>
-                   </pre>
-            </div>
-            </div>
 
 
-        <div class="buttons" ng-controller="DropdownCtrl">
-            <div ng-controller="Counter">
-            <!--Dropdownmenü Taktauswahl--
-            <select id="Taktauswahl" class="selectpicker" ng-controller="DropdownCtrl" ng-model="$scope.Takt">
-                <option value="0.032767">32,767 kHz</option>
-                <option value="0.5">500 kHz</option>
-                <option value="1">1 MHz</option>
-                <option value="2" selected="selected">2 MHz</option>
-                <option value="4">4 MHz</option>
-                <option value="8">8 MHz</option>
-                <option value="16">16 MHz</option>
-                <option value="20">20 MHz</option>
-                <option value="32">32 MHz</option>
-            </select>-->
-            <select id="Taktauswahl" class="selectpicker"  ng-model="selectedItem" ng-options="item.name for item in items"></select>
-            <!--Anzeige Laufzeitzähler-->
-            <label>{{selectedItem.Takt}}</label>
-            <label>Laufzeitzähler: {{Laufzeit}}</label>
-        </div>
-        </div>
+                <div class="buttons" ng-controller="DropdownCtrl">
+                    <div ng-controller="Counter">
+                        <!--Dropdownmenü Taktauswahl--
+                        <select id="Taktauswahl" class="selectpicker" ng-controller="DropdownCtrl" ng-model="$scope.Takt">
+                        <option value="0.032767">32,767 kHz</option>
+                        <option value="0.5">500 kHz</option>
+                        <option value="1">1 MHz</option>
+                        <option value="2" selected="selected">2 MHz</option>
+                        <option value="4">4 MHz</option>
+                        <option value="8">8 MHz</option>
+                        <option value="16">16 MHz</option>
+                        <option value="20">20 MHz</option>
+                        <option value="32">32 MHz</option>
+                        </select>-->
+                        <select id="Taktauswahl" class="selectpicker"  ng-model="selectedItem" ng-options="item.name for item in items"></select>
+                        <!--Anzeige Laufzeitzähler-->
+                        <label>{{selectedItem.Takt}}</label>
+                        <label>Laufzeitzähler: {{Laufzeit}}</label>
+                    </div>
+                </div>
 
-
-
-             <div ng-if="content" class="ram">
-                 <!--Anzeige der Special Function Registers-->
-                <h2>SFR</h2>
-                <table ng-if="ram" align="left" class="table table-striped">
-                    <tr>
-                        <td>Indirect_addr</td> <td>{{Indirect_addr}}</td>
-                        <td>{{Indirect_addr}}</td> <td>Indirect_addr</td>
-                    </tr>
-                    <tr>
-                        <td>TMR0</td> <td>{{TMR0}}</td>
-                        <td>{{OPTION_REG}}</td> <td>OPTION_REG</td>
-                    </tr>
-                    <tr>
-                        <td>PCL</td> <td>{{PCL}}</td>
-                        <td>{{PCL}}</td> <td>PCL</td>
-                    </tr>
-                    <tr>
-                        <td>STATUS</td> <td>{{STATUS}}</td>
-                        <td>{{STATUS}}</td> <td>STATUS</td>
-                    </tr>
-                    <tr>
-                        <td>FSR</td> <td>{{FSR}}</td>
-                        <td>{{FSR}}</td> <td>FSR</td>
-                    </tr>
-                    <tr>
-                        <td>PORTA</td> <td>{{PORTA}}</td>
-                        <td>{{TRISA}}</td> <td>TRISA</td>
-                    </tr>
-                    <tr>
-                        <td>PORTB</td> <td>{{PORTB}}</td>
-                        <td>{{TRISB}}</td> <td>TRISB</td>
-                    </tr>
-                    <tr>
-                        <td>EEDATA</td>	<td>{{EEDATA}}</td>
-                        <td>{{EECON1}}</td>	<td>EECON1</td>
-                    </tr>
-                    <tr>
-                        <td>EEADR</td>	<td>{{EEADR}}</td>
-                        <td>{{EECON2}}</td>	<td>EECON2</td>
-                    </tr>
-                    <tr>
-                        <td>PCLATH</td>	<td>{{PCLATH}}</td>
-                        <td>{{PCLATH}}</td>	<td>PCLATH</td>
-                    </tr>
-                    <tr>
-                        <td>INTCON</td>	<td>{{INTCON}}</td>
-                        <td>{{INTCON}}</td>	<td>INTCON</td>
-                    </tr>
-                </table>
-
-             </div>
-        <div ng-if="content" class="ram">
-            <!--Anzeige der General Purpose Registers-->
-            <h2>GPR</h2>
+                <div class="ram">
+                         <!--Anzeige der Special Function Registers-->
+                    <h2>SFR</h2>
+                    <table align="left" class="table table-striped">
+                        <tr>
+                            <td>Indirect_addr</td> <td>{{Indirect_addr}}</td>
+                            <td>{{Indirect_addr}}</td> <td>Indirect_addr</td>
+                        </tr>
+                        <tr>
+                            <td>TMR0</td> <td>{{TMR0}}</td>
+                            <td>{{OPTION_REG}}</td> <td>OPTION_REG</td>
+                        </tr>
+                        <tr>
+                            <td>PCL</td> <td>{{PCL}}</td>
+                            <td>{{PCL}}</td> <td>PCL</td>
+                            </tr>
+                        <tr>
+                            <td>STATUS</td> <td>{{STATUS}}</td>
+                            <td>{{STATUS}}</td> <td>STATUS</td>
+                            </tr>
+                        <tr>
+                            <td>FSR</td> <td>{{FSR}}</td>
+                            <td>{{FSR}}</td> <td>FSR</td>
+                            </tr>
+                        <tr>
+                            <td>PORTA</td> <td>{{PORTA}}</td>
+                            <td>{{TRISA}}</td> <td>TRISA</td>
+                        </tr>
+                        <tr>
+                            <td>PORTB</td> <td>{{PORTB}}</td>
+                            <td>{{TRISB}}</td> <td>TRISB</td>
+                        </tr>
+                        <tr>
+                            <td>EEDATA</td>	<td>{{EEDATA}}</td>
+                            <td>{{EECON1}}</td>	<td>EECON1</td>
+                        </tr>
+                        <tr>
+                            <td>EEADR</td>	<td>{{EEADR}}</td>
+                            <td>{{EECON2}}</td>	<td>EECON2</td>
+                        </tr>
+                        <tr>
+                            <td>PCLATH</td>	<td>{{PCLATH}}</td>
+                            <td>{{PCLATH}}</td>	<td>PCLATH</td>
+                        </tr>
+                        <tr>
+                            <td>INTCON</td>	<td>{{INTCON}}</td>
+                            <td>{{INTCON}}</td>	<td>INTCON</td>
+                        </tr>
+                    </table>
+                </div>
+            <div class="ram">
+                <!--Anzeige der General Purpose Registers-->
+                <h2>GPR</h2>
                 <table ng-if="ram" class="table table-striped">
                     <tr>
                         <td>{{ram[0]}}</td>	 <td>{{ram[1]}}</td>  <td>{{ram[2]}}</td>  <td>{{ram[3]}}</td>  <td>{{ram[4]}}</td>	 <td>{{ram[5]}}</td>  <td>{{ram[6]}}</td>  <td>{{ram[7]}}</td>
@@ -195,11 +194,14 @@
                 </table>
             </div>
 
-    <!--Zusätzliche Labels für verschiedene Anzeigen-->
+        <!--Zusätzliche Labels für verschiedene Anzeigen-->
+            </div>
+            <label>DigitalCarry:{{digitCarry}}</label>
+            <label>ZeroFlag:{{zeroFlag}}</label>
+            <label>CarryFlag:{{carry}}</label>
+            <label>Instructions:{{Instructioncounter}}</label>
+        </div>
     </div>
-        <label>DigitalCarry:{{digitalCarry}}</label>
-        <label>ZeroFlag:{{zeroFlag}}</label>
-        <label>CarryFlag:{{carry}}</label>
     </div>
 </body>
 </html>

@@ -31,8 +31,8 @@ app.directive('onReadFile', function ($parse) {
 
     };
 });
-
-    pic.factory('storage', function () {
+/*
+    app.factory('storage', function () {
         var collection = [];
 
         var get = function () {
@@ -54,6 +54,7 @@ app.directive('onReadFile', function ($parse) {
             removeItem: remove
         };
     });
+  */
 
 /*
 app.factory('meineDaten',function(){
