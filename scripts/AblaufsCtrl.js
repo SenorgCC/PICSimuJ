@@ -5,13 +5,19 @@
 app.controller("AblaufsCtrl",function($scope){
     $scope.StopFlag=0;
     $scope.Instructioncounter=0;
+    $scope.GotoFlag=0;
 
     $scope.Startapp = function () {
 
+
         while($scope.StopFlag==0){
-            
             $scope.callOperation($scope.operations[$scope.Instructioncounter].befehl);
-            $scope.Instructioncounter++;
+            if($scope.GotoFlag==1){
+                $scope.GotoFlag=0;
+            }else{
+                $scope.Instructioncounter++;
+            }
+
             //checkBreakPoint();
             //checkInterrupt();
             //saveStep();
@@ -38,7 +44,6 @@ app.controller("AblaufsCtrl",function($scope){
 
     };
     $scope.stoppapp = function () {
-        alert("stop!");
         $scope.StopFlag=1;
     };
 

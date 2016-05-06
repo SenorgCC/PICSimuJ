@@ -655,7 +655,7 @@ app.controller('CPU', function ($scope) {
         },
         "GOTO": function (k) {
             ///TODO: Irgendwie Testen...
-
+        /*
             //Das PCLATH wird als Hex Zahl gelagert, zum verarbeiten wird es aber als Bit array Benötigt, daher Umwandlung
             var PCLATHarray=getBinaryArray($scope.PCLATH);
             var literalArray=getBinaryLiteralArray(k);
@@ -679,6 +679,18 @@ app.controller('CPU', function ($scope) {
             PCLBefehl = PCLBefehl.toString(16);
 
             $scope.ProgramCounter=PCLBefehl;
+         */
+            $scope.GotoFlag=1;
+            var vergleichszeile= k.toString(16);
+
+            for (var i=0; i<=$scope.operations.length;i++){
+                if($scope.operations[i].zeile==vergleichszeile){
+                    $scope.GotoFlag=1;
+                    $scope.Instructioncounter=i;
+                    alert($scope.Instructioncounter);
+                }
+            }
+
 
         },
         "IORLW": function (k) {
