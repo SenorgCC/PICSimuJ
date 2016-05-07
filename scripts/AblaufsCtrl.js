@@ -17,6 +17,7 @@ app.controller("AblaufsCtrl",function($scope,DataPic){
                 DataPic.Instructioncounter++;
             }
             $scope.Instructioncounter++;
+            setTimeout($scope.Startapp,3000);
             //checkBreakPoint();
             //checkInterrupt();
             //saveStep();

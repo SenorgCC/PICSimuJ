@@ -1,10 +1,6 @@
 /**
  * Created by Alex on 06.04.2016.
  */
-//es werden das Register (Reg), Instructionpointer (IP) und Flags: Zero (ZF), Carry(CY) und Faultflag (Fl)
-///TODO: Instructioncounter in den richtigen scope legen
-var intstructioncounter = 0;
-
 
 var app = angular.module('pic', ['ui.bootstrap']);
 
