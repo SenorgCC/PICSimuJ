@@ -17,7 +17,6 @@ app.controller("AblaufsCtrl",function($scope,DataPic){
                 DataPic.Instructioncounter++;
             }
             $scope.Instructioncounter++;
-            setTimeout($scope.Startapp,3000);
             //checkBreakPoint();
             //checkInterrupt();
             //saveStep();
@@ -25,6 +24,14 @@ app.controller("AblaufsCtrl",function($scope,DataPic){
 
     };
 
+    function sleep(milliseconds) {
+        var start = new Date().getTime();
+        for (var i = 0; i < 1e7; i++) {
+            if ((new Date().getTime() - start) > milliseconds){
+                break;
+            }
+        }
+    }
     $scope.oneStep = function () {
         $scope.callOperation($scope.operations[DataPic.Instructioncounter].befehl);
         if(DataPic.GotoFlag==1){
