@@ -1,4 +1,5 @@
-app.controller('ramcontroller', function ($scope) {
+app.controller('ramcontroller', function ($scope,DataPic) {
+    $scope.Instructioncounter=DataPic.Instructioncounter;
     //Deklaration Arbeitsregister und die Flags
     $scope.w_reg = '00';
     $scope.digitCarry = 0;

@@ -1,4 +1,4 @@
-app.controller('CPU', function ($scope) {
+app.controller('CPU', function ($scope, DataPic) {
     
     function getDirectory(binOP) {
         //Das D-Bit befindet sich bei den meisten Befehlen an der Selben Position, daher kann es ausmaskiert werden
@@ -393,7 +393,8 @@ app.controller('CPU', function ($scope) {
             if (result == 0) {
                 $scope.callOperation('00');
             } else {
-                $scope.Instructioncounter++;
+                //$scope.Instructioncounter++;
+                DataPic.Instructioncounter++;
             }
             result = result.toString(16);
             if (d == 1) {
@@ -426,7 +427,7 @@ app.controller('CPU', function ($scope) {
             if(d==1){
                 $scope.ram[f]=movffile;
             }else{
-                $scope.ram=movffile;
+                $scope.w_reg=movffile;
             }
         },
         "MOVWF": function (f) {
@@ -434,7 +435,8 @@ app.controller('CPU', function ($scope) {
         },
         "NOP": function () {
             //Der NOP Befehl erhöt nur den IC, Keine weitere Funktion
-            $scope.Instructioncounter++;
+            //$scope.Instructioncounter++;
+            DataPic.Instructioncounter++;
         },
         "RLF": function (f, d) {
             var rlfresult=new Array();
@@ -561,18 +563,21 @@ app.controller('CPU', function ($scope) {
             var tempFle = getBinaryArray($scope.ram[f]);
             if (tempFle[b] == 0) {
                 //bei gesetztem bit wird statt dem nächsten Befehl ein NOP aufgerufen
-                $scope.callOperation("0");
+                //$scope.callOperation("0");
+                DataPic.Instructioncounter++;
             } else {
-                $scope.Instructioncounter++;
+                //$scope.Instructioncounter++;
+                //Ansonsten Tue nix
             }
         },
         "BTFSS": function (f, b) {
             var tempFle = getBinaryArray($scope.ram[f]);
             if (tempFle[b] == 1) {
                 //bei gesetztem bit wird statt dem nächsten Befehl ein NOP aufgerufen
-                $scope.callOperation("0");
+                DataPic.Instructioncounter++;
             } else {
-                $scope.Instructioncounter++;
+                //$scope.Instructioncounter++;
+                //Ansonsten tue nix
             }
         },
         "ADDLW": function (k) {
@@ -627,7 +632,7 @@ app.controller('CPU', function ($scope) {
             var PCLATH43=new Array(2);
 
             //ProgramSTack ist die Stack funltion, auf dem wird der Nächste Befehl gespeichert
-            $scope.ProgramStack.push($scope.operations[$scope.Instructioncounter+1].befehl);
+            $scope.ProgramStack.push($scope.operations[Data.Instructioncounter+1].befehl);
 
             //Laden der 2 PCLATH bits in das Verarbeitungsarray
             PCLATH43[0]=PCLATHarray[3];
@@ -680,16 +685,17 @@ app.controller('CPU', function ($scope) {
 
             $scope.ProgramCounter=PCLBefehl;
          */
-            $scope.GotoFlag=1;
+            DataPic.GotoFlag=1;
             var vergleichszeile= k.toString(16);
 
             for (var i=0; i<=$scope.operations.length;i++){
-                if($scope.operations[i].zeile==vergleichszeile){
-                    $scope.GotoFlag=1;
-                    $scope.Instructioncounter=i;
-                    alert($scope.Instructioncounter);
+                if(parseInt($scope.operations[i].zeile,16)==vergleichszeile){
+                    DataPic.GotoFlag=1;
+                    DataPic.Instructioncounter=parseInt($scope.operations[i].zeile,16);
+                    break;
                 }
             }
+
 
 
         },

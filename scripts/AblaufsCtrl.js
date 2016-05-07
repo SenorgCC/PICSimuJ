@@ -2,26 +2,36 @@
  * Created by Alex on 02.05.2016.
  */
 
-app.controller("AblaufsCtrl",function($scope){
+app.controller("AblaufsCtrl",function($scope,DataPic){
     $scope.StopFlag=0;
-    $scope.Instructioncounter=0;
-    $scope.GotoFlag=0;
+    DataPic.Instructioncounter=0;
 
     $scope.Startapp = function () {
-
+        $scope.StopFlag=0;
 
         while($scope.StopFlag==0){
-            $scope.callOperation($scope.operations[$scope.Instructioncounter].befehl);
-            if($scope.GotoFlag==1){
-                $scope.GotoFlag=0;
+            $scope.callOperation($scope.operations[DataPic.Instructioncounter].befehl);
+            if(DataPic.GotoFlag==1){
+                DataPic.GotoFlag=0;
             }else{
-                $scope.Instructioncounter++;
+                DataPic.Instructioncounter++;
             }
-
+            $scope.Instructioncounter++;
             //checkBreakPoint();
             //checkInterrupt();
             //saveStep();
         }
+
+    };
+
+    $scope.oneStep = function () {
+        $scope.callOperation($scope.operations[DataPic.Instructioncounter].befehl);
+        if(DataPic.GotoFlag==1){
+            DataPic.GotoFlag=0;
+        }else{
+            DataPic.Instructioncounter++;
+        }
+        $scope.Instructioncounter=DataPic.Instructioncounter;
 
     };
     $scope.reset = function () {
@@ -30,6 +40,7 @@ app.controller("AblaufsCtrl",function($scope){
         }
         $scope.PCL='00';
         $scope.STATUS='18';
+        DataPic.Instructioncounter=0;
         $scope.Instructioncounter=0;
         $scope.StopFlag=1;
         $scope.ProgramCounter=0;
