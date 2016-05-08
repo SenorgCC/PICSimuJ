@@ -16,6 +16,9 @@ table{
     position: relative;
     width: 25%
 }
+.highlighted{
+    background-color: #1b6d85;
+}
 .buttons{
     float: left;
     width: 50%

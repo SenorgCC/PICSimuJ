@@ -5,9 +5,12 @@
 app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
     $scope.StopFlag=false;
     DataPic.Instructioncounter=0;
+    var testsequenzeline;
+    var temp1,temp2;
 
 
     $scope.Startapp = function () {
+
         $scope.StopFlag=false;
         if($scope.StopFlag==false){
             $scope.oneStep();
@@ -18,7 +21,7 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
             if($scope.StopFlag==false){
                 $scope.Startapp()
             }
-        },3000);
+        },1000);
 
     };
 
@@ -31,13 +34,14 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
         }
     }
     $scope.oneStep = function () {
+
         $scope.callOperation($scope.operations[DataPic.Instructioncounter].befehl);
         if(DataPic.GotoFlag==1){
             DataPic.GotoFlag=0;
         }else{
             DataPic.Instructioncounter++;
         }
-        $scope.Instructioncounter=DataPic.Instructioncounter;
+        $scope.Instructioncounter++;
         //checkBreakPoint();
         //checkInterrupt();
         //saveStep();
@@ -66,6 +70,17 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
     $scope.stoppapp = function () {
         $scope.StopFlag=true;
     };
+    $scope.checkActive = function (line){
+        var vergleichsline= line.split(' ');
+        if(vergleichsline[0]==$scope.operations[DataPic.Instructioncounter].zeile){
+            return true;
+        }else {
+            return false;
+        }
+    };
 
 
 });
+/*
+
+*/

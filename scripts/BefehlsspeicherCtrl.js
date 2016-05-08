@@ -13,6 +13,7 @@ app.controller('Befehlsspeichercontroller', function ($scope) {
         $scope.ProgramCounter= new Array(13); //ProgrammCounter hat eine vordefinierte länge von 13 Bit
 
 
+
         //Schleife filter die wichtigen Befehle aus dem Quellcode
         for (var i = 0; i <= befehlssatz.length - 1; i++) {
 
@@ -31,5 +32,6 @@ app.controller('Befehlsspeichercontroller', function ($scope) {
             }
 
         }
+
     };
 });

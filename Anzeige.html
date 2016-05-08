@@ -84,7 +84,7 @@
                         <h2>Programmcode</h2>
                            <pre class=".pre-scrollable">
                                <!--Schleife für die Zeilenweise Ausgabe des Dateiinhalts-->
-                               <p ng-repeat="line in content">{{line}}</p>
+                               <p ng-repeat="line in content" ng-class="{highlighted:checkActive(line)}">{{line}}</p>
                            </pre>
                     </div>
                 </div>
