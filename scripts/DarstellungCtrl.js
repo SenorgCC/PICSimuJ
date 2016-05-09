@@ -2,15 +2,7 @@
  * Created by harmi on 29.04.2016.
  */
 app.controller('DropdownCtrl',['$scope', function ($scope) {
-   /*Controller für den Dropdownbutton der Taktauswahl*
-    $(document).ready(function () {
-        $('.selectpicker').selectpicker({
-            style: 'btn-info'
-        });
-        $('.selectpicker').on('change',function () {
-            $scope.Takt = $(this).val();
-        });
-    });*/
+   
     $scope.items=
         [
             {id: '1', name : '32,767 kHz', Takt : 0.032767},
