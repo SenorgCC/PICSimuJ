@@ -19,8 +19,6 @@ app.factory('DataPic',function () {
     PicData.Takt=0;
     PicData.Laufzeit=0;
 
-    PicData.ram=[];
-    PicData.w_reg="00";
     PicData.zeroFlag=0;
     PicData.digitCarry=0;
     PicData.carry=0;

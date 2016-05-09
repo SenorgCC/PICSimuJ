@@ -1,6 +1,6 @@
 app.controller('ramcontroller', function ($scope,DataPic) {
-    $scope.Instructioncounter=DataPic.AnzeigeIC;
     //Deklaration Arbeitsregister und die Flags
+    $scope.Instructioncounter=DataPic.AnzeigeIC;
     $scope.w_reg = '00';
     $scope.digitCarry = 0;
     $scope.zeroFlag = DataPic.zeroFlag;
@@ -27,9 +27,7 @@ app.controller('ramcontroller', function ($scope,DataPic) {
     for (var i = 0; i < 68; i++) {
         GPR1[i] = 0x00;
     }
-
-    DataPic.ram = GPR1;
-    $scope.ram = DataPic.ram;
+    $scope.ram = GPR1;
 
     $scope.getValue = function (hexAdr) {
         //Dekodierung zur Dezimalzahl

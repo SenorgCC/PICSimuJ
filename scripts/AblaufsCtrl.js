@@ -35,8 +35,9 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
         }else{
             DataPic.Instructioncounter++;
         }
-        $scope.Instructioncounter++; //Angezeigter Operationszähler
+        DataPic.AnzeigeIC++; //Angezeigter Operationszähler
         $scope.Laufzeit=DataPic.Laufzeit;
+        $scope.Instructioncounter = DataPic.AnzeigeIC;
         //checkBreakPoint();
         //checkInterrupt();ui
 
@@ -50,7 +51,7 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
         $scope.PCL='00';
         $scope.STATUS='18';
         DataPic.Instructioncounter=0;
-        $scope.Instructioncounter=0;
+        DataPic.AnzeigeIC=0;
         $scope.StopFlag=1;
         $scope.ProgramCounter=0;
         $scope.ProgramStack=0;
@@ -68,17 +69,19 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
         $scope.StopFlag=true;
     };
     $scope.SaveStep = function (){
+        var tempIC= DataPic.Instructioncounter;
+        var tempram=[];
+        for (var i=0; i<=$scope.ram.length-1;i++){
+            tempram[i]=$scope.ram[i];
+        }
+        var tempAIC=DataPic.AnzeigeIC;
+        var tempW= $scope.w_reg;
+        var tempDC= $scope.digitCarry;
+        var tempC= $scope.carry;
+        var tempZF= $scope.zeroFlag;
+        var tempLZ=DataPic.Laufzeit;
 
-        DataPic.SaveLastStep(
-            DataPic.Instructioncounter,
-            DataPic.ram,
-            $scope.Instructioncounter,
-            $scope.w_reg,
-            $scope.digitCarry,
-            $scope.carry,
-            $scope.zeroFlag,
-            DataPic.Laufzeit
-        );
+        DataPic.SaveLastStep(tempIC,tempram,tempAIC,tempW,tempDC,tempC,tempZF,tempLZ);
     };
     $scope.checkActive = function (line){
         var vergleichsline= line.split(' ');
@@ -90,14 +93,10 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
     };
 
     $scope.oneStepBack = function (){
-        var lastState = DataPic.LastState[DataPic.LastState.length-2];
-        DataPic.ram = lastState.ram;
-        $scope.w_reg= lastState.w_reg;
-        DataPic.Instructioncounter = lastState.InstructionCounter;  //lastState.Instructioncounter
-        $scope.Instructioncounter =lastState.AnzeigeIC; // lastState.AnzeigeIC
-        $scope.digitCarry = lastState.digitCarry;
-        $scope.carry = lastState.carry;
-        $scope.zeroFlag = lastState.zeroFlag;
+        var lastState = DataPic.LastState[DataPic.LastState.length-1];
+
+        $scope.rollBackState(lastState);
+        $scope.Instructioncounter = DataPic.AnzeigeIC;
         DataPic.LastState.pop();
 
     };
