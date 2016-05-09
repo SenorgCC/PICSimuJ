@@ -28,7 +28,8 @@ app.controller('ramcontroller', function ($scope,DataPic) {
         GPR1[i] = 0x00;
     }
 
-    $scope.ram = GPR1;
+    DataPic.ram = GPR1;
+    $scope.ram = DataPic.ram;
 
     $scope.getValue = function (hexAdr) {
         //Dekodierung zur Dezimalzahl

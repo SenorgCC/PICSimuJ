@@ -27,7 +27,7 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
     };
 
     $scope.oneStep = function () {
-
+        $scope.SaveStep();
         $scope.callOperation($scope.operations[DataPic.Instructioncounter].befehl);
         if(DataPic.GotoFlag==1){
             DataPic.GotoFlag=0;
@@ -37,12 +37,12 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
         $scope.Instructioncounter++; //Angezeigter Operationszähler
         //checkBreakPoint();
         //checkInterrupt();
-        $scope.SaveStep();
+
 
     };
     $scope.reset = function () {
-        for(var i=0; i<$scope.ram.length;i++){
-            $scope.ram[i]=0;
+        for(var i=0; i<DataPic.ram.length;i++){
+            DataPic.ram[i]=0;
         }
         ///TODO Faktory auslagern
         $scope.PCL='00';
@@ -68,7 +68,7 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
     $scope.SaveStep = function (){
         DataPic.LastState.push({
             InstructionCounter:DataPic.Instructioncounter,
-            Ram:$scope.ram,
+            ram:DataPic.ram,
             AnzeigeIC:$scope.Instructioncounter,
             w_reg:$scope.w_reg,
             digitCarry:$scope.digitCarry,
@@ -87,15 +87,9 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
 
     $scope.oneStepBack = function (){
         var lastState = DataPic.LastState[DataPic.LastState.length-1];
-        alert(JSON.stringify(lastState));
-        $scope.ram = lastState.ram;
-        $scope.w_reg= lastState.w_reg;
-        DataPic.Instructioncounter = lastState.Instructioncounter;
-        $scope.Instructioncounter = last.AnzeigeIC;
-        $scope.digitCarry = lastState.digitCarry;
-        $scope.carry = lastState.carry;
-        $scope.zeroFlag = lastState.zeroFlag;
-    }
+        $scope.rollBackState(lastState);
+        DataPic.LastState.pop();
+    };
 
 
 });

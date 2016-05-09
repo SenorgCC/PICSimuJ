@@ -288,7 +288,7 @@ app.controller('CPU', function ($scope, DataPic) {
     var Befehlsausfuehrung = {
         "ADDWF": function (f, d) {
             var tempW_Reg = parseInt($scope.w_reg, 16);
-            var addresult = tempW_Reg + parseInt($scope.ram[f], 16);
+            var addresult = tempW_Reg + parseInt(DataPic.ram[f], 16);
             addresult = addresult.toString(16);
             var tempW_RegArray = getBinaryArray($scope.w_reg);
             var tempaddresult_Array = getBinaryArray(addresult);
@@ -315,14 +315,14 @@ app.controller('CPU', function ($scope, DataPic) {
 
             if (d == 1) {
 
-                $scope.ram[f] = addresult;
+                DataPic.ram[f] = addresult;
             } else {
                 $scope.w_reg = addresult;
             }
 
         },
         "ANDWF": function (f, d) {
-            var fileRegValue = $scope.ram[f];
+            var fileRegValue = DataPic.ram[f];
             var andresult = ((parseInt($scope.w_reg, 16)) & (parseInt(fileRegValue, 16)));
             andresult = andresult.toString(16);
 
@@ -332,13 +332,13 @@ app.controller('CPU', function ($scope, DataPic) {
 
             if (d == 1) {
 
-                $scope.ram[f] = andresult;
+                DataPic.ram[f] = andresult;
             } else {
                 $scope.w_reg = andresult;
             }
         },
         "CLRF": function (f) {
-            $scope.ram[f] = '00';
+            DataPic.ram[f] = '00';
             $scope.zeroFlag = 1;
         },
         "CLRW": function () {
@@ -346,7 +346,7 @@ app.controller('CPU', function ($scope, DataPic) {
             $scope.zeroFlag = 1;
         },
         "COMF": function (f, d) {
-            var tempcomresult = getBinaryArray($scope.ram[f]);
+            var tempcomresult = getBinaryArray(DataPic.ram[f]);
             var comresult=getComArray(tempcomresult);
             comresult = convertArrayToHex(comresult);
             if (parseInt(comresult, 16) == 0) {
@@ -354,27 +354,27 @@ app.controller('CPU', function ($scope, DataPic) {
             }
             if (d == 1) {
 
-                $scope.ram[f] = comresult;
+                DataPic.ram[f] = comresult;
             } else {
                 $scope.w_reg = comresult;
             }
         },
         "DECF": function (f, d) {
             //DO SOMETHING
-            var result = parseInt($scope.ram[f], 16) - 1;
+            var result = parseInt(DataPic.ram[f], 16) - 1;
             if (result == 0) {
                 $scope.zeroFlag = 1;
             }
             result = result.toString(16);
 
             if (d == 1) {
-                $scope.ram[f] = result;
+                DataPic.ram[f] = result;
             } else {
                 $scope.w_reg = result;
             }
         },
         "DECFSZ": function (f, d) {
-            var result = parseInt($scope.ram[f], 16) - 1;
+            var result = parseInt(DataPic.ram[f], 16) - 1;
             //Wenn das register um 1 dekrementiert wird und damit 0 ergibt,
             //wird statt dem nächsten Befehl ein NOP ausgeführt
             if (result == 0) {
@@ -384,17 +384,17 @@ app.controller('CPU', function ($scope, DataPic) {
             }
             result = result.toString(16);
             if (d == 1) {
-                $scope.ram[f] = result;
+                DataPic.ram[f] = result;
             } else {
                 $scope.w_reg = result;
             }
 
         },
         "INCF": function (f, d) {
-            var result = parseInt($scope.ram[f], 16) + 1;
+            var result = parseInt(DataPic.ram[f], 16) + 1;
             result = result.toString(16);
             if (d == 1) {
-                $scope.ram[f] = result;
+                DataPic.ram[f] = result;
             } else {
                 $scope.w_reg = result;
             }
@@ -404,7 +404,7 @@ app.controller('CPU', function ($scope, DataPic) {
         },
         "INCFSZ": function (f, d) {
 
-            var result = parseInt($scope.ram[f], 16) + 1;
+            var result = parseInt(DataPic.ram[f], 16) + 1;
             //Wenn das register um 1 dekrementiert wird und damit 0 ergibt,
             //wird statt dem nächsten Befehl ein NOP ausgeführt
             if (result == 0) {
@@ -415,13 +415,13 @@ app.controller('CPU', function ($scope, DataPic) {
             }
             result = result.toString(16);
             if (d == 1) {
-                $scope.ram[f] = result;
+                DataPic.ram[f] = result;
             } else {
                 $scope.w_reg = result;
             }
         },
         "IORWF": function (f, d) {
-            var fileRegValue = $scope.ram[f];
+            var fileRegValue = DataPic.ram[f];
             var andresult = ((parseInt($scope.w_reg, 16)) | (parseInt(fileRegValue, 16)));
             andresult = andresult.toString(16);
 
@@ -431,24 +431,24 @@ app.controller('CPU', function ($scope, DataPic) {
 
             if (d == 1) {
 
-                $scope.ram[f] = andresult;
+                DataPic.ram[f] = andresult;
             } else {
                 $scope.w_reg = andresult;
             }
         },
         "MOVF": function (f, d) {
-            var movffile=$scope.ram[f];
+            var movffile=DataPic.ram[f];
             if(movffile==0){
                 $scope.zeroFlag=1;
             }
             if(d==1){
-                $scope.ram[f]=movffile;
+                DataPic.ram[f]=movffile;
             }else{
                 $scope.w_reg=movffile;
             }
         },
         "MOVWF": function (f) {
-            $scope.ram[f]=$scope.w_reg;
+            DataPic.ram[f]=$scope.w_reg;
         },
         "NOP": function () {
             //Der NOP Befehl erhöt nur den IC, Keine weitere Funktion
@@ -457,7 +457,7 @@ app.controller('CPU', function ($scope, DataPic) {
         },
         "RLF": function (f, d) {
             var rlfresult=new Array();
-            var oldfile=getBinaryArray($scope.ram[f]);
+            var oldfile=getBinaryArray(DataPic.ram[f]);
             var tempCarry=$scope.carry;
 
             $scope.carry=oldfile[7];
@@ -471,7 +471,7 @@ app.controller('CPU', function ($scope, DataPic) {
             }
             rlfresult=convertArrayToHex(rlfresult);
             if(d==1){
-                $scope.ram[f]=rlfresult;
+                DataPic.ram[f]=rlfresult;
             }else{
                 $scope.w_reg=rlfresult;
             }
@@ -479,7 +479,7 @@ app.controller('CPU', function ($scope, DataPic) {
         },
         "RRF": function (f, d) {
             var rrfresult=new Array();
-            var oldfile=getBinaryArray($scope.ram[f]);
+            var oldfile=getBinaryArray(DataPic.ram[f]);
             var tempCarry=$scope.carry;
 
             $scope.carry=oldfile[0];
@@ -493,14 +493,14 @@ app.controller('CPU', function ($scope, DataPic) {
             }
             rrfresult=convertArrayToHex(rrfresult);
             if(d==1){
-                $scope.ram[f]=rrfresult;
+                DataPic.ram[f]=rrfresult;
             }else{
                 $scope.w_reg=rrfresult;
             }
 
         },
         "SUBWF": function (f, d) {
-            var zahl1=parseInt($scope.ram[f],16);
+            var zahl1=parseInt(DataPic.ram[f],16);
             var zahl2= getZweierKomplement($scope.w_reg);
             var result = zahl1+zahl2;
             result=result.toString(16);
@@ -525,13 +525,13 @@ app.controller('CPU', function ($scope, DataPic) {
                 $scope.zeroFlag = 1;
             }
             if (d == 1) {
-                $scope.ram[f] = result;
+                DataPic.ram[f] = result;
             } else {
                 $scope.w_reg = result;
             }
         },
         "SWAPF": function (f, d) {
-            var tempArray=getBinaryArray($scope.ram[f]);
+            var tempArray=getBinaryArray(DataPic.ram[f]);
             var nibble1=tempArray[3].toString()+tempArray[2].toString()+tempArray[1].toString()+tempArray[0].toString();
             var nibble2=tempArray[7].toString()+tempArray[6].toString()+tempArray[5].toString()+tempArray[4].toString();
             var swapResult=nibble1+nibble2;
@@ -539,14 +539,14 @@ app.controller('CPU', function ($scope, DataPic) {
             swapResult=swapResult.toString(16);
 
             if (d == 1) {
-                $scope.ram[f] = swapResult;
+                DataPic.ram[f] = swapResult;
             } else {
                 $scope.w_reg = swapResult;
             }
         },
         "XORWF": function (f, d) {
 
-            var fileRegValue = $scope.ram[f];
+            var fileRegValue = DataPic.ram[f];
             var xorresult = ((parseInt($scope.w_reg, 16)) ^ (parseInt(fileRegValue, 16)));
             xorresult = xorresult.toString(16);
 
@@ -556,28 +556,28 @@ app.controller('CPU', function ($scope, DataPic) {
 
             if (d == 1) {
 
-                $scope.ram[f] = xorresult;
+                DataPic.ram[f] = xorresult;
             } else {
                 $scope.w_reg = xorresult;
             }
         },
         "BCF": function (f, b) {
             var result;
-            var tempFile = getBinaryArray($scope.ram[f]);
+            var tempFile = getBinaryArray(DataPic.ram[f]);
             tempFile[b] = 0;
             result = convertArrayToHex(tempFile);
-            $scope.ram[f] = result;
+            DataPic.ram[f] = result;
         },
         "BSF": function (f, b) {
             var result = "";
-            var tempFile = getBinaryArray($scope.ram[f]);
+            var tempFile = getBinaryArray(DataPic.ram[f]);
             tempFile[b] = 1;
             result = convertArrayToHex(tempFile);
-            $scope.ram[f] = result;
+            DataPic.ram[f] = result;
         },
         "BTFSC": function (f, b) {
             //DO SOMETHING
-            var tempFle = getBinaryArray($scope.ram[f]);
+            var tempFle = getBinaryArray(DataPic.ram[f]);
             if (tempFle[b] == 0) {
                 //bei gesetztem bit wird statt dem nächsten Befehl ein NOP aufgerufen
                 //$scope.callOperation("0");
@@ -588,7 +588,7 @@ app.controller('CPU', function ($scope, DataPic) {
             }
         },
         "BTFSS": function (f, b) {
-            var tempFle = getBinaryArray($scope.ram[f]);
+            var tempFle = getBinaryArray(DataPic.ram[f]);
             if (tempFle[b] == 1) {
                 //bei gesetztem bit wird statt dem nächsten Befehl ein NOP aufgerufen
                 DataPic.Instructioncounter++;
@@ -797,5 +797,16 @@ app.controller('CPU', function ($scope, DataPic) {
             }
             $scope.w_reg = xorlresult;
         }
+    };
+
+    $scope.rollBackState= function(lastState){
+        DataPic.ram = lastState.ram;
+        $scope.w_reg= lastState.w_reg;
+        DataPic.Instructioncounter = 42;  //lastState.Instructioncounter
+        $scope.Instructioncounter =22; // lastState.AnzeigeIC
+        $scope.digitCarry = lastState.digitCarry;
+        $scope.carry = lastState.carry;
+        $scope.zeroFlag = lastState.zeroFlag;
+
     };
 });
