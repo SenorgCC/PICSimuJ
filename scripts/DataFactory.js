@@ -21,6 +21,13 @@ app.factory('DataPic',function () {
 
     PicData.ram=[];
 
+    PicData.Zeit = function (takte) {
+        PicData.Laufzeit= PicData.Laufzeit + (1/PicData.Takt)* takte;
+        alert(PicData.Laufzeit);
+        ///TODO: Alert entfernen
+    };
+
+
     return PicData;
 
 });
