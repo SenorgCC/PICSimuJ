@@ -12,6 +12,7 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
     $scope.Startapp = function () {
 
         $scope.StopFlag=false;
+
         if($scope.StopFlag==false){
             $scope.oneStep();
         }
@@ -25,14 +26,6 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
 
     };
 
-    function sleep(milliseconds) {
-        var start = new Date().getTime();
-        for (var i = 0; i < 1e7; i++) {
-            if ((new Date().getTime() - start) > milliseconds){
-                break;
-            }
-        }
-    }
     $scope.oneStep = function () {
        // $scope.SaveStep();
         $scope.callOperation($scope.operations[DataPic.Instructioncounter].befehl);
@@ -41,7 +34,7 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
         }else{
             DataPic.Instructioncounter++;
         }
-        $scope.Instructioncounter++;
+        $scope.Instructioncounter++; //Angezeigter Operationszähler
         //checkBreakPoint();
         //checkInterrupt();
         //saveStep();
@@ -49,8 +42,9 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
     };
     $scope.reset = function () {
         for(var i=0; i<$scope.ram.length;i++){
-            $scope.ram[i]='00';
+            $scope.ram[i]=0;
         }
+        ///TODO Faktory auslagern
         $scope.PCL='00';
         $scope.STATUS='18';
         DataPic.Instructioncounter=0;
@@ -67,12 +61,13 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
         $scope.TimeOutbit=0;
 
     };
+
     $scope.stoppapp = function () {
         $scope.StopFlag=true;
     };
     $scope.SaveStep = function (){
         DataPic.LastState.push({IC:DataPic.Instructioncounter,Ram:$scope.Ram,ICAnzeige:$scope.Instructioncounter});
-    }
+    };
     $scope.checkActive = function (line){
         var vergleichsline= line.split(' ');
         if(vergleichsline[0]==$scope.operations[DataPic.Instructioncounter-1].zeile){

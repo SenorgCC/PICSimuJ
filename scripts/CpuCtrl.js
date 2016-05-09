@@ -1,5 +1,5 @@
 app.controller('CPU', function ($scope, DataPic) {
-    
+    ///TODO : Flags funktionen Überprüfen
     function getDirectory(binOP) {
         //Das D-Bit befindet sich bei den meisten Befehlen an der Selben Position, daher kann es ausmaskiert werden
         var directory = parseInt(binOP, 2) & parseInt('00000010000000', 2);
@@ -702,7 +702,6 @@ app.controller('CPU', function ($scope, DataPic) {
 
             $scope.ProgramCounter=PCLBefehl;
          */
-            DataPic.GotoFlag=1;
             var vergleichszeile= k.toString(16);
 
             for (var i=0; i<=$scope.operations.length;i++){
