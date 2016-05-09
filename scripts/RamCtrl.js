@@ -1,10 +1,10 @@
 app.controller('ramcontroller', function ($scope,DataPic) {
-    $scope.Instructioncounter=DataPic.Instructioncounter;
+    $scope.Instructioncounter=DataPic.AnzeigeIC;
     //Deklaration Arbeitsregister und die Flags
     $scope.w_reg = '00';
     $scope.digitCarry = 0;
-    $scope.zeroFlag = 0;
-    $scope.carry = 0;
+    $scope.zeroFlag = DataPic.zeroFlag;
+    $scope.carry = DataPic.carry;
 
     //Deklaration Specialfunction Register
     $scope.Indirect_addr = '00';

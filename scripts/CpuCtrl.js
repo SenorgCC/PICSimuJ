@@ -835,13 +835,7 @@ app.controller('CPU', function ($scope, DataPic) {
     };
 
     $scope.rollBackState= function(lastState){
-        DataPic.ram = lastState.ram;
-        $scope.w_reg= lastState.w_reg;
-        DataPic.Instructioncounter = 42;  //lastState.Instructioncounter
-        $scope.Instructioncounter =22; // lastState.AnzeigeIC
-        $scope.digitCarry = lastState.digitCarry;
-        $scope.carry = lastState.carry;
-        $scope.zeroFlag = lastState.zeroFlag;
+
 
     };
 });

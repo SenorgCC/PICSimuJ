@@ -20,11 +20,28 @@ app.factory('DataPic',function () {
     PicData.Laufzeit=0;
 
     PicData.ram=[];
+    PicData.w_reg="00";
+    PicData.zeroFlag=0;
+    PicData.digitCarry=0;
+    PicData.carry=0;
+    PicData.AnzeigeIC=0;
+
 
     PicData.Zeit = function (takte) {
         PicData.Laufzeit= PicData.Laufzeit + (1/PicData.Takt)* takte;
-        alert(PicData.Laufzeit);
-        ///TODO: Alert entfernen
+    };
+
+    PicData.SaveLastStep = function (IC,Ram,AIC,WREG,DC,C,ZF,LZ) {
+        PicData.LastState.push({
+            InstructionCounter: IC,
+            ram: Ram,
+            AnzeigeIC: AIC,
+            w_reg: WREG,
+            digitCarry: DC,
+            carry: C,
+            zeroFlag: ZF,
+            laufzeit: LZ
+        });
     };
 
 

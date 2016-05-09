@@ -10,6 +10,7 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
 
 
     $scope.Startapp = function () {
+        DataPic.Instructioncounter=0;
 
         $scope.StopFlag=false;
 
@@ -34,7 +35,8 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
         }else{
             DataPic.Instructioncounter++;
         }
-        $scope.Instructioncounter++; //Angezeigter Operationszähler
+        DataPic.AnzeigeIC++; //Angezeigter Operationszähler
+        $scope.Instructioncounter=DataPic.AnzeigeIC;
         //checkBreakPoint();
         //checkInterrupt();
 
@@ -66,15 +68,17 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
         $scope.StopFlag=true;
     };
     $scope.SaveStep = function (){
-        DataPic.LastState.push({
-            InstructionCounter:DataPic.Instructioncounter,
-            ram:DataPic.ram,
-            AnzeigeIC:$scope.Instructioncounter,
-            w_reg:$scope.w_reg,
-            digitCarry:$scope.digitCarry,
-            carry: $scope.carry,
-            zeroFlag: $scope.zeroFlag
-        });
+
+        DataPic.SaveLastStep(
+            DataPic.Instructioncounter,
+            DataPic.ram,
+            $scope.Instructioncounter,
+            $scope.w_reg,
+            $scope.digitCarry,
+            $scope.carry,
+            $scope.zeroFlag,
+            DataPic.Laufzeit
+        );
     };
     $scope.checkActive = function (line){
         var vergleichsline= line.split(' ');
@@ -86,9 +90,16 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
     };
 
     $scope.oneStepBack = function (){
-        var lastState = DataPic.LastState[DataPic.LastState.length-1];
-        $scope.rollBackState(lastState);
+        var lastState = DataPic.LastState[DataPic.LastState.length-2];
+        DataPic.ram = lastState.ram;
+        $scope.w_reg= lastState.w_reg;
+        DataPic.Instructioncounter = lastState.InstructionCounter;  //lastState.Instructioncounter
+        $scope.Instructioncounter =lastState.AnzeigeIC; // lastState.AnzeigeIC
+        $scope.digitCarry = lastState.digitCarry;
+        $scope.carry = lastState.carry;
+        $scope.zeroFlag = lastState.zeroFlag;
         DataPic.LastState.pop();
+
     };
 
 
