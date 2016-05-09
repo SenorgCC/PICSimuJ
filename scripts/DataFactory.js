@@ -15,6 +15,9 @@ app.factory('DataPic',function () {
     //Last State enthällt die Variablen und Registerergebnise des vorherigen Schrittes
     //Diese Array Arbeitet als ein Stack, damit mehrere Schritte rückgängig gemacht werden können
     PicData.LastState = [];
+    
+    PicData.Takt=0;
+    PicData.Zeit=0;
 
     return PicData;
 
