@@ -85,7 +85,7 @@
                         <h2>Programmcode</h2>
                            <pre class=".pre-scrollable">
                                <!--Schleife für die Zeilenweise Ausgabe des Dateiinhalts-->
-                               <p ng-repeat="line in content" ng-class="{highlighted:checkActive(line)}">{{line}}</p>
+                               <p ng-repeat="line in content" ng-class="{highlighted:checkActive(line)}"> <input type="checkbox" >{{line}}</p>
                            </pre>
                     </div>
                 </div>
@@ -96,7 +96,7 @@
                         <select id="Taktauswahl" class="selectpicker"  ng-model="selectedItem" ng-options="item.name for item in items" ng-change="changetakt()"></select>
                         <!--Anzeige Laufzeitzähler-->
                         <label>{{selectedItem.Takt}}</label>
-                        <label>Laufzeitzähler: {{Laufzeit}}</label>
+                        <label>Laufzeitzähler: {{Laufzeit}} &micro;s</label>
                     </div>
                 </div>
 
