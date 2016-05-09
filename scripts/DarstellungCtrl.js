@@ -1,8 +1,8 @@
 /**
  * Created by harmi on 29.04.2016.
  */
-app.controller('DropdownCtrl',['$scope', function ($scope) {
-   
+app.controller('DropdownCtrl', function ($scope, DataPic) {
+
     $scope.items=
         [
             {id: '1', name : '32,767 kHz', Takt : 0.032767},
@@ -18,12 +18,12 @@ app.controller('DropdownCtrl',['$scope', function ($scope) {
     $scope.selectedItem = $scope.items[0];
 
     $scope.save = function (data) {
-        //storage.add(data);
+       // DataPic.Takt=data;
     };
     $scope.save($scope.selectedItem.Takt);
+    DataPic.Takt=$scope.selectedItem.Takt;
 
-
-}]);
+});
 
 app.controller('UploadCtrl', function ($scope) {
     /*Controller für das Label neben dem Uploadbutton zur Dateinamenanzeige*/
