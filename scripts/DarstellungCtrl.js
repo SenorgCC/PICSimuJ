@@ -15,13 +15,13 @@ app.controller('DropdownCtrl', function ($scope, DataPic) {
             {id: '8', name : '20 MHz', Takt : 20},
             {id : '9', name : '32 MHz', Takt : 32}
         ];
-    $scope.selectedItem = $scope.items[0];
+    $scope.selectedItem = $scope.items[3];
 
     $scope.save = function (data) {
-       // DataPic.Takt=data;
+        DataPic.Takt=data;
     };
     $scope.save($scope.selectedItem.Takt);
-    DataPic.Takt=$scope.selectedItem.Takt;
+
 
 });
 

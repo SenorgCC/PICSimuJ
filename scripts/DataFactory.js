@@ -17,7 +17,7 @@ app.factory('DataPic',function () {
     PicData.LastState = [];
     
     PicData.Takt=0;
-    PicData.Zeit=0;
+    PicData.Laufzeit=0;
 
     return PicData;
 
