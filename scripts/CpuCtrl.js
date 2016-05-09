@@ -118,7 +118,7 @@ app.controller('CPU', function ($scope, DataPic) {
         // Sie Sucht nach dem Richtigen Befehl, der als Hex Wert übergeben wird
         // Durch Maskierung werden die Variablenwerte aus dem übergebenem Hexwert rausgefiltert
 
-        //var temp = parseInt(hexOP, 16);
+        var temp = parseInt(hexOP, 16);
         var tempbin = temp.toString(2);
 
         // abfrage auf den Befehl anführende "00" werden leider ausgeschnitten und js kann nativ kein binary
