@@ -16,6 +16,7 @@ app.factory('DataPic',function () {
     //Diese Array Arbeitet als ein Stack, damit mehrere Schritte rückgängig gemacht werden können
     PicData.LastState = [];
     
+    //Initialisierung der Variablen für Takt und Laufzeit
     PicData.Takt=0;
     PicData.Laufzeit=0;
 
@@ -24,7 +25,7 @@ app.factory('DataPic',function () {
     PicData.carry=0;
     PicData.AnzeigeIC=0;
 
-
+    //Berechnung der Laufzeitanzeige Übergabe sind die benötigten Takte eines Befehls
     PicData.Zeit = function (takte) {
         PicData.Laufzeit= PicData.Laufzeit + (1/PicData.Takt)* takte;
     };
