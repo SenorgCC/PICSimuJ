@@ -21,6 +21,10 @@ app.controller('DropdownCtrl', function ($scope, DataPic) {
         DataPic.Takt=data;
     };
     $scope.save($scope.selectedItem.Takt);
+    
+    $scope.changetakt = function(){
+        $scope.save(this.selectedItem.Takt);
+    }
 
 
 });

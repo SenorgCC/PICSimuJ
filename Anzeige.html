@@ -94,7 +94,7 @@
 
                 <div class="buttons" ng-controller="DropdownCtrl">
                     <div ng-controller="Counter">
-                        <select id="Taktauswahl" class="selectpicker"  ng-model="selectedItem" ng-options="item.name for item in items"></select>
+                        <select id="Taktauswahl" class="selectpicker"  ng-model="selectedItem" ng-options="item.name for item in items" ng-change="changetakt()"></select>
                         <!--Anzeige Laufzeitzähler-->
                         <label>{{selectedItem.Takt}}</label>
                         <label>Laufzeitzähler: {{Laufzeit}}</label>
