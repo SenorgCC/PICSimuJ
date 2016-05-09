@@ -45,7 +45,8 @@ app.controller('CPU', function ($scope, DataPic) {
         //Die meisten Funktionen benötigen aber bitweise operationen -> Umwandlungsfunktion, liefert ein Bitarray
         var tempHex_Val = parseInt(hexVal, 16);
         var result_Binary = [];
-
+        // Der Rotationsbefehl verändert dieIntegerzahl bitweise
+        // diese Verschiebung kann zur Umwandlung in ein bitarray genutzt werden
         for (var i = 0; i < 8; i++) {
             result_Binary[i] = (tempHex_Val >> i) & 1;
         }
@@ -80,9 +81,10 @@ app.controller('CPU', function ($scope, DataPic) {
     }
 
     function getComArray(binArray){
-        //Diese Funktion Wandelt das eingegebene binär Array in das ensprechende komplimentäre array um und gibt es aus
+        // Diese Funktion Wandelt das eingegebene binär Array in das ensprechende komplimentäre array um und gibt es aus
         var complement=new Array();
-        //Da nur 8 Bit Werte übergeben werden reicht eine abfrage bis 8
+
+        // Da nur 8 Bit Werte übergeben werden reicht eine abfrage bis 8
         for (var i=0; i<8;i++){
             if(binArray[i]==0){
                 complement[i]=1;
@@ -95,21 +97,36 @@ app.controller('CPU', function ($scope, DataPic) {
     }
 
     function getZweierKomplement(hexValue){
-        //Das Zweierkomplement wird durch die Negation der Binär zahl und anschließender Addition von 1 errechnet
-        //Da die Werte als Hex gespeichert werden müssen diese umgewandelt werden
-        var zweierKompResult= getBinaryArray(hexValue)
+        // Das Zweierkomplement wird durch die Negation der Binär zahl und anschließender Addition von 1 errechnet
+        // Da die Werte als Hex gespeichert werden müssen diese umgewandelt werden
+        var zweierKompResult= getBinaryArray(hexValue);
+
+        // Wandelt das Bitarray in ihr Komplement um
         zweierKompResult= getComArray(zweierKompResult);
+
+        // Es können keine arithmetischen Operationen mit einem Bitarray dsurchgeführt werden, die Bitarray to Hex
+        // Funktion erleichtert die Konvertierung
         zweierKompResult = convertArrayToHex(zweierKompResult);
+
+        //Zweierkomplement = Komplement + 1 -> Da die komplement Zahl als Hex vorliegt, kann die parseInt funktion es umwandeln
         zweierKompResult= parseInt(zweierKompResult,16)+1;
         return zweierKompResult;
     }
 
     $scope.callOperation = function (hexOP) {
+        // Die callOperation Funktion ist die Kernfunktion der CPU
+        // Sie Sucht nach dem Richtigen Befehl, der als Hex Wert übergeben wird
+        // Durch Maskierung werden die Variablenwerte aus dem übergebenem Hexwert rausgefiltert
 
-        var temp = parseInt(hexOP, 16);
+        //var temp = parseInt(hexOP, 16);
         var tempbin = temp.toString(2);
 
-        //abfrage auf den Befehl anführende "00" werden leider ausgeschnitten und js kann nativ kein binary
+        // abfrage auf den Befehl anführende "00" werden leider ausgeschnitten und js kann nativ kein binary
+        // Durch binäre Verknüpfung wird der Richtige Befehl gefiltert, da jeder Befehl durch
+        // eine einmalige Bitfolge dargestellt wird
+        // manche Befehle Enthalten Don't care Zustände diese können statt einzeln auszustesten
+        // durch die Intergerzahl Darstellung zusammengefasst werden
+
 
         if ((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "11100000000") {
             //Befehl ADDWF

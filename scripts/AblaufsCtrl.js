@@ -34,7 +34,7 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
         }
     }
     $scope.oneStep = function () {
-
+       // $scope.SaveStep();
         $scope.callOperation($scope.operations[DataPic.Instructioncounter].befehl);
         if(DataPic.GotoFlag==1){
             DataPic.GotoFlag=0;
@@ -70,6 +70,9 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
     $scope.stoppapp = function () {
         $scope.StopFlag=true;
     };
+    $scope.SaveStep = function (){
+        DataPic.LastState.push({IC:DataPic.Instructioncounter,Ram:$scope.Ram,ICAnzeige:$scope.Instructioncounter});
+    }
     $scope.checkActive = function (line){
         var vergleichsline= line.split(' ');
         if(vergleichsline[0]==$scope.operations[DataPic.Instructioncounter].zeile){
