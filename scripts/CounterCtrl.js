@@ -1,4 +1,4 @@
-app.controller('Counter', function ($scope){
+app.controller('Counter', function ($scope, DataPic){
     $scope.Laufzeit=0;
 
     
