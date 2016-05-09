@@ -138,7 +138,7 @@ app.controller('CPU', function ($scope, DataPic) {
 
         } else if ((parseInt(tempbin, 2) & parseInt('11111110000000', 2)).toString(2) == "110000000") {
             //CLRF
-            Befehlsausfuehrung["ADDWF"](getFileregister(tempbin), getDirectory(tempbin));
+            Befehlsausfuehrung["CLRF"](getFileregister(tempbin), getDirectory(tempbin));
 
         } else if (((parseInt(tempbin, 2) & parseInt('11111110000000', 2)) > 255) & ((parseInt(tempbin, 2) & parseInt('11111110000000', 2)) < 384)) {
             //CLRW
