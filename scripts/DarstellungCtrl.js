@@ -25,8 +25,6 @@ app.controller('DropdownCtrl', function ($scope, DataPic) {
     $scope.changetakt = function(){
         $scope.save(this.selectedItem.Takt);
     }
-
-
 });
 
 app.controller('UploadCtrl', function ($scope) {

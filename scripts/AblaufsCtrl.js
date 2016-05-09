@@ -35,8 +35,8 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
         }else{
             DataPic.Instructioncounter++;
         }
-        DataPic.AnzeigeIC++; //Angezeigter Operationszähler
-        $scope.Instructioncounter=DataPic.AnzeigeIC;
+        $scope.Instructioncounter++; //Angezeigter Operationszähler
+        $scope.Laufzeit=DataPic.Laufzeit;
         //checkBreakPoint();
         //checkInterrupt();
 
