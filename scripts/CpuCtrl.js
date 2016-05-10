@@ -699,9 +699,8 @@ app.controller('CPU', function ($scope, DataPic) {
             DataPic.Zeit(1);
         },
         "CALL": function (k) {
-            ///Das Eingegebene Literal muss zunächt in ein 13 Bit Array umgewandelt werden
-            var literalArray=getBinaryLiteralArray(k);
 
+            /*
             //Das PCLATH wird als Hex Zahl gelagert, zum verarbeiten wird es aber als Bit array Benötigt, daher Umwandlung
             var PCLATHarray=getBinaryArray($scope.PCLATH);
 
@@ -728,6 +727,23 @@ app.controller('CPU', function ($scope, DataPic) {
             PCLBefehl = PCLBefehl.toString(16);
 
             $scope.ProgramCounter=PCLBefehl;
+            */
+
+            ///Das Eingegebene Literal muss zunächt in ein 13 Bit Array umgewandelt werden
+
+            var vergleichszeile= k.toString(16);
+
+            DataPic.ProgramStack.push(DataPic.Instructioncounter);
+
+            for (var i=0; i<=$scope.operations.length;i++){
+                if(parseInt($scope.operations[i].zeile,16)==parseInt(vergleichszeile,16)){
+                    DataPic.GotoFlag=1;
+                    DataPic.Instructioncounter=parseInt($scope.operations[i].zeile,16);
+                    break;
+                }
+            }
+
+
             DataPic.Zeit(1);
 
         },
@@ -739,7 +755,6 @@ app.controller('CPU', function ($scope, DataPic) {
             DataPic.Zeit(1);
         },
         "GOTO": function (k) {
-            ///TODO: Irgendwie Testen...
         /*
             //Das PCLATH wird als Hex Zahl gelagert, zum verarbeiten wird es aber als Bit array Benötigt, daher Umwandlung
             var PCLATHarray=getBinaryArray($scope.PCLATH);
@@ -768,13 +783,12 @@ app.controller('CPU', function ($scope, DataPic) {
             var vergleichszeile= k.toString(16);
 
             for (var i=0; i<=$scope.operations.length;i++){
-                if(parseInt($scope.operations[i].zeile,16)==vergleichszeile){
+                if(parseInt($scope.operations[i].zeile,16)==parseInt(vergleichszeile,16)){
                     DataPic.GotoFlag=1;
                     DataPic.Instructioncounter=parseInt($scope.operations[i].zeile,16);
                     break;
                 }
             }
-
 
             DataPic.Zeit(2);
         },
@@ -814,7 +828,8 @@ app.controller('CPU', function ($scope, DataPic) {
             //Wie RETLW nur ohne Literalübergabe
             //Das Top of Stack von ProgramStack wird durch die maxlänge-1 bestimmt, da es keine native fkt dafür gibt
             //Und im ProgramCounter abgespeichert
-            $scope.ProgramCounter=$scope.ProgramStack[$scope.ProgramStack.length-1];
+            DataPic.GotoFlag=1;
+            DataPic.Instructioncounter=DataPic.ProgramStack[DataPic.ProgramStack.length-1];
             //Nach dem Übertrag wird der TOS vom ProgramStack gelöscht
             $scope.ProgramStack.pop();
             DataPic.Zeit(1);

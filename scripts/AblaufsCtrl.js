@@ -1,7 +1,6 @@
 /**
  * Created by Alex on 02.05.2016.
  */
-
 app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
     $scope.StopFlag=false;
     DataPic.Instructioncounter=0;
@@ -9,25 +8,32 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
     var temp1,temp2;
     $scope.breakpointbox=false;
     $scope.breakpointview=true;
+    var runner;
+
+    var firstrunFlag=true;
 
 
     $scope.Startapp = function () {
-        DataPic.Instructioncounter=0;
+
+        if(firstrunFlag==true){
+            DataPic.Instructioncounter=0;
+        }
+        firstrunFlag=false;
+
 
         $scope.StopFlag=false;
         
         if($scope.StopFlag==false){
-            if ($scope.breakpointbox==false) {
-                    $scope.oneStep();
-            }
+            $scope.oneStep();
         }
 
-            var runner;
-            runner=$timeout(function() {
-                if($scope.StopFlag==false){
-                $scope.Startapp()
-                }
-            },1000);
+
+
+        runner=$timeout(function() {
+            if($scope.StopFlag==false){
+                    $scope.Startapp();
+            }
+        },1000);
         
 
     };
@@ -73,6 +79,7 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
 
     $scope.stoppapp = function () {
         $scope.StopFlag=true;
+
     };
     $scope.SaveStep = function (){
         var tempIC= DataPic.Instructioncounter;
@@ -91,7 +98,7 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
     };
     $scope.checkActive = function (line){
         var vergleichsline= line.split(' ');
-        if(vergleichsline[0]==$scope.operations[DataPic.Instructioncounter-1].zeile){
+        if(vergleichsline[0]==$scope.operations[DataPic.Instructioncounter].zeile){
             return true;
         }else {
             return false;
