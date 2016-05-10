@@ -8,16 +8,19 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
     var testsequenzeline;
     var temp1,temp2;
     $scope.breakpointbox=false;
+    $scope.breakpointview=true;
 
 
     $scope.Startapp = function () {
         DataPic.Instructioncounter=0;
 
         $scope.StopFlag=false;
-        if ($scope.breakpointbox==false){
-            if($scope.StopFlag==false){
-                $scope.oneStep();
+        
+        if($scope.StopFlag==false){
+            if ($scope.breakpointbox==false) {
+                    $scope.oneStep();
             }
+        }
 
             var runner;
             runner=$timeout(function() {
@@ -25,9 +28,7 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
                 $scope.Startapp()
                 }
             },1000);
-        }
-        else{///TODO genauer überlegen wie es weitergeht
-             }
+        
 
     };
 
