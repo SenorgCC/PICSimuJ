@@ -125,11 +125,11 @@
                             <td>{{FSR}}</td> <td>FSR</td>
                             </tr>
                         <tr>
-                            <td>PORTA</td> <td>{{PORTA}}</td>
+                            <td>PORTA</td> <td>{{ram[5]}}</td>
                             <td>{{TRISA}}</td> <td>TRISA</td>
                         </tr>
                         <tr>
-                            <td>PORTB</td> <td>{{PORTB}}</td>
+                            <td>PORTB</td> <td>{{ram[6]}}</td>
                             <td>{{TRISB}}</td> <td>TRISB</td>
                         </tr>
                         <tr>
@@ -147,6 +147,30 @@
                         <tr>
                             <td>INTCON</td>	<td>{{INTCON}}</td>
                             <td>{{INTCON}}</td>	<td>INTCON</td>
+                        </tr>
+                    </table>
+
+                    <h2>Port B</h2>
+                    <table>
+                        <tr>
+                            <td>7</td>
+                            <td>6</td>
+                            <td>5</td>
+                            <td>4</td>
+                            <td>3</td>
+                            <td>2</td>
+                            <td>1</td>
+                            <td>0</td>
+                        </tr>
+                        <tr>
+                            <td><button ng-click="changePortBbit(7)">7</button></td>
+                            <td><button ng-click="changePortBbit(6)">6</button></td>
+                            <td><button ng-click="changePortBbit(5)">5</button></td>
+                            <td><button ng-click="changePortBbit(4)">4</button></td>
+                            <td><button ng-click="changePortBbit(3)">3</button></td>
+                            <td><button ng-click="changePortBbit(2)">2</button></td>
+                            <td><button ng-click="changePortBbit(1)">1</button></td>
+                            <td><button ng-click="changePortBbit(0)">0</button></td>
                         </tr>
                     </table>
                 </div>

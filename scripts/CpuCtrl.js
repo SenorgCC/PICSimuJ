@@ -257,10 +257,10 @@ app.controller('CPU', function ($scope, DataPic) {
             //RETFIE
             Befehlsausfuehrung["RETFIE"]();
 
-        } else if (((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "1101000000")
-            | ((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "1101010000")
-            | ((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "1101100000")
-            | ((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "1101110000")) {
+        } else if (((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "11010000000000")
+            | ((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "11010100000000")
+            | ((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "11011000000000")
+            | ((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "11011100000000")) {
 
             //RETLW
             Befehlsausfuehrung["RETLW"](getLiteralfieldshort(tempbin));
@@ -808,20 +808,22 @@ app.controller('CPU', function ($scope, DataPic) {
         },
         "RETFIE": function () {
             ///TODO me: Muss getestet werden!
+            DataPic.GotoFlag=1;
             $scope.GlobalInteruptEnable=1;
-            $scope.ProgramCounter=$scope.ProgramStack[$scope.ProgramStack.length -1];
+            $scope.Instructioncounter=$scope.ProgramStack[$scope.ProgramStack.length -1]+1;
             $scope.ProgramStack.pop();
             DataPic.Zeit(2);
         },
         "RETLW": function (k) {
             ///TODO: TESTEN!
             //Der übergebene Literal muss vor der Speicherung in einen Hexwert umgewandelt werden
+            DataPic.GotoFlag=1;
             $scope.w_reg= k.toString(16);
             //Das Top of Stack von ProgramStack wird durch die maxlänge-1 bestimmt, da es keine native fkt dafür gibt
             //Und im ProgramCounter abgespeichert
-            $scope.ProgramCounter=$scope.ProgramStack[$scope.ProgramStack.length-1];
+            DataPic.Instructioncounter=DataPic.ProgramStack[DataPic.ProgramStack.length-1]+1;
             //Nach dem Übertrag wird der TOS vom ProgramStack gelöscht
-            $scope.ProgramStack.pop();
+            DataPic.ProgramStack.pop();
             DataPic.Zeit(1);
         },
         "RETURN": function () {
@@ -831,7 +833,7 @@ app.controller('CPU', function ($scope, DataPic) {
             DataPic.GotoFlag=1;
             DataPic.Instructioncounter=DataPic.ProgramStack[DataPic.ProgramStack.length-1];
             //Nach dem Übertrag wird der TOS vom ProgramStack gelöscht
-            $scope.ProgramStack.pop();
+            DataPic.ProgramStack.pop();
             DataPic.Zeit(1);
         },
         "SLEEP": function () {
@@ -897,4 +899,14 @@ app.controller('CPU', function ($scope, DataPic) {
         $scope.zeroFlag = lastState.zeroFlag;
         DataPic.Laufzeit= lastState.laufzeit;
     };
+    $scope.changePortBbit = function (bitpos) {
+        var temp = getBinaryArray($scope.ram[6]);
+        if(temp[bitpos]==1){
+            temp[bitpos]=0;
+        }else{
+            temp[bitpos]=1;
+        }
+        $scope.ram[6] = convertArrayToHex(temp);
+        $scope.PORTB = $scope.ram[6];
+    }
 });
