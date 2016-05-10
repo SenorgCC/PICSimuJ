@@ -7,23 +7,27 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
     DataPic.Instructioncounter=0;
     var testsequenzeline;
     var temp1,temp2;
+    $scope.breakpointbox=false;
 
 
     $scope.Startapp = function () {
         DataPic.Instructioncounter=0;
 
         $scope.StopFlag=false;
-
-        if($scope.StopFlag==false){
-            $scope.oneStep();
-        }
-
-        var runner;
-        runner=$timeout(function() {
+        if ($scope.breakpointbox==false){
             if($scope.StopFlag==false){
-                $scope.Startapp()
+                $scope.oneStep();
             }
-        },1000);
+
+            var runner;
+            runner=$timeout(function() {
+                if($scope.StopFlag==false){
+                $scope.Startapp()
+                }
+            },1000);
+        }
+        else{///TODO genauer überlegen wie es weitergeht
+             }
 
     };
 
@@ -38,7 +42,7 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
         DataPic.AnzeigeIC++; //Angezeigter Operationszähler
         $scope.Laufzeit=DataPic.Laufzeit;
         $scope.Instructioncounter = DataPic.AnzeigeIC;
-        //checkBreakPoint();
+        //checkBreakPoint(); ///TODO macht an dieser Stelle wenig sinn da man ansonsten nicht über den Breakpoint hinwegkommt
         //checkInterrupt();ui
 
 
@@ -88,7 +92,7 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
         if(vergleichsline[0]==$scope.operations[DataPic.Instructioncounter-1].zeile){
             return true;
         }else {
-            return false;
+            return false;///TODO Eventuell der richtige Ort für das ausblenden der nicht benötigten Checkboxen
         }
     };
 
@@ -100,8 +104,7 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
         DataPic.LastState.pop();
 
     };
-
-
+    
 });
 /*
 
