@@ -93,7 +93,16 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
         if(vergleichsline[0]==$scope.operations[DataPic.Instructioncounter-1].zeile){
             return true;
         }else {
-            return false;///TODO Eventuell der richtige Ort für das ausblenden der nicht benötigten Checkboxen
+            return false;
+        }
+    };
+    //Funktion zum Abprüfen ob eine BreakpointCheckbox angezeigt werden soll in der Zeile oder nicht
+    $scope.checkBreakpoint= function (line) {
+        if (/[0-9a-fA-F]{4}\s*[0-9a-fA-F]{4}/.test(line)) {
+            return true
+        }
+        else {
+            return false
         }
     };
 

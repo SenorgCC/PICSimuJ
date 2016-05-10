@@ -85,7 +85,10 @@
                         <h2>Programmcode</h2>
                            <pre class=".pre-scrollable">
                                <!--Schleife für die Zeilenweise Ausgabe des Dateiinhalts-->
-                               <p ng-repeat="line in content" ng-class="{highlighted:checkActive(line)}"> <input type="checkbox" ng-model="breakpointbox" ng-show="breakpointview"> {{line}}</p>
+                               <p ng-repeat="line in content" ng-class="{highlighted:checkActive(line)}">
+                                   <input type="checkbox" ng-model="breakpointbox" ng-show="checkBreakpoint(line)">
+                                   {{line}}
+                               </p>
                            </pre>
                     </div>
                 </div>
