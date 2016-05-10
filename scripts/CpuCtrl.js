@@ -359,6 +359,7 @@ app.controller('CPU', function ($scope, DataPic) {
 
         },
         "ANDWF": function (f, d) {
+
             var fileRegValue = $scope.ram[f];
             var andresult = ((parseInt($scope.w_reg, 16)) & (parseInt(fileRegValue, 16)));
             andresult = andresult.toString(16);
@@ -879,6 +880,6 @@ app.controller('CPU', function ($scope, DataPic) {
         $scope.digitCarry = lastState.digitCarry;
         $scope.carry = lastState.carry;
         $scope.zeroFlag = lastState.zeroFlag;
-        $scope.Laufzeit= lastState.laufzeit;
+        DataPic.Laufzeit= lastState.laufzeit;
     };
 });
