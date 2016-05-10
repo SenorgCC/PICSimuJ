@@ -285,18 +285,50 @@ app.controller('CPU', function ($scope, DataPic) {
         }
     };
 
+    // Statt alle PIC Befehle in einzelne Funktionen zu verpacken, haben wir uns für eine Lookup Table entschieden,
+    // der Aufruf sieht wie folgt aus : Befehlsausfuehrung[Bezeichner](Parameter)
+    // die Lookuptable ist somit übersichtlicher als die einzelnen Funktionen
     var Befehlsausfuehrung = {
         "ADDWF": function (f, d) {
+            // Beim ADDWF Befehl wird ein Register mit dem Arbeitsregister addiert
+            // und die Summe bei gesetztem d Bit im Ram und nicht gesetztem im Arbeitsregister abgespeichert.
+            // Da dieser Befehl das DC carry manipulieren wird ein temporäre Kopie des Alten Arbeitsregisters benötigt.
+            // Die Daten werden sowohl im Arbeitsregister als auch im Fileregister in in Hexdarstellung
+            // und damit als String variablen gespeichert.
+            // Aus diesem Grund müssen diese vor der eigentlichen Bearbeitung in einen Integerwert geparst werden.
             var tempW_Reg = parseInt($scope.w_reg, 16);
+
             var addresult = tempW_Reg + parseInt($scope.ram[f], 16);
+
+            // Dieser Befehl könnte auch an die initialisierung angehängt werden,
+            // doch für eine bessere Lesbarkeit wurden diese Befehle getrennt
             addresult = addresult.toString(16);
+
+            // Da Javascript keine Konvertierung von Integer auf binär Array kann,
+            // erfüllt diese Funktion die Aufgabe. Rückgabewert ist ein Bitarray
             var tempW_RegArray = getBinaryArray($scope.w_reg);
             var tempaddresult_Array = getBinaryArray(addresult);
+
+            // Für die Überprüfung des Digitcarrys werden die unteren Nibble des vorherigen Arbeitsregisters
+            // und der Wert des Arbeitsregisters nach dem Befehl benötigt.
             var wReg_firstN, addresresult_FirstN;
 
-            wReg_firstN = tempW_RegArray[3].toString() + tempW_RegArray[2].toString() + tempW_RegArray[1].toString() + tempW_RegArray[0].toString();
-            addresresult_FirstN = tempaddresult_Array[4].toString() + tempaddresult_Array[3].toString() + tempaddresult_Array[2].toString() + tempaddresult_Array[1].toString() + tempaddresult_Array[0].toString();
+            // Die Nibbles können durch einfaches konkadenieren von den Arrayemelenten gebildet werden
+            wReg_firstN = tempW_RegArray[4].toString()
+                        + tempW_RegArray[3].toString()
+                        + tempW_RegArray[2].toString()
+                        + tempW_RegArray[1].toString()
+                        + tempW_RegArray[0].toString();
 
+            addresresult_FirstN = tempaddresult_Array[4].toString()
+                                + tempaddresult_Array[3].toString()
+                                + tempaddresult_Array[2].toString()
+                                + tempaddresult_Array[1].toString()
+                                + tempaddresult_Array[0].toString();
+
+            // Das Carrybit ist der überlauf vom 7. Bit und wird durch ein Ergebnis größer gleich 256 (2^8) ausgelöst
+            // Das Carrybit wird gesetzt und der Überlauf, durch die Subtraktion von 256, abgeschnitten
+            // Bei zwei 8 Bit registern ist die Höstmögliche Zahl (FF+FF) = 1FE und damit nicht größer als das 8. Bit
             if (parseInt(addresult, 16) > 255) {
 
                 var temp = parseInt(addresult, 16);
@@ -305,10 +337,12 @@ app.controller('CPU', function ($scope, DataPic) {
                 addresult = temp.toString(16);
             }
 
+            // Zeroflag Überprüfung
             if (parseInt(addresult, 16) == 0) {
                 $scope.zeroFlag = 1;
             }
-
+            // Beim DigitCarry übertrag muss das der vorherige Arbeitsregisterwert kleiner 15 und
+            // nach der Rechnung größer 15 sein
             if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15)) {
                 $scope.digitCarry = 1;
             }
@@ -319,6 +353,8 @@ app.controller('CPU', function ($scope, DataPic) {
             } else {
                 $scope.w_reg = addresult;
             }
+            // Die Laufzeitberechnungsfunktion liegt in der Factory DataPic, damit es scopeübergreifend
+            // den selben Wert speichern kann
             DataPic.Zeit(1);
 
         },
