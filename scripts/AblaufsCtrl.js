@@ -12,19 +12,17 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
 
     var firstrunFlag=true;
 
-
     $scope.Startapp = function () {
-
+        $scope.StopFlag=false;
         if(firstrunFlag==true){
             DataPic.Instructioncounter=0;
         }
         firstrunFlag=false;
 
-
-        $scope.StopFlag=false;
-        
+        ///TODO: Refactorn vll
+        controlBreakPoint($scope.operations[DataPic.Instructioncounter].zeile);
         if($scope.StopFlag==false){
-            $scope.oneStep();
+                $scope.oneStep();
         }
 
 
@@ -123,6 +121,36 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
         DataPic.LastState.pop();
 
     };
+    
+    $scope.changeBreakPoint = function (BreakLine) {
+
+        var tempLine= BreakLine.split(' ');
+        var breakLine = tempLine[0];
+        var vorhandenFlag=false;
+
+
+        for(var i=0; i<=DataPic.BreakPointArray.length-1;i++){
+            if(breakLine==DataPic.BreakPointArray[i]){
+                DataPic.BreakPointArray.splice(i,1);
+                vorhandenFlag=true;
+            }
+        }
+
+        if(vorhandenFlag==false){
+            DataPic.BreakPointArray.push(breakLine);
+        }
+    };
+
+    function controlBreakPoint(currentLine){
+        for (var i=0; i<=DataPic.BreakPointArray.length-1;i++){
+            if(currentLine == DataPic.BreakPointArray[i]){
+                $scope.stoppapp();
+                break;
+            }
+        }
+    }
+
+
     
 });
 /*

@@ -113,6 +113,27 @@ app.controller('CPU', function ($scope, DataPic) {
         return zweierKompResult;
     }
 
+    function setCarry(){
+        var tempStatus = getBinaryArray($scope.ram[3]);
+        tempStatus[0]=1;
+        $scope.ram[3]=convertArrayToHex(tempStatus);
+        $scope.carry=1;
+    }
+    function setDigitCarry(){
+        var tempStatus = getBinaryArray($scope.ram[3]);
+        tempStatus[1]=1;
+        $scope.ram[3]=convertArrayToHex(tempStatus);
+        $scope.digitCarry=1;
+    }
+    function setZeroFlag(){
+        var tempStatus = getBinaryArray($scope.ram[3]);
+        tempStatus[1]=1;
+        $scope.ram[3]=convertArrayToHex(tempStatus);
+        $scope.zeroFlag = 1;
+    }
+
+
+
     $scope.callOperation = function (hexOP) {
         // Die callOperation Funktion ist die Kernfunktion der CPU
         // Sie Sucht nach dem Richtigen Befehl, der als Hex Wert übergeben wird
@@ -332,19 +353,21 @@ app.controller('CPU', function ($scope, DataPic) {
             if (parseInt(addresult, 16) > 255) {
 
                 var temp = parseInt(addresult, 16);
-                $scope.carry = 1;
+                setCarry();
                 temp = temp - 256;
                 addresult = temp.toString(16);
             }
 
             // Zeroflag Überprüfung
             if (parseInt(addresult, 16) == 0) {
+                setZeroFlag();
                 $scope.zeroFlag = 1;
             }
             // Beim DigitCarry übertrag muss das der vorherige Arbeitsregisterwert kleiner 15 und
             // nach der Rechnung größer 15 sein
             if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15)) {
                 $scope.digitCarry = 1;
+                setDigitCarry();
             }
 
             if (d == 1) {
@@ -365,6 +388,7 @@ app.controller('CPU', function ($scope, DataPic) {
             andresult = andresult.toString(16);
 
             if (parseInt(andresult, 16) == 0) {
+                setZeroFlag();
                 $scope.zeroFlag = 1;
             }
 
@@ -378,11 +402,13 @@ app.controller('CPU', function ($scope, DataPic) {
         },
         "CLRF": function (f) {
             $scope.ram[f] = '00';
-            $scope.zeroFlag = 1;
+            setZeroFlag();
+
             DataPic.Zeit(1);
         },
         "CLRW": function () {
             $scope.w_reg = '00';
+            setZeroFlag();
             $scope.zeroFlag = 1;
             DataPic.Zeit(1);
         },
@@ -507,9 +533,12 @@ app.controller('CPU', function ($scope, DataPic) {
         "RLF": function (f, d) {
             var rlfresult=new Array();
             var oldfile=getBinaryArray($scope.ram[f]);
-            var tempCarry=$scope.carry;
+            var tempStatus=getBinaryArray($scope.ram[3]);
+            var tempCarry=tempStatus[0];
 
             $scope.carry=oldfile[7];
+            tempStatus[0]=oldfile[7];
+            $scope.ram[3]=tempStatus;
 
             for(var i=7; i>=0;i--){
                 if(i==0){
@@ -529,9 +558,12 @@ app.controller('CPU', function ($scope, DataPic) {
         "RRF": function (f, d) {
             var rrfresult=new Array();
             var oldfile=getBinaryArray($scope.ram[f]);
-            var tempCarry=$scope.carry;
+            var tempStatus=getBinaryArray($scope.ram[3]);
+            var tempCarry=tempStatus[0];
 
             $scope.carry=oldfile[0];
+            tempStatus[0]=oldfile[0];
+            $scope.ram[3]=tempStatus;
 
             for(var i=0; i<=7;i++){
                 if(i==7){
@@ -564,15 +596,15 @@ app.controller('CPU', function ($scope, DataPic) {
             if (parseInt(result, 16) > 255) {
 
                 var temp = parseInt(result, 16)-256;
-                $scope.carry = 1;
+                setCarry();
                 result = temp.toString(16);
             }
             if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15)) {
-                $scope.digitCarry = 1;
+                setDigitCarry();
             }
 
             if (parseInt(result, 16) == 0) {
-                $scope.zeroFlag = 1;
+                setZeroFlag();
             }
             if (d == 1) {
                 $scope.ram[f] = result;
@@ -603,7 +635,7 @@ app.controller('CPU', function ($scope, DataPic) {
             xorresult = xorresult.toString(16);
 
             if (parseInt(xorresult, 16) == 0) {
-                $scope.zeroFlag = 1;
+                setZeroFlag();
             }
 
             if (d == 1) {
@@ -672,18 +704,18 @@ app.controller('CPU', function ($scope, DataPic) {
             if (parseInt(addresult, 16) > 255) {
 
                 var temp = parseInt(addresult, 16);
-                $scope.carry = 1;
+                setCarry();
                 temp = temp - 256;
                 addresult = temp.toString(16);
             }
 
             if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15)) {
 
-                $scope.digitCarry = 1;
+                setDigitCarry();
             }
 
             if (parseInt(addresult, 16) == 0) {
-                $scope.zeroFlag = 1;
+                setZeroFlag();
             }
 
             $scope.w_reg = addresult;
@@ -693,7 +725,7 @@ app.controller('CPU', function ($scope, DataPic) {
             var andresult = ((parseInt($scope.w_reg, 16)) & (k));
             andresult = andresult.toString(16);
             if (parseInt(andresult, 16) == 0) {
-                $scope.zeroFlag = 1;
+                setZeroFlag();
             }
             $scope.w_reg = andresult;
             DataPic.Zeit(1);
@@ -751,7 +783,9 @@ app.controller('CPU', function ($scope, DataPic) {
             //DO SOMETHING
             $scope.watchdogtimer='00';
             $scope.TimeOutbit=1;
-            $scope.PowerDownbit=1;
+            var tempStatus= getBinaryArray($scope.ram[3]);
+            tempStatus[3]=1;
+            $scope.ram[3]=tempStatus;
             DataPic.Zeit(1);
         },
         "GOTO": function (k) {
@@ -796,7 +830,7 @@ app.controller('CPU', function ($scope, DataPic) {
             var andresult = ((parseInt($scope.w_reg, 16)) | (k));
             andresult = andresult.toString(16);
             if (parseInt(andresult, 16) == 0) {
-                $scope.zeroFlag = 1;
+                setZeroFlag();
             }
             $scope.w_reg = andresult;
             DataPic.Zeit(1);
@@ -842,6 +876,10 @@ app.controller('CPU', function ($scope, DataPic) {
             $scope.wdtPrescaler=0;
             $scope.TimeOutbit=1;
             $scope.PowerDownbit=0;
+            var tempStatus = getBinaryArray($scope.ram[3]);
+            tempStatus[4]=1;
+            tempStatus[3]=0;
+            $scope.ram[3]=convertArrayToHex(tempStatus);
             // Hier sollte sowas wie ein Sleep kommen, aber kp wie der umzusetzten ist ...
             // Absolut kp
             DataPic.Zeit(1);
@@ -861,16 +899,16 @@ app.controller('CPU', function ($scope, DataPic) {
             if (parseInt(result, 16) > 255) {
 
                 var temp = parseInt(result, 16)-256;
-                $scope.carry = 1;
+                setCarry();
                 result = temp.toString(16);
             }
             ///TODO: DC ÜBERDENKEN!!!
             if ((parseInt(wReg_firstN, 2)>(parseInt(addresresult_FirstN, 2)))){
-                $scope.digitCarry = 1;
+                setDigitCarry();
             }
 
             if (parseInt(result, 16) == 0) {
-                $scope.zeroFlag = 1;
+                setZeroFlag();
             }
             $scope.w_reg = result;
             DataPic.Zeit(1);
@@ -880,7 +918,7 @@ app.controller('CPU', function ($scope, DataPic) {
             var xorlresult = ((parseInt($scope.w_reg, 16)) ^ (k));
             xorlresult = xorlresult.toString(16);
             if (parseInt(xorlresult, 16) == 0) {
-                $scope.zeroFlag = 1;
+                setZeroFlag();
             }
             $scope.w_reg = xorlresult;
             DataPic.Zeit(1);

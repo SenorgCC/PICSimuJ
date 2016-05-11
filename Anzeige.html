@@ -71,6 +71,8 @@
                 </div><!-- /.container-fluid -->
             </nav><!--Ende der Navbar-->
 
+
+
             <div >
                 <!--Einlesen des Programmcodes-->
                 <div class="codeanzeige" ng-controller="UploadCtrl">
@@ -85,11 +87,10 @@
                         <h2>Programmcode</h2>
                            <pre class=".pre-scrollable">
                                <!--Schleife für die Zeilenweise Ausgabe des Dateiinhalts-->
-                               <p ng-repeat="line in content" ng-class="{highlighted:checkActive(line)}"><input type="checkbox" ng-model="breakpointbox" ng-show="checkBreakpoint(line)"> {{line}}</p>
+                               <p ng-repeat="line in content" ng-class="{highlighted:checkActive(line)} "><input type="checkbox" ng-click="changeBreakPoint(line)" ng-show="checkBreakpoint(line)"> {{line}}</p>
                            </pre>
                     </div>
                 </div>
-
 
                 <div class="buttons" ng-controller="DropdownCtrl">
                     <div ng-controller="AblaufsCtrl">
@@ -117,7 +118,7 @@
                             <td>{{PCL}}</td> <td>PCL</td>
                             </tr>
                         <tr>
-                            <td>STATUS</td> <td>{{STATUS}}</td>
+                            <td>STATUS</td> <td>{{ram[3]}}</td>
                             <td>{{STATUS}}</td> <td>STATUS</td>
                             </tr>
                         <tr>
