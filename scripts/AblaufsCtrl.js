@@ -31,7 +31,7 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
             if($scope.StopFlag==false){
                     $scope.Startapp();
             }
-        },1000);
+        },1000/DataPic.Takt);
         
 
     };
@@ -58,8 +58,10 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
         }
         ///TODO Faktory auslagern
         $scope.PCL='00';
-        $scope.STATUS='18';
+        $scope.ram[3]='18';
+        $scope.STATUS=$scope.ram[3];
         DataPic.Instructioncounter=0;
+        $scope.Instructioncounter=0;
         DataPic.AnzeigeIC=0;
         $scope.StopFlag=1;
         $scope.ProgramCounter=0;
@@ -69,9 +71,11 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
         $scope.carry=0;
         $scope.watchdogtimer=0;
         $scope.w_reg='00';
-        $scope.PowerDownbit=0;
-        $scope.TimeOutbit=0;
         DataPic.Laufzeit=0;
+        $scope.Laufzeit=0;
+        $scope.OPTION_REG='ff';
+        $scope.TRISA='1f';
+        $scope.TRISB='ff';
 
     };
 

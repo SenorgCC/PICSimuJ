@@ -26,6 +26,7 @@ app.factory('DataPic',function () {
     PicData.AnzeigeIC=0;
     PicData.ProgramStack =[];
     PicData.BreakPointArray=[];
+    
 
     //Berechnung der Laufzeitanzeige Übergabe sind die benötigten Takte eines Befehls
     PicData.Zeit = function (takte) {

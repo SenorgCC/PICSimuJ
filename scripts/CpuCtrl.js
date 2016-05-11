@@ -946,5 +946,20 @@ app.controller('CPU', function ($scope, DataPic) {
         }
         $scope.ram[6] = convertArrayToHex(temp);
         $scope.PORTB = $scope.ram[6];
-    }
+    };
+
+    $scope.calculateVerzug = function () {
+
+        var tempOPTreg=getBinaryArray($scope.ram[81]);
+        var prescalerVal=tempOPTreg[2].toString()+tempOPTreg[1].toString()+tempOPTreg[0].toString();
+        prescalerVal=parseInt(prescalerVal,2);
+        var prescaler=Math.pow(2,prescalerVal);
+
+        if(tempOPTreg[3]==0){
+            return (4*prescaler*DataPic.Takt);
+        }else {
+            return (4*DataPic.Takt);
+        }
+    };
+
 });
