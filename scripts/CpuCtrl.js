@@ -527,7 +527,6 @@ app.controller('CPU', function ($scope, DataPic) {
         "NOP": function () {
             //Der NOP Befehl erhöt nur den IC, Keine weitere Funktion
             //$scope.Instructioncounter++;
-            DataPic.Instructioncounter++;
             DataPic.Zeit(1);
         },
         "RLF": function (f, d) {
