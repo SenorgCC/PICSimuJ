@@ -27,7 +27,7 @@ app.controller('ramcontroller', function ($scope,DataPic,$timeout) {
 
 //Dummy zum befüllen des rams
     var GPR1 = new Array();
-    for (var i = 0; i < 80; i++) {
+    for (var i = 0; i < 256; i++) {
         GPR1[i] = '00';
     }
 
@@ -67,16 +67,18 @@ app.controller('ramcontroller', function ($scope,DataPic,$timeout) {
 
 
     };
+    
+    //Javascript für das Modal zum RAM verändern
     var intramAddresse;
     $('#ramModal').on('show.bs.modal', function (event) {
         var button = $(event.relatedTarget); // Button, der das Modal ausgelöst hat
         var ramaddress = button.data('whatever'); // Infos aus data-*-Attributen extrahieren
-        intramAddresse=parseInt(ramaddress,16);
+        intramAddresse=parseInt(ramaddress,16); //Parsen des Hexwerts der Speicherstelle um das korrekte Arrayelement mit dem Wert befüllen zu können
         var modal = $(this);
-        modal.find('.modal-title').text('Speicheradresse: ' + ramaddress + 'h');
+        modal.find('.modal-title').text('Speicheradresse: ' + ramaddress + 'h'); //Überschrift des Modals
     });
     $scope.saveNewRam = function (newWert) {
-        $scope.ram[intramAddresse]=newWert;
+        $scope.ram[intramAddresse]=newWert; //Speichern des eingegebenen Werts im Modal im entsprechenden Element des Arrays
     };
     
 });
