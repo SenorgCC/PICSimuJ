@@ -20,6 +20,7 @@ app.controller('ramcontroller', function ($scope,DataPic,$timeout) {
     $scope.EECON2 = '00';
     $scope.PCLATH = '00';
     $scope.INTCON = '00';
+    $scope.TMR0Flag=0;
 
 //Dummy zum befüllen des rams
     var GPR1 = new Array();

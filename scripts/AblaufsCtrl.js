@@ -153,6 +153,46 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
             }
         }
     }
+    $scope.runTimer = function () {
+        $scope.StopFlag = false;
+        var test = $scope.calculateVerzug();
+        var runner;
+        if ($scope.StopFlag == false) {
+
+            var tempTMR0 = parseInt($scope.ram[1], 16);
+            if (tempTMR0 == 255) {
+                var tempIntcon = parseInt($scope.ram[11], 16);
+                var IntconArray = [];
+
+                for (var i = 0; i < 8; i++) {
+                    IntconArray[i] = (tempIntcon >> i) & 1;
+                }
+                IntconArray[3] = 1;
+
+                var FinalIntcon = "";
+                FinalIntcon = IntconArray[7].toString() + IntconArray[6].toString()
+                    + IntconArray[5].toString() + IntconArray[4].toString()
+                    + IntconArray[3].toString() + IntconArray[2].toString()
+                    + IntconArray[1].toString() + IntconArray[0].toString();
+                FinalIntcon = parseInt(FinalIntcon, 2);
+                FinalIntcon = FinalIntcon.toString(16);
+                $scope.ram[11] = FinalIntcon;
+                $scope.TMR0Flag=1;
+
+            } else {
+                tempTMR0++;
+                $scope.ram[1] = tempTMR0.toString(16);
+            }
+        }
+
+        runner = $timeout(function () {
+            if ($scope.StopFlag == false) {
+                $scope.runTimer();
+            }
+        }, test / (DataPic.Takt * 1000000));
+
+    };
+
 
 
     
