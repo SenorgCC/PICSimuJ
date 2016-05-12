@@ -116,21 +116,43 @@ app.controller('CPU', function ($scope, DataPic) {
     function setCarry(){
         var tempStatus = getBinaryArray($scope.ram[3]);
         tempStatus[0]=1;
-        $scope.ram[3]=convertArrayToHex(tempStatus);
         $scope.carry=1;
+        $scope.ram[3]=convertArrayToHex(tempStatus);
+
+    }
+    function clrCarry(){
+        var tempStatus = getBinaryArray($scope.ram[3]);
+        tempStatus[0]=0;
+        $scope.carry=0;
+        $scope.ram[3]=convertArrayToHex(tempStatus);
     }
     function setDigitCarry(){
         var tempStatus = getBinaryArray($scope.ram[3]);
         tempStatus[1]=1;
-        $scope.ram[3]=convertArrayToHex(tempStatus);
         $scope.digitCarry=1;
+        $scope.ram[3]=convertArrayToHex(tempStatus);
+
+    }
+    function clrDigitCarry(){
+        var tempStatus = getBinaryArray($scope.ram[3]);
+        tempStatus[1]=0;
+        $scope.digitCarry=0;
+        $scope.ram[3]=convertArrayToHex(tempStatus);
+
     }
     function setZeroFlag(){
         var tempStatus = getBinaryArray($scope.ram[3]);
-        tempStatus[1]=1;
-        $scope.ram[3]=convertArrayToHex(tempStatus);
+        tempStatus[2]=1;
         $scope.zeroFlag = 1;
+        $scope.ram[3]=convertArrayToHex(tempStatus);
     }
+    function clrZeroFlag(){
+        var tempStatus = getBinaryArray($scope.ram[3]);
+        tempStatus[2]=0;
+        $scope.zeroFlag = 0;
+        $scope.ram[3]=convertArrayToHex(tempStatus);
+    }
+
 
 
 
@@ -356,18 +378,22 @@ app.controller('CPU', function ($scope, DataPic) {
                 setCarry();
                 temp = temp - 256;
                 addresult = temp.toString(16);
+            }else{
+                clrCarry();
             }
 
             // Zeroflag Überprüfung
             if (parseInt(addresult, 16) == 0) {
                 setZeroFlag();
-                $scope.zeroFlag = 1;
+            }else{
+                clrZeroFlag();
             }
             // Beim DigitCarry übertrag muss das der vorherige Arbeitsregisterwert kleiner 15 und
             // nach der Rechnung größer 15 sein
             if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15)) {
-                $scope.digitCarry = 1;
                 setDigitCarry();
+            }else {
+                clrDigitCarry();
             }
 
             if (d == 1) {
@@ -389,7 +415,8 @@ app.controller('CPU', function ($scope, DataPic) {
 
             if (parseInt(andresult, 16) == 0) {
                 setZeroFlag();
-                $scope.zeroFlag = 1;
+            }else{
+                clrZeroFlag();
             }
 
             if (d == 1) {
@@ -409,7 +436,6 @@ app.controller('CPU', function ($scope, DataPic) {
         "CLRW": function () {
             $scope.w_reg = '00';
             setZeroFlag();
-            $scope.zeroFlag = 1;
             DataPic.Zeit(1);
         },
         "COMF": function (f, d) {
@@ -417,7 +443,9 @@ app.controller('CPU', function ($scope, DataPic) {
             var comresult=getComArray(tempcomresult);
             comresult = convertArrayToHex(comresult);
             if (parseInt(comresult, 16) == 0) {
-                $scope.zeroFlag = 1;
+                setZeroFlag();
+            }else{
+                clrZeroFlag();
             }
             if (d == 1) {
 
@@ -429,9 +457,14 @@ app.controller('CPU', function ($scope, DataPic) {
         },
         "DECF": function (f, d) {
             //DO SOMETHING
-            var result = parseInt($scope.ram[f], 16) - 1;
+            var result = parseInt($scope.ram[f], 16);
+            if(result>0){
+                result--;
+            }
             if (result == 0) {
-                $scope.zeroFlag = 1;
+                setZeroFlag();
+            }else {
+                clrZeroFlag();
             }
             result = result.toString(16);
 
@@ -443,7 +476,10 @@ app.controller('CPU', function ($scope, DataPic) {
             DataPic.Zeit(1);
         },
         "DECFSZ": function (f, d) {
-            var result = parseInt($scope.ram[f], 16) - 1;
+            var result = parseInt($scope.ram[f], 16);
+            if(result>0){
+                result--;
+            }
             //Wenn das register um 1 dekrementiert wird und damit 0 ergibt,
             //wird statt dem nächsten Befehl ein NOP ausgeführt
             if (result == 0) {
@@ -461,21 +497,30 @@ app.controller('CPU', function ($scope, DataPic) {
 
         },
         "INCF": function (f, d) {
-            var result = parseInt($scope.ram[f], 16) + 1;
+            var result = parseInt($scope.ram[f], 16);
+            if(result<255){
+                result++;
+            }
             result = result.toString(16);
+
             if (d == 1) {
                 $scope.ram[f] = result;
             } else {
                 $scope.w_reg = result;
             }
+
             if (result == 0) {
-                $scope.zeroFlag = 1;
+                setZeroFlag();
+            }else{
+                clrZeroFlag();
             }
             DataPic.Zeit(1);
         },
         "INCFSZ": function (f, d) {
-
-            var result = parseInt($scope.ram[f], 16) + 1;
+            var result = parseInt($scope.ram[f], 16);
+            if(result<255){
+                result++;
+            }
             //Wenn das register um 1 dekrementiert wird und damit 0 ergibt,
             //wird statt dem nächsten Befehl ein NOP ausgeführt
             if (result == 0) {
@@ -497,7 +542,9 @@ app.controller('CPU', function ($scope, DataPic) {
             andresult = andresult.toString(16);
 
             if (parseInt(andresult, 16) == 0) {
-                $scope.zeroFlag = 1;
+                setZeroFlag();
+            }else{
+                clrZeroFlag();
             }
 
             if (d == 1) {
@@ -511,7 +558,7 @@ app.controller('CPU', function ($scope, DataPic) {
         "MOVF": function (f, d) {
             var movffile=$scope.ram[f];
             if(movffile==0){
-                $scope.zeroFlag=1;
+                setZeroFlag();
             }
             if(d==1){
                 $scope.ram[f]=movffile;
@@ -597,13 +644,19 @@ app.controller('CPU', function ($scope, DataPic) {
                 var temp = parseInt(result, 16)-256;
                 setCarry();
                 result = temp.toString(16);
+            }else{
+                clrCarry();
             }
             if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15)) {
                 setDigitCarry();
+            }else{
+                clrDigitCarry();
             }
 
             if (parseInt(result, 16) == 0) {
                 setZeroFlag();
+            }else{
+                clrZeroFlag();
             }
             if (d == 1) {
                 $scope.ram[f] = result;
@@ -635,6 +688,8 @@ app.controller('CPU', function ($scope, DataPic) {
 
             if (parseInt(xorresult, 16) == 0) {
                 setZeroFlag();
+            }else{
+                clrZeroFlag();
             }
 
             if (d == 1) {
@@ -706,15 +761,21 @@ app.controller('CPU', function ($scope, DataPic) {
                 setCarry();
                 temp = temp - 256;
                 addresult = temp.toString(16);
+            }else{
+                clrCarry();
             }
 
             if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15)) {
 
                 setDigitCarry();
+            }else{
+                clrDigitCarry();
             }
 
             if (parseInt(addresult, 16) == 0) {
                 setZeroFlag();
+            }else{
+                clrZeroFlag();
             }
 
             $scope.w_reg = addresult;
@@ -725,6 +786,8 @@ app.controller('CPU', function ($scope, DataPic) {
             andresult = andresult.toString(16);
             if (parseInt(andresult, 16) == 0) {
                 setZeroFlag();
+            }else{
+                clrZeroFlag();
             }
             $scope.w_reg = andresult;
             DataPic.Zeit(1);
@@ -830,6 +893,8 @@ app.controller('CPU', function ($scope, DataPic) {
             andresult = andresult.toString(16);
             if (parseInt(andresult, 16) == 0) {
                 setZeroFlag();
+            }else{
+                clrZeroFlag();
             }
             $scope.w_reg = andresult;
             DataPic.Zeit(1);
@@ -843,8 +908,8 @@ app.controller('CPU', function ($scope, DataPic) {
             ///TODO me: Muss getestet werden!
             DataPic.GotoFlag=1;
             $scope.GlobalInteruptEnable=1;
-            $scope.Instructioncounter=$scope.ProgramStack[$scope.ProgramStack.length -1]+1;
-            $scope.ProgramStack.pop();
+            DataPic.Instructioncounter=$scope.ProgramStack[$scope.ProgramStack.length -1]+1;
+            DataPic.ProgramStack.pop();
             DataPic.Zeit(2);
         },
         "RETLW": function (k) {
@@ -864,7 +929,7 @@ app.controller('CPU', function ($scope, DataPic) {
             //Das Top of Stack von ProgramStack wird durch die maxlänge-1 bestimmt, da es keine native fkt dafür gibt
             //Und im ProgramCounter abgespeichert
             DataPic.GotoFlag=1;
-            DataPic.Instructioncounter=DataPic.ProgramStack[DataPic.ProgramStack.length-1];
+            DataPic.Instructioncounter=DataPic.ProgramStack[DataPic.ProgramStack.length-1]+1;
             //Nach dem Übertrag wird der TOS vom ProgramStack gelöscht
             DataPic.ProgramStack.pop();
             DataPic.Zeit(1);
@@ -900,24 +965,32 @@ app.controller('CPU', function ($scope, DataPic) {
                 var temp = parseInt(result, 16)-256;
                 setCarry();
                 result = temp.toString(16);
+            }else{
+                clrCarry();
             }
             ///TODO: DC ÜBERDENKEN!!!
             if ((parseInt(wReg_firstN, 2)>(parseInt(addresresult_FirstN, 2)))){
                 setDigitCarry();
+            }else {
+                clrDigitCarry();
             }
+
 
             if (parseInt(result, 16) == 0) {
                 setZeroFlag();
+            }else{
+                clrZeroFlag();
             }
             $scope.w_reg = result;
             DataPic.Zeit(1);
         },
         "XORLW": function (k) {
-            $scope.w_reg='44';
             var xorlresult = ((parseInt($scope.w_reg, 16)) ^ (k));
             xorlresult = xorlresult.toString(16);
             if (parseInt(xorlresult, 16) == 0) {
                 setZeroFlag();
+            }else{
+                clrZeroFlag();
             }
             $scope.w_reg = xorlresult;
             DataPic.Zeit(1);

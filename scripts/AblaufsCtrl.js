@@ -100,7 +100,7 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
     };
     $scope.checkActive = function (line){
         var vergleichsline= line.split(' ');
-        if(vergleichsline[0]==$scope.operations[DataPic.Instructioncounter].zeile){
+        if(vergleichsline[0]==$scope.operations[DataPic.Instructioncounter-1].zeile){
             return true;
         }else {
             return false;
