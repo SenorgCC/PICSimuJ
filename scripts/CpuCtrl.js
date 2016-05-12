@@ -828,6 +828,7 @@ app.controller('CPU', function ($scope, DataPic) {
             var vergleichszeile= k.toString(16);
 
             DataPic.ProgramStack.push(DataPic.Instructioncounter);
+            $scope.ProgramStack=DataPic.ProgramStack;
 
             for (var i=0; i<=$scope.operations.length;i++){
                 if(parseInt($scope.operations[i].zeile,16)==parseInt(vergleichszeile,16)){
@@ -910,6 +911,7 @@ app.controller('CPU', function ($scope, DataPic) {
             $scope.GlobalInteruptEnable=1;
             DataPic.Instructioncounter=$scope.ProgramStack[$scope.ProgramStack.length -1]+1;
             DataPic.ProgramStack.pop();
+            $scope.ProgramStack= DataPic.ProgramStack;
             DataPic.Zeit(2);
         },
         "RETLW": function (k) {
@@ -922,6 +924,7 @@ app.controller('CPU', function ($scope, DataPic) {
             DataPic.Instructioncounter=DataPic.ProgramStack[DataPic.ProgramStack.length-1]+1;
             //Nach dem Übertrag wird der TOS vom ProgramStack gelöscht
             DataPic.ProgramStack.pop();
+            $scope.ProgramStack= DataPic.ProgramStack;
             DataPic.Zeit(1);
         },
         "RETURN": function () {
@@ -932,6 +935,7 @@ app.controller('CPU', function ($scope, DataPic) {
             DataPic.Instructioncounter=DataPic.ProgramStack[DataPic.ProgramStack.length-1]+1;
             //Nach dem Übertrag wird der TOS vom ProgramStack gelöscht
             DataPic.ProgramStack.pop();
+            $scope.ProgramStack= DataPic.ProgramStack;
             DataPic.Zeit(1);
         },
         "SLEEP": function () {

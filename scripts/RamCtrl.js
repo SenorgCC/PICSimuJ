@@ -6,6 +6,7 @@ app.controller('ramcontroller', function ($scope,DataPic,$timeout) {
     $scope.digitCarry = 0;
     $scope.zeroFlag = DataPic.zeroFlag;
     $scope.carry = DataPic.carry;
+    $scope.ProgramStack=DataPic.ProgramStack;
 
     //Deklaration Specialfunction Register
     $scope.Indirect_addr = '00';

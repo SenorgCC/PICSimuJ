@@ -219,7 +219,9 @@
             <label>CarryFlag:{{carry}}</label>
             <label>Instructions:{{Instructioncounter}}</label>
             <br>
-            <label>W_Register:{{w_reg}}</label>
+            <label>W_Register:{{w_reg}}</label><br>
+            <label><b>Stack</b>:</label>
+            <p ng-repeat="line in ProgramStack">{{line}}</p>
         </div>
     </div>
     </div>
