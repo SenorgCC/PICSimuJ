@@ -390,11 +390,11 @@ app.controller('CPU', function ($scope, DataPic) {
             }
             // Beim DigitCarry übertrag muss das der vorherige Arbeitsregisterwert kleiner 15 und
             // nach der Rechnung größer 15 sein
-            if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15) && !(tempW_RegArray[4]=!tempaddresult_Array[4])) {
+            if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15) && ((tempW_RegArray[4]==tempaddresult_Array[4]))) {
                 setDigitCarry();
             }else {
-                clrDigitCarry();
             }
+                clrDigitCarry();
 
             if (d == 1) {
 
@@ -460,6 +460,8 @@ app.controller('CPU', function ($scope, DataPic) {
             var result = parseInt($scope.ram[f], 16);
             if(result>0){
                 result--;
+            }else {
+                result=255; //result=ff
             }
             if (result == 0) {
                 setZeroFlag();
@@ -498,8 +500,10 @@ app.controller('CPU', function ($scope, DataPic) {
         },
         "INCF": function (f, d) {
             var result = parseInt($scope.ram[f], 16);
-            if(result<255){
+            if(result<256){
                 result++;
+            }else {
+                result=0;
             }
             result = result.toString(16);
 
@@ -518,7 +522,7 @@ app.controller('CPU', function ($scope, DataPic) {
         },
         "INCFSZ": function (f, d) {
             var result = parseInt($scope.ram[f], 16);
-            if(result<255){
+            if(result<256){
                 result++;
             }
             //Wenn das register um 1 dekrementiert wird und damit 0 ergibt,
@@ -593,6 +597,7 @@ app.controller('CPU', function ($scope, DataPic) {
                     rlfresult[i]=oldfile[i-1];
                 }
             }
+            ///Todo fehlerhaft!
             rlfresult=convertArrayToHex(rlfresult);
             if(d==1){
                 $scope.ram[f]=rlfresult;
@@ -656,7 +661,7 @@ app.controller('CPU', function ($scope, DataPic) {
             }else{
                 clrCarry();
             }
-            if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15) && !(tempW_RegArray[4]=!tempaddresult_Array[4])) {
+            if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15) && (tempW_RegArray[4]==tempaddresult_Array[4])) {
                 setDigitCarry();
             }else{
                 clrDigitCarry();
@@ -783,7 +788,7 @@ app.controller('CPU', function ($scope, DataPic) {
                 clrCarry();
             }
 
-            if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15) && !(tempW_RegArray[4]=!tempaddresult_Array[4])) {
+            if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15) && (tempW_RegArray[4]==tempaddresult_Array[4])) {
 
                 setDigitCarry();
             }else{
@@ -999,7 +1004,7 @@ app.controller('CPU', function ($scope, DataPic) {
             }else{
                 clrCarry();
             }
-            if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15) && !(tempW_RegArray[4]=!tempaddresult_Array[4])){
+            if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15) && (tempW_RegArray[4]==tempaddresult_Array[4])){
                 setDigitCarry();
             }else {
                 clrDigitCarry();
@@ -1043,8 +1048,10 @@ app.controller('CPU', function ($scope, DataPic) {
         var temp = getBinaryArray($scope.ram[6]);
         if(temp[bitpos]==1){
             temp[bitpos]=0;
+            $scope.PortBbits[bitpos]=0;
         }else{
             temp[bitpos]=1;
+            $scope.PortBbits[bitpos]=1;
         }
         $scope.ram[6] = convertArrayToHex(temp);
         $scope.PORTB = $scope.ram[6];

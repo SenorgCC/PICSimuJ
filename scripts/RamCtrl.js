@@ -1,5 +1,7 @@
 app.controller('ramcontroller', function ($scope,DataPic,$timeout) {
     $scope.ram=[];
+    $scope.PortBbits=["0","0","0","0","0","0","0","0"];
+
     //Deklaration Arbeitsregister und die Flags
     $scope.Instructioncounter=DataPic.AnzeigeIC;
     $scope.w_reg = '00';
