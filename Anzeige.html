@@ -180,7 +180,7 @@
                 <h2>Speicherbelegung</h2>
                 <table ng-if="ram" class="table table-striped">
                     <tr>
-                        <td><button type="button" size="2" class="btn btn-default" data-toggle="modal" data-target="#ramModal" data-whatever="00h">{{ram[0]}}</button></td>	 <td><button type="button" size="2" class="btn btn-default">{{ram[1]}}</button></td>  <td><button type="button" size="2" class="btn btn-default">{{ram[2]}}</button></td>  <td><button type="button" size="2" class="btn btn-default">{{ram[3]}}</button></td>  <td><button type="button" size="2" class="btn btn-default">{{ram[4]}}</button></td>	 <td><button type="button" size="2" class="btn btn-default">{{ram[5]}}</button></td>  <td><button type="button" size="2" class="btn btn-default">{{ram[6]}}</button></td>  <td><button type="button" size="2" class="btn btn-default">{{ram[7]}}</button></td>
+                        <td><button type="button" size="2" class="btn btn-default" data-toggle="modal" data-target="#ramModal" data-whatever="00">{{ram[0]}}</button></td>	 <td><button type="button" size="2" class="btn btn-default">{{ram[1]}}</button></td>  <td><button type="button" size="2" class="btn btn-default">{{ram[2]}}</button></td>  <td><button type="button" size="2" class="btn btn-default">{{ram[3]}}</button></td>  <td><button type="button" size="2" class="btn btn-default">{{ram[4]}}</button></td>	 <td><button type="button" size="2" class="btn btn-default">{{ram[5]}}</button></td>  <td><button type="button" size="2" class="btn btn-default">{{ram[6]}}</button></td>  <td><button type="button" size="2" class="btn btn-default">{{ram[7]}}</button></td>
                     </tr>
                     <tr>
                         <td>{{ram[8]}}</td>  <td>{{ram[9]}}</td>  <td>{{ram[10]}}</td> <td>{{ram[11]}}</td> <td>{{ram[12]}}</td> <td>{{ram[13]}}</td> <td>{{ram[14]}}</td> <td>{{ram[15]}}</td>
@@ -234,14 +234,14 @@
                 <div class="modal-body">
                     <form>
                         <div class="form-group">
-                            <label for="empfaenger-name" class="control-label">Neuer Wert:</label>
-                            <input type="text" class="form-control" id="empfaenger-name" size="2" maxlength="2" minlength="2">
+                            <label for="neuerhexwert" class="control-label">Neuer Wert:</label>
+                            <input type="text" class="form-control" id="neuerhexwert" size="2" maxlength="2" minlength="2" ng-model="newRamvalue">
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
-                    <button type="button" class="btn btn-primary">Speichern</button>
+                    <button type="button" class="btn btn-primary" ng-click="saveNewRam(newRamvalue)" data-dismiss="modal">Speichern</button>
                 </div>
             </div>
         </div>

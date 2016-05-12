@@ -64,14 +64,16 @@ app.controller('ramcontroller', function ($scope,DataPic,$timeout) {
 
 
     };
+    var intramAddresse;
     $('#ramModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget) // Button, der das Modal ausgelöst hat
-        var ramaddress = button.data('whatever') // Infos aus data-*-Attributen extrahieren
-        // Falls notwendig, könntest du an dieser Stelle eine AJAX-Anfrage initiieren (und dann die Aktualisierung in einem Callback erledigen).
-        // Modal-Inhalt aktualisieren. Wir verwenden an dieser Stelle jQuery here, aber du könntest auch eine Data-Binding-Bibliothek oder andere Methoden verwenden.
-        var modal = $(this)
-        modal.find('.modal-title').text('Speicheradresse ' + ramaddress)
-       // modal.find('.modal-body input').val(recipient)
-    })
+        var button = $(event.relatedTarget); // Button, der das Modal ausgelöst hat
+        var ramaddress = button.data('whatever'); // Infos aus data-*-Attributen extrahieren
+        intramAddresse=parseInt(ramaddress,16);
+        var modal = $(this);
+        modal.find('.modal-title').text('Speicheradresse: ' + ramaddress + 'h');
+    });
+    $scope.saveNewRam = function (newWert) {
+        $scope.ram[intramAddresse]=newWert;
+    };
     
 });
