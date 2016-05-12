@@ -390,7 +390,7 @@ app.controller('CPU', function ($scope, DataPic) {
             }
             // Beim DigitCarry übertrag muss das der vorherige Arbeitsregisterwert kleiner 15 und
             // nach der Rechnung größer 15 sein
-            if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15)) {
+            if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15) && !(tempW_RegArray[4]=!tempaddresult_Array[4])) {
                 setDigitCarry();
             }else {
                 clrDigitCarry();
@@ -636,8 +636,17 @@ app.controller('CPU', function ($scope, DataPic) {
             var tempaddresult_Array = getBinaryArray(result);
             var wReg_firstN, addresresult_FirstN;
 
-            wReg_firstN = tempW_RegArray[3].toString() + tempW_RegArray[2].toString() + tempW_RegArray[1].toString() + tempW_RegArray[0].toString();
-            addresresult_FirstN =tempaddresult_Array[3].toString() + tempaddresult_Array[2].toString() + tempaddresult_Array[1].toString() + tempaddresult_Array[0].toString();
+            wReg_firstN = tempW_RegArray[4].toString()
+                        + tempW_RegArray[3].toString()
+                        + tempW_RegArray[2].toString()
+                        + tempW_RegArray[1].toString()
+                        + tempW_RegArray[0].toString();
+
+            addresresult_FirstN = tempaddresult_Array[4].toString()
+                                + tempaddresult_Array[3].toString()
+                                + tempaddresult_Array[2].toString()
+                                + tempaddresult_Array[1].toString()
+                                + tempaddresult_Array[0].toString();
 
             if (parseInt(result, 16) > 255) {
 
@@ -647,7 +656,7 @@ app.controller('CPU', function ($scope, DataPic) {
             }else{
                 clrCarry();
             }
-            if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15)) {
+            if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15) && !(tempW_RegArray[4]=!tempaddresult_Array[4])) {
                 setDigitCarry();
             }else{
                 clrDigitCarry();
@@ -752,8 +761,17 @@ app.controller('CPU', function ($scope, DataPic) {
             //kommentar
             ///TODO Diese Funktionen lassen sich gut refactorn
 
-            wReg_firstN = tempW_RegArray[3].toString() + tempW_RegArray[2].toString() + tempW_RegArray[1].toString() + tempW_RegArray[0].toString();
-            addresresult_FirstN = tempaddresult_Array[4].toString() + tempaddresult_Array[3].toString() + tempaddresult_Array[2].toString() + tempaddresult_Array[1].toString() + tempaddresult_Array[0].toString();
+            wReg_firstN = tempW_RegArray[4].toString()
+                        + tempW_RegArray[3].toString()
+                        + tempW_RegArray[2].toString()
+                        + tempW_RegArray[1].toString()
+                        + tempW_RegArray[0].toString();
+
+            addresresult_FirstN = tempaddresult_Array[4].toString()
+                                + tempaddresult_Array[3].toString()
+                                + tempaddresult_Array[2].toString()
+                                + tempaddresult_Array[1].toString()
+                                + tempaddresult_Array[0].toString();
 
             if (parseInt(addresult, 16) > 255) {
 
@@ -765,7 +783,7 @@ app.controller('CPU', function ($scope, DataPic) {
                 clrCarry();
             }
 
-            if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15)) {
+            if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15) && !(tempW_RegArray[4]=!tempaddresult_Array[4])) {
 
                 setDigitCarry();
             }else{
@@ -961,8 +979,17 @@ app.controller('CPU', function ($scope, DataPic) {
             var tempaddresult_Array = getBinaryArray(result);
             var wReg_firstN, addresresult_FirstN;
 
-            wReg_firstN = tempW_RegArray[3].toString() + tempW_RegArray[2].toString() + tempW_RegArray[1].toString() + tempW_RegArray[0].toString();
-            addresresult_FirstN =tempaddresult_Array[3].toString() + tempaddresult_Array[2].toString() + tempaddresult_Array[1].toString() + tempaddresult_Array[0].toString();
+            wReg_firstN = tempW_RegArray[4].toString()
+                        + tempW_RegArray[3].toString()
+                        + tempW_RegArray[2].toString()
+                        + tempW_RegArray[1].toString()
+                        + tempW_RegArray[0].toString();
+
+            addresresult_FirstN = tempaddresult_Array[4].toString()
+                                + tempaddresult_Array[3].toString()
+                                + tempaddresult_Array[2].toString()
+                                + tempaddresult_Array[1].toString()
+                                + tempaddresult_Array[0].toString();
 
             if (parseInt(result, 16) > 255) {
 
@@ -972,8 +999,7 @@ app.controller('CPU', function ($scope, DataPic) {
             }else{
                 clrCarry();
             }
-            ///TODO: DC ÜBERDENKEN!!!
-            if ((parseInt(wReg_firstN, 2)>(parseInt(addresresult_FirstN, 2)))){
+            if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15) && !(tempW_RegArray[4]=!tempaddresult_Array[4])){
                 setDigitCarry();
             }else {
                 clrDigitCarry();
