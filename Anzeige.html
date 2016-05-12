@@ -94,9 +94,9 @@
 
                 <div class="buttons" ng-controller="DropdownCtrl">
                     <div ng-controller="AblaufsCtrl">
+                        <!--Anzeige des Dropdownmenüs der Taktauswahl-->
                         <select id="Taktauswahl" class="selectpicker"  ng-model="selectedItem" ng-options="item.name for item in items" ng-change="changetakt()"></select>
                         <!--Anzeige Laufzeitzähler-->
-                        <label>{{selectedItem.Takt}}</label>
                         <label>Laufzeitzähler: {{Laufzeit}} &micro;s</label>
                     </div>
                 </div>
@@ -180,7 +180,7 @@
                 <h2>Speicherbelegung</h2>
                 <table ng-if="ram" class="table table-striped">
                     <tr>
-                        <td>{{ram[0]}}</td>	 <td>{{ram[1]}}</td>  <td>{{ram[2]}}</td>  <td>{{ram[3]}}</td>  <td>{{ram[4]}}</td>	 <td>{{ram[5]}}</td>  <td>{{ram[6]}}</td>  <td>{{ram[7]}}</td>
+                        <td><button type="button" size="2" class="btn btn-default" data-toggle="modal" data-target="#ramModal" data-whatever="00h">{{ram[0]}}</button></td>	 <td><button type="button" size="2" class="btn btn-default">{{ram[1]}}</button></td>  <td><button type="button" size="2" class="btn btn-default">{{ram[2]}}</button></td>  <td><button type="button" size="2" class="btn btn-default">{{ram[3]}}</button></td>  <td><button type="button" size="2" class="btn btn-default">{{ram[4]}}</button></td>	 <td><button type="button" size="2" class="btn btn-default">{{ram[5]}}</button></td>  <td><button type="button" size="2" class="btn btn-default">{{ram[6]}}</button></td>  <td><button type="button" size="2" class="btn btn-default">{{ram[7]}}</button></td>
                     </tr>
                     <tr>
                         <td>{{ram[8]}}</td>  <td>{{ram[9]}}</td>  <td>{{ram[10]}}</td> <td>{{ram[11]}}</td> <td>{{ram[12]}}</td> <td>{{ram[13]}}</td> <td>{{ram[14]}}</td> <td>{{ram[15]}}</td>
@@ -223,5 +223,29 @@
         </div>
     </div>
     </div>
+
+    <div class="modal fade bs-example-modal-sm" id="ramModal" tabindex="-1" role="dialog" aria-labelledby="beispielModalLabel">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="beispielModalLabel">Speicheradresse</h4>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="empfaenger-name" class="control-label">Neuer Wert:</label>
+                            <input type="text" class="form-control" id="empfaenger-name" size="2" maxlength="2" minlength="2">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
+                    <button type="button" class="btn btn-primary">Speichern</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </body>
 </html>

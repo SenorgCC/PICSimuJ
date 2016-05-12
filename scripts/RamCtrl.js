@@ -63,5 +63,14 @@ app.controller('ramcontroller', function ($scope,DataPic,$timeout) {
 
 
     };
-
+    $('#ramModal').on('show.bs.modal', function (event) {
+        var button = $(event.relatedTarget) // Button, der das Modal ausgelöst hat
+        var ramaddress = button.data('whatever') // Infos aus data-*-Attributen extrahieren
+        // Falls notwendig, könntest du an dieser Stelle eine AJAX-Anfrage initiieren (und dann die Aktualisierung in einem Callback erledigen).
+        // Modal-Inhalt aktualisieren. Wir verwenden an dieser Stelle jQuery here, aber du könntest auch eine Data-Binding-Bibliothek oder andere Methoden verwenden.
+        var modal = $(this)
+        modal.find('.modal-title').text('Speicheradresse ' + ramaddress)
+       // modal.find('.modal-body input').val(recipient)
+    })
+    
 });
