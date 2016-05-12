@@ -13,6 +13,16 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
 
     var firstrunFlag=true;
 
+
+    $scope.runPic = function(){
+        $scope.runTimer();
+        $scope.Startapp();
+    };
+
+
+
+
+
     $scope.Startapp = function () {
         $scope.StopFlag=false;
         if(firstrunFlag==true){
@@ -156,8 +166,8 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
     }
     $scope.runTimer = function () {
         $scope.StopFlag = false;
-        var test = $scope.calculateVerzug();
-        var runner;
+        var Teilerfaktor = $scope.calculateVerzug();
+        var Timerunner;
         if ($scope.StopFlag == false) {
 
             var tempTMR0 = parseInt($scope.ram[1], 16);
@@ -179,6 +189,8 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
                 FinalIntcon = FinalIntcon.toString(16);
                 $scope.ram[11] = FinalIntcon;
                 $scope.TMR0Flag=1;
+                tempTMR0=0;
+                $scope.ram[1]=tempTMR0.toString(16);
 
             } else {
                 tempTMR0++;
@@ -186,11 +198,11 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
             }
         }
 
-        runner = $timeout(function () {
+        Timerunner = $timeout(function () {
             if ($scope.StopFlag == false) {
                 $scope.runTimer();
             }
-        }, test / (DataPic.Takt * 1000000));
+        }, Teilerfaktor / (DataPic.Takt * 1000000));
 
     };
 
