@@ -8,6 +8,7 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
     var temp1,temp2;
     $scope.breakpointbox=false;
     $scope.breakpointview=true;
+    $scope.ProgramCounter=[];
     var runner;
 
     var firstrunFlag=true;
@@ -65,7 +66,7 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
         DataPic.AnzeigeIC=0;
         $scope.StopFlag=1;
         $scope.ProgramCounter=0;
-        $scope.ProgramStack=0;
+        $scope.ProgramStack=[];
         $scope.zeroFlag=0;
         $scope.digitCarry=0;
         $scope.carry=0;
