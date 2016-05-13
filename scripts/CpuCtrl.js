@@ -390,7 +390,7 @@ app.controller('CPU', function ($scope, DataPic) {
             }
             // Beim DigitCarry übertrag muss das der vorherige Arbeitsregisterwert kleiner 15 und
             // nach der Rechnung größer 15 sein
-            if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15) && ((tempW_RegArray[4]==tempaddresult_Array[4]))) {
+            if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15)) {
                 setDigitCarry();
             }else {
             }
@@ -481,6 +481,8 @@ app.controller('CPU', function ($scope, DataPic) {
             var result = parseInt($scope.ram[f], 16);
             if(result>0){
                 result--;
+            }else{
+                result=0;
             }
             //Wenn das register um 1 dekrementiert wird und damit 0 ergibt,
             //wird statt dem nächsten Befehl ein NOP ausgeführt
@@ -500,7 +502,7 @@ app.controller('CPU', function ($scope, DataPic) {
         },
         "INCF": function (f, d) {
             var result = parseInt($scope.ram[f], 16);
-            if(result<256){
+            if(result<255){
                 result++;
             }else {
                 result=0;
@@ -522,14 +524,16 @@ app.controller('CPU', function ($scope, DataPic) {
         },
         "INCFSZ": function (f, d) {
             var result = parseInt($scope.ram[f], 16);
-            if(result<256){
+            if(result<255){
                 result++;
+            }else{
+                result=0;
             }
             //Wenn das register um 1 dekrementiert wird und damit 0 ergibt,
             //wird statt dem nächsten Befehl ein NOP ausgeführt
             if (result == 0) {
                 DataPic.Instructioncounter++;
-                DataPic.Zeit(1);
+                DataPic.Zeit(2);
             } else {
                 DataPic.Zeit(1);
             }
@@ -588,7 +592,7 @@ app.controller('CPU', function ($scope, DataPic) {
 
             $scope.carry=oldfile[7];
             tempStatus[0]=oldfile[7];
-            $scope.ram[3]=tempStatus;
+            $scope.ram[3]=convertArrayToHex(tempStatus);
 
             for(var i=7; i>=0;i--){
                 if(i==0){
@@ -597,7 +601,7 @@ app.controller('CPU', function ($scope, DataPic) {
                     rlfresult[i]=oldfile[i-1];
                 }
             }
-            ///Todo fehlerhaft!
+
             rlfresult=convertArrayToHex(rlfresult);
             if(d==1){
                 $scope.ram[f]=rlfresult;
@@ -614,7 +618,7 @@ app.controller('CPU', function ($scope, DataPic) {
 
             $scope.carry=oldfile[0];
             tempStatus[0]=oldfile[0];
-            $scope.ram[3]=tempStatus;
+            $scope.ram[3]=convertArrayToHex(tempStatus);
 
             for(var i=0; i<=7;i++){
                 if(i==7){
@@ -1070,5 +1074,31 @@ app.controller('CPU', function ($scope, DataPic) {
             return (4*DataPic.Takt);
         }
     };
+
+    $scope.resetPic = function(){
+        for(var i=0; i<=$scope.ram.length-1;i++){
+            $scope.ram[i]=0;
+        }
+        ///TODO Faktory auslagern
+        $scope.PCL='00';
+        $scope.ram[3]='18';
+        $scope.STATUS=$scope.ram[3];
+        DataPic.Instructioncounter=0;
+        $scope.Instructioncounter=0;
+        DataPic.AnzeigeIC=0;
+        $scope.StopFlag=1;
+        $scope.ProgramCounter=0;
+        $scope.ProgramStack=[];
+        $scope.zeroFlag=0;
+        $scope.digitCarry=0;
+        $scope.carry=0;
+        $scope.watchdogtimer=0;
+        $scope.w_reg='00';
+        DataPic.Laufzeit=0;
+        $scope.Laufzeit=0;
+        $scope.OPTION_REG='ff';
+        $scope.TRISA='1f';
+        $scope.TRISB='ff';
+    }
 
 });

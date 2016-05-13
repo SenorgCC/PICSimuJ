@@ -64,30 +64,7 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
 
     };
     $scope.reset = function () {
-        for(var i=0; i<=$scope.ram.length-1;i++){
-            $scope.ram[i]=0;
-        }
-        ///TODO Faktory auslagern
-        $scope.PCL='00';
-        $scope.ram[3]='18';
-        $scope.STATUS=$scope.ram[3];
-        DataPic.Instructioncounter=0;
-        $scope.Instructioncounter=0;
-        DataPic.AnzeigeIC=0;
-        $scope.StopFlag=1;
-        $scope.ProgramCounter=0;
-        $scope.ProgramStack=[];
-        $scope.zeroFlag=0;
-        $scope.digitCarry=0;
-        $scope.carry=0;
-        $scope.watchdogtimer=0;
-        $scope.w_reg='00';
-        DataPic.Laufzeit=0;
-        $scope.Laufzeit=0;
-        $scope.OPTION_REG='ff';
-        $scope.TRISA='1f';
-        $scope.TRISB='ff';
-
+        $scope.resetPic();
     };
 
     $scope.stoppapp = function () {
