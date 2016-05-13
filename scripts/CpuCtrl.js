@@ -405,6 +405,7 @@ app.controller('CPU', function ($scope, DataPic) {
             // Die Laufzeitberechnungsfunktion liegt in der Factory DataPic, damit es scopeübergreifend
             // den selben Wert speichern kann
             DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
 
         },
         "ANDWF": function (f, d) {
@@ -426,17 +427,20 @@ app.controller('CPU', function ($scope, DataPic) {
                 $scope.w_reg = andresult;
             }
             DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
         },
         "CLRF": function (f) {
             $scope.ram[f] = '00';
             setZeroFlag();
 
             DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
         },
         "CLRW": function () {
             $scope.w_reg = '00';
             setZeroFlag();
             DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
         },
         "COMF": function (f, d) {
             var tempcomresult = getBinaryArray($scope.ram[f]);
@@ -454,6 +458,7 @@ app.controller('CPU', function ($scope, DataPic) {
                 $scope.w_reg = comresult;
             }
             DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
         },
         "DECF": function (f, d) {
             //DO SOMETHING
@@ -476,6 +481,7 @@ app.controller('CPU', function ($scope, DataPic) {
                 $scope.w_reg = result;
             }
             DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
         },
         "DECFSZ": function (f, d) {
             var result = parseInt($scope.ram[f], 16);
@@ -489,8 +495,10 @@ app.controller('CPU', function ($scope, DataPic) {
             if (result == 0) {
                 DataPic.Instructioncounter++;
                 DataPic.Zeit(2);
+                DataPic.IncTaktanzahl(2);
             } else {
                 DataPic.Zeit(1);
+                DataPic.IncTaktanzahl(1);
             }
             result = result.toString(16);
             if (d == 1) {
@@ -521,6 +529,7 @@ app.controller('CPU', function ($scope, DataPic) {
                 clrZeroFlag();
             }
             DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
         },
         "INCFSZ": function (f, d) {
             var result = parseInt($scope.ram[f], 16);
@@ -534,8 +543,10 @@ app.controller('CPU', function ($scope, DataPic) {
             if (result == 0) {
                 DataPic.Instructioncounter++;
                 DataPic.Zeit(2);
+                DataPic.IncTaktanzahl(2);
             } else {
                 DataPic.Zeit(1);
+                DataPic.IncTaktanzahl(1);
             }
             result = result.toString(16);
             if (d == 1) {
@@ -562,6 +573,7 @@ app.controller('CPU', function ($scope, DataPic) {
                 $scope.w_reg = andresult;
             }
             DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
         },
         "MOVF": function (f, d) {
             var movffile=$scope.ram[f];
@@ -574,15 +586,18 @@ app.controller('CPU', function ($scope, DataPic) {
                 $scope.w_reg=movffile;
             }
             DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
         },
         "MOVWF": function (f) {
             $scope.ram[f]=$scope.w_reg;
             DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
         },
         "NOP": function () {
             //Der NOP Befehl erhöt nur den IC, Keine weitere Funktion
             //$scope.Instructioncounter++;
             DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
         },
         "RLF": function (f, d) {
             var rlfresult=new Array();
@@ -609,6 +624,7 @@ app.controller('CPU', function ($scope, DataPic) {
                 $scope.w_reg=rlfresult;
             }
             DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
         },
         "RRF": function (f, d) {
             var rrfresult=new Array();
@@ -634,6 +650,7 @@ app.controller('CPU', function ($scope, DataPic) {
                 $scope.w_reg=rrfresult;
             }
             DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
 
         },
         "SUBWF": function (f, d) {
@@ -682,6 +699,7 @@ app.controller('CPU', function ($scope, DataPic) {
                 $scope.w_reg = result;
             }
             DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
         },
         "SWAPF": function (f, d) {
             var tempArray=getBinaryArray($scope.ram[f]);
@@ -697,6 +715,7 @@ app.controller('CPU', function ($scope, DataPic) {
                 $scope.w_reg = swapResult;
             }
             DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
         },
         "XORWF": function (f, d) {
 
@@ -717,6 +736,7 @@ app.controller('CPU', function ($scope, DataPic) {
                 $scope.w_reg = xorresult;
             }
             DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
         },
         "BCF": function (f, b) {
             var result;
@@ -725,6 +745,7 @@ app.controller('CPU', function ($scope, DataPic) {
             result = convertArrayToHex(tempFile);
             $scope.ram[f] = result;
             DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
         },
         "BSF": function (f, b) {
             var result = "";
@@ -733,6 +754,7 @@ app.controller('CPU', function ($scope, DataPic) {
             result = convertArrayToHex(tempFile);
             $scope.ram[f] = result;
             DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
         },
         "BTFSC": function (f, b) {
             //DO SOMETHING
@@ -742,10 +764,12 @@ app.controller('CPU', function ($scope, DataPic) {
                 //$scope.callOperation("0");
                 DataPic.Instructioncounter++;
                 DataPic.Zeit(2);
+                DataPic.IncTaktanzahl(2);
             } else {
                 //$scope.Instructioncounter++;
                 //Ansonsten Tue nix
                 DataPic.Zeit(1);
+                DataPic.IncTaktanzahl(1);
             }
         },
         "BTFSS": function (f, b) {
@@ -754,10 +778,12 @@ app.controller('CPU', function ($scope, DataPic) {
                 //bei gesetztem bit wird statt dem nächsten Befehl ein NOP aufgerufen
                 DataPic.Instructioncounter++;
                 DataPic.Zeit(2);
+                DataPic.IncTaktanzahl(2);
             } else {
                 //$scope.Instructioncounter++;
                 //Ansonsten tue nix
                 DataPic.Zeit(1);
+                DataPic.IncTaktanzahl(1);
             }
         },
         "ADDLW": function (k) {
@@ -807,6 +833,7 @@ app.controller('CPU', function ($scope, DataPic) {
 
             $scope.w_reg = addresult;
             DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
         },
         "ANDLW": function (k) {
             var andresult = ((parseInt($scope.w_reg, 16)) & (k));
@@ -818,6 +845,7 @@ app.controller('CPU', function ($scope, DataPic) {
             }
             $scope.w_reg = andresult;
             DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
         },
         "CALL": function (k) {
 
@@ -867,6 +895,7 @@ app.controller('CPU', function ($scope, DataPic) {
 
 
             DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
 
         },
         "CRLWDT": function () {
@@ -877,6 +906,7 @@ app.controller('CPU', function ($scope, DataPic) {
             tempStatus[3]=1;
             $scope.ram[3]=tempStatus;
             DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
         },
         "GOTO": function (k) {
         /*
@@ -915,6 +945,7 @@ app.controller('CPU', function ($scope, DataPic) {
             }
 
             DataPic.Zeit(2);
+            DataPic.IncTaktanzahl(2);
         },
         "IORLW": function (k) {
             var andresult = ((parseInt($scope.w_reg, 16)) | (k));
@@ -926,20 +957,23 @@ app.controller('CPU', function ($scope, DataPic) {
             }
             $scope.w_reg = andresult;
             DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
         },
         "MOVLW": function (k) {
             $scope.w_reg=k.toString(16);
             DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
+
 
         },
         "RETFIE": function () {
             ///TODO me: Muss getestet werden!
             DataPic.GotoFlag=1;
-            $scope.GlobalInteruptEnable=1;
-            DataPic.Instructioncounter=$scope.ProgramStack[$scope.ProgramStack.length -1]+1;
+            DataPic.GIE=1;
+            DataPic.Instructioncounter=DataPic.ProgramStack[$scope.ProgramStack.length -1]+1;
             DataPic.ProgramStack.pop();
-            $scope.ProgramStack= DataPic.ProgramStack;
             DataPic.Zeit(2);
+            DataPic.IncTaktanzahl(2);
         },
         "RETLW": function (k) {
             ///TODO: TESTEN!
@@ -953,6 +987,7 @@ app.controller('CPU', function ($scope, DataPic) {
             DataPic.ProgramStack.pop();
             $scope.ProgramStack= DataPic.ProgramStack;
             DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
         },
         "RETURN": function () {
             //Wie RETLW nur ohne Literalübergabe
@@ -964,6 +999,7 @@ app.controller('CPU', function ($scope, DataPic) {
             DataPic.ProgramStack.pop();
             $scope.ProgramStack= DataPic.ProgramStack;
             DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
         },
         "SLEEP": function () {
             ///TODO: Wie zur Hölle soll man des Simulieren ??????????
@@ -978,6 +1014,7 @@ app.controller('CPU', function ($scope, DataPic) {
             // Hier sollte sowas wie ein Sleep kommen, aber kp wie der umzusetzten ist ...
             // Absolut kp
             DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
         },
         "SUBLW": function (k) {
             var zahl1=k;
@@ -1022,6 +1059,7 @@ app.controller('CPU', function ($scope, DataPic) {
             }
             $scope.w_reg = result;
             DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
         },
         "XORLW": function (k) {
             var xorlresult = ((parseInt($scope.w_reg, 16)) ^ (k));
@@ -1033,6 +1071,7 @@ app.controller('CPU', function ($scope, DataPic) {
             }
             $scope.w_reg = xorlresult;
             DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
         }
     };
 
@@ -1073,7 +1112,7 @@ app.controller('CPU', function ($scope, DataPic) {
         $scope.PORTA = $scope.ram[5];
     };
 
-    $scope.calculateVerzug = function () {
+    $scope.calculatePrescale = function () {
 
         var tempOPTreg=getBinaryArray($scope.ram[81]);
         var prescalerVal=tempOPTreg[2].toString()+tempOPTreg[1].toString()+tempOPTreg[0].toString();
@@ -1111,6 +1150,13 @@ app.controller('CPU', function ($scope, DataPic) {
         $scope.OPTION_REG='ff';
         $scope.TRISA='1f';
         $scope.TRISB='ff';
-    }
+        $scope.RP0=0;
+        $scope.TimeOutbit=1;
+        $scope.PowerDownbit=1;
+    };
+
+
+
+
 
 });

@@ -18,6 +18,7 @@ app.factory('DataPic',function () {
     
     //Initialisierung der Variablen für Takt und Laufzeit
     PicData.Takt=0;
+    PicData.Taktanzahl=0;
     PicData.Laufzeit=0;
 
     PicData.zeroFlag=0;
@@ -26,6 +27,12 @@ app.factory('DataPic',function () {
     PicData.AnzeigeIC=0;
     PicData.ProgramStack =[];
     PicData.BreakPointArray=[];
+
+    //Interruptflags
+
+    PicData.GIE=0;
+    PicData.T0IF=0;
+    PicData.T0IE=0;
     
 
     //Berechnung der Laufzeitanzeige Übergabe sind die benötigten Takte eines Befehls
@@ -44,6 +51,10 @@ app.factory('DataPic',function () {
             zeroFlag: ZF,
             laufzeit: LZ
         });
+    };
+
+    PicData.IncTaktanzahl = function (taktZahl){
+        PicData.Taktanzahl = PicData.Taktanzahl + taktZahl;
     };
 
 

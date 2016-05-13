@@ -15,7 +15,6 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
 
 
     $scope.runPic = function(){
-        $scope.runTimer();
         $scope.Startapp();
     };
 
@@ -49,7 +48,12 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
 
     $scope.oneStep = function () {
         $scope.SaveStep();
-        $scope.callOperation($scope.operations[DataPic.Instructioncounter].befehl);
+        if($scope.checkInterrupt()==false){
+            $scope.callOperation($scope.operations[DataPic.Instructioncounter].befehl);
+            if(DataPic.Taktanzahl % $scope.calculatePrescale() == 0 && DataPic.Taktanzahl>=4){
+                $scope.runTimer();
+            }
+        }
         if(DataPic.GotoFlag==1){
             DataPic.GotoFlag=0;
         }else{
@@ -88,7 +92,7 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
     };
     $scope.checkActive = function (line){
         var vergleichsline= line.split(' ');
-        if(vergleichsline[0]==$scope.operations[DataPic.Instructioncounter-1].zeile){
+        if(vergleichsline[0]==$scope.operations[DataPic.Instructioncounter].zeile){
             return true;
         }else {
             return false;
@@ -142,47 +146,62 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
         }
     }
     $scope.runTimer = function () {
-        $scope.StopFlag = false;
-        var Teilerfaktor = $scope.calculateVerzug();
-        var Timerunner;
-        if ($scope.StopFlag == false) {
+        var tempTMR0 = parseInt($scope.ram[1], 16);
+        if (tempTMR0 == 255) {
+            var tempIntcon = parseInt($scope.ram[11], 16);
+            var IntconArray = [];
 
-            var tempTMR0 = parseInt($scope.ram[1], 16);
-            if (tempTMR0 == 255) {
-                var tempIntcon = parseInt($scope.ram[11], 16);
-                var IntconArray = [];
+            for (var i = 0; i < 8; i++) {
+                   IntconArray[i] = (tempIntcon >> i) & 1;
+            }
+            IntconArray[3] = 1;
 
-                for (var i = 0; i < 8; i++) {
-                    IntconArray[i] = (tempIntcon >> i) & 1;
-                }
-                IntconArray[3] = 1;
-
-                var FinalIntcon = "";
-                FinalIntcon = IntconArray[7].toString() + IntconArray[6].toString()
-                    + IntconArray[5].toString() + IntconArray[4].toString()
-                    + IntconArray[3].toString() + IntconArray[2].toString()
-                    + IntconArray[1].toString() + IntconArray[0].toString();
-                FinalIntcon = parseInt(FinalIntcon, 2);
-                FinalIntcon = FinalIntcon.toString(16);
-                $scope.ram[11] = FinalIntcon;
-                $scope.TMR0Flag=1;
-                tempTMR0=0;
-                $scope.ram[1]=tempTMR0.toString(16);
+            var FinalIntcon = "";
+            FinalIntcon = IntconArray[7].toString() + IntconArray[6].toString()
+                        + IntconArray[5].toString() + IntconArray[4].toString()
+                        + IntconArray[3].toString() + IntconArray[2].toString()
+                        + IntconArray[1].toString() + IntconArray[0].toString();
+            FinalIntcon = parseInt(FinalIntcon, 2);
+            FinalIntcon = FinalIntcon.toString(16);
+            $scope.ram[11] = FinalIntcon;
+            DataPic.T0IF=1;
+            tempTMR0=0;
+            $scope.ram[1]=tempTMR0.toString(16);
 
             } else {
                 tempTMR0++;
                 $scope.ram[1] = tempTMR0.toString(16);
             }
+        };
+
+    //GIE und T0IE Watcher meldet jede änderung am ram[11] und check ob die bedingungen erfult wurden
+    $scope.$watch('ram[11]', function() {
+        if((parseInt($scope.ram[11],16)&parseInt("10000000",2))==128){
+            $scope.GIE=1;
+        }else{
+            $scope.GIE=0;
+        }
+        if((parseInt($scope.ram[11],16)&parseInt("00100000",2))==32){
+            $scope.T0IE=1;
+        }else{
+            $scope.T0IE=0;
         }
 
-        Timerunner = $timeout(function () {
-            if ($scope.StopFlag == false) {
-                $scope.runTimer();
-            }
-        }, Teilerfaktor / (DataPic.Takt * 1000000));
+    });
+    $scope.checkInterrupt = function (){
+
+        if(($scope.T0IE&&$scope.TMR0Flag)&&$scope.GIE){
+            $scope.GIE=0;
+            $scope.ram[11]=(parseInt($scope.ram[11],16)&&parseInt("01111111",2)).toString(16);
+            DataPic.ProgramStack.push(DataPic.Instructioncounter);
+            DataPic.Instructioncounter=4;
+            DataPic.GotoFlag=1;
+            return true;
+        }else {
+            return false;
+        }
 
     };
-
 
 
     
