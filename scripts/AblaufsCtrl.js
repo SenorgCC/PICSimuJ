@@ -164,7 +164,7 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
             FinalIntcon = parseInt(FinalIntcon, 2);
             FinalIntcon = FinalIntcon.toString(16);
             $scope.ram[11] = FinalIntcon;
-            DataPic.T0IF=1;
+            $scope.T0IF=1;
             tempTMR0=0;
             $scope.ram[1]=tempTMR0.toString(16);
 
@@ -190,10 +190,11 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
     });
     $scope.checkInterrupt = function (){
 
-        if(($scope.T0IE&&$scope.TMR0Flag)&&$scope.GIE){
+        if(($scope.T0IE&&$scope.T0IF)&&$scope.GIE){
             $scope.GIE=0;
             $scope.ram[11]=(parseInt($scope.ram[11],16)&&parseInt("01111111",2)).toString(16);
             DataPic.ProgramStack.push(DataPic.Instructioncounter);
+            $scope.ProgramStack=DataPic.ProgramStack;
             DataPic.Instructioncounter=4;
             DataPic.GotoFlag=1;
             return true;
@@ -202,6 +203,8 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
         }
 
     };
+
+    $scope.watch('ProgramStack')
 
 
     

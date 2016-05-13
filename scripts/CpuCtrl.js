@@ -969,8 +969,8 @@ app.controller('CPU', function ($scope, DataPic) {
         "RETFIE": function () {
             ///TODO me: Muss getestet werden!
             DataPic.GotoFlag=1;
-            DataPic.GIE=1;
-            DataPic.Instructioncounter=DataPic.ProgramStack[$scope.ProgramStack.length -1]+1;
+            $scope.ram[11]=(parseInt($scope.ram[11],16)&parseInt("01111111",2)).toString(16);
+            DataPic.Instructioncounter=DataPic.ProgramStack[DataPic.ProgramStack.length -1]+1;
             DataPic.ProgramStack.pop();
             DataPic.Zeit(2);
             DataPic.IncTaktanzahl(2);
