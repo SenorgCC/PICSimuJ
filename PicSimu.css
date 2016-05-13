@@ -1,27 +1,22 @@
 body {
     font-family: sans-serif;
 }
-table{
-    font-size: small;
-}
 .codeanzeige{
     position: static;
     float: left;
     width: 50%;
-    height: 550px;
+    height: 500px;
     overflow: scroll;
 }
 .ram{
     float: left;
     position: relative;
-    width: 50%
+    width: 50%;
+    height: 500px;
+    overflow: scroll;
 }
 .highlighted{
     background-color: #1b6d85;
-}
-.buttons{
-    float: left;
-    width: 50%
 }
 .cpu{
     position:relative;
@@ -43,4 +38,15 @@ table{
     opacity: 0;
     filter: alpha(opacity=0);
 }
-
+.ueberstrich {
+    text-decoration: overline;
+}
+.statuswreg{
+    position: relative;
+    float: left;
+    width: 50%;
+}
+.rahmenporttakt{
+    width: 50%;
+    float: left;
+}
