@@ -1060,6 +1060,18 @@ app.controller('CPU', function ($scope, DataPic) {
         $scope.ram[6] = convertArrayToHex(temp);
         $scope.PORTB = $scope.ram[6];
     };
+    $scope.changePortAbit = function (bitpos) {
+        var temp = getBinaryArray($scope.ram[5]);
+        if(temp[bitpos]==1){
+            temp[bitpos]=0;
+            $scope.PortAbits[bitpos]=0;
+        }else{
+            temp[bitpos]=1;
+            $scope.PortAbits[bitpos]=1;
+        }
+        $scope.ram[5] = convertArrayToHex(temp);
+        $scope.PORTA = $scope.ram[5];
+    };
 
     $scope.calculateVerzug = function () {
 
