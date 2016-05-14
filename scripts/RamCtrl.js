@@ -28,7 +28,12 @@ app.controller('ramcontroller', function ($scope,DataPic,$timeout) {
     $scope.GIE=parseInt($scope.ram[11])&parseInt("10000000");
     $scope.T0IE=parseInt($scope.ram[11])&parseInt("00100000");
     $scope.T0IF=0;
-
+    $scope.INTE=0;
+    $scope.RBIE=0;
+    $scope.INTF=0;
+    $scope.RBIF=0;
+    $scope.RB0InterruptFlag=0;
+    $scope.PortBInterruptFlag=0;
 //Dummy zum befüllen des rams
     var GPR1 = new Array();
     for (var i = 0; i < 256; i++) {

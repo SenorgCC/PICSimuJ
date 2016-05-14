@@ -18,10 +18,6 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
         $scope.Startapp();
     };
 
-
-
-
-
     $scope.Startapp = function () {
         $scope.StopFlag=false;
         if(firstrunFlag==true){
@@ -154,7 +150,7 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
             for (var i = 0; i < 8; i++) {
                    IntconArray[i] = (tempIntcon >> i) & 1;
             }
-            IntconArray[3] = 1;
+            IntconArray[2] = 1;
 
             var FinalIntcon = "";
             FinalIntcon = IntconArray[7].toString() + IntconArray[6].toString()
@@ -186,13 +182,51 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
         }else{
             $scope.T0IE=0;
         }
+        if((parseInt($scope.ram[11],16)&parseInt("00010000",2))==16){
+            $scope.INTE=1;
+        }else{
+            $scope.INTE=0;
+        }
+        if((parseInt($scope.ram[11],16)&parseInt("00001000",2))==8){
+            $scope.RBIE=1;
+        }else{
+            $scope.RBIE=0;
+        }
 
+    });
+    
+    $scope.$watch('ram[6]',function (newValue, oldValue) {
+
+        if((parseInt($scope.ram[81],16)&&parseInt("01000000",2))==62){
+            alert("Steigende Flanke");
+            if(((parseInt(oldValue,16)&&parseInt("00000001",2))==0)&&((parseInt(newValue,16)&&parseInt("00000001",2))==1)){
+                alert("gefunden!");
+                $scope.RB0InterruptFlag=1;
+                $scope.ram[11]=(parseInt($scope.ram[11],16)|parseInt("00000010",2)).toString(16);
+            }else{
+                $scope.RB0InterruptFlag=0;
+            }
+        }else{
+            if(((parseInt(oldValue,16)&&parseInt("00000001",2))==1)&&((parseInt(newValue,16)&&parseInt("00000001",2))==0)){
+                $scope.RB0InterruptFlag=1;
+                $scope.ram[11]=(parseInt($scope.ram[11],16)|parseInt("00000010",2)).toString(16);
+            }else{
+                $scope.RB0InterruptFlag=0;
+            }
+        }
+        if(parseInt($scope.ram[6],16)>15){
+            $scope.RBIF=1;
+            $scope.ram[11]=(parseInt($scope.ram[11],16)|parseInt("00000001",2)).toString(16);
+        }else{
+            $scope.RBIF=0;
+        }
     });
     $scope.checkInterrupt = function (){
 
-        if(($scope.T0IE&&$scope.T0IF)&&$scope.GIE){
-            $scope.GIE=0;
-            $scope.ram[11]=(parseInt($scope.ram[11],16)&&parseInt("01111111",2)).toString(16);
+        if  (((($scope.T0IE&&$scope.T0IF)&&$scope.GIE))||
+            ((($scope.INTE&&$scope.RB0InterruptFlag)&&$scope.GIE))||
+            (($scope.RBIE&&$scope.RBIF)&&$scope.GIE)){
+            $scope.ram[11]=(parseInt($scope.ram[11],16)&parseInt("01111111",2)).toString(16);
             DataPic.ProgramStack.push(DataPic.Instructioncounter);
             $scope.ProgramStack=DataPic.ProgramStack;
             DataPic.Instructioncounter=4;
@@ -201,7 +235,6 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
         }else {
             return false;
         }
-
     };
 
 });

@@ -1120,9 +1120,9 @@ app.controller('CPU', function ($scope, DataPic) {
         var prescaler=Math.pow(2,prescalerVal);
 
         if(tempOPTreg[3]==0){
-            return (4*prescaler*DataPic.Takt);
+            return (4*prescaler);
         }else {
-            return (4*DataPic.Takt);
+            return (4);
         }
     };
 
