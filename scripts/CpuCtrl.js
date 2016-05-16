@@ -1155,6 +1155,18 @@ app.controller('CPU', function ($scope, DataPic) {
         $scope.PowerDownbit=1;
     };
 
+    $scope.$watch('ram[4]',function(){
+       if($scope.ram[4]!=0) {
+           $scope.ram[0] = $scope.ram[parseInt($scope.ram[4], 16)];
+       }else{
+           $scope.ram[0]='00';
+       }
+    });
+    $scope.$watch('ram[0]',function (newValue, oldValue) {
+        $scope.ram[parseInt($scope.ram[4],16)]=newValue;
+    });
+
+
 
 
 
