@@ -1,5 +1,5 @@
 app.controller('CPU', function ($scope, DataPic) {
-    ///TODO : Flags funktionen Überprüfen
+
     function getDirectory(binOP) {
         //Das D-Bit befindet sich bei den meisten Befehlen an der Selben Position, daher kann es ausmaskiert werden
         var directory = parseInt(binOP, 2) & parseInt('00000010000000', 2);
@@ -53,6 +53,7 @@ app.controller('CPU', function ($scope, DataPic) {
         return result_Binary;
 
     }
+
     function getBinaryLiteralArray(IntVal) {
 
         //Das k Literalfeld wird mit 11 Bit Kodiert der Programmcounter Benötigt 13
@@ -80,80 +81,83 @@ app.controller('CPU', function ($scope, DataPic) {
         return result;
     }
 
-    function getComArray(binArray){
+    function getComArray(binArray) {
         // Diese Funktion Wandelt das eingegebene binär Array in das ensprechende komplimentäre array um und gibt es aus
-        var complement=new Array();
+        var complement = new Array();
 
         // Da nur 8 Bit Werte übergeben werden reicht eine abfrage bis 8
-        for (var i=0; i<8;i++){
-            if(binArray[i]==0){
-                complement[i]=1;
-            }else {
-                complement[i]=0;
+        for (var i = 0; i < 8; i++) {
+            if (binArray[i] == 0) {
+                complement[i] = 1;
+            } else {
+                complement[i] = 0;
             }
         }
         return complement;
 
     }
 
-    function getZweierKomplement(hexValue){
+    function getZweierKomplement(hexValue) {
         // Das Zweierkomplement wird durch die Negation der Binär zahl und anschließender Addition von 1 errechnet
         // Da die Werte als Hex gespeichert werden müssen diese umgewandelt werden
-        var zweierKompResult= getBinaryArray(hexValue);
+        var zweierKompResult = getBinaryArray(hexValue);
 
         // Wandelt das Bitarray in ihr Komplement um
-        zweierKompResult= getComArray(zweierKompResult);
+        zweierKompResult = getComArray(zweierKompResult);
 
         // Es können keine arithmetischen Operationen mit einem Bitarray dsurchgeführt werden, die Bitarray to Hex
         // Funktion erleichtert die Konvertierung
         zweierKompResult = convertArrayToHex(zweierKompResult);
 
         //Zweierkomplement = Komplement + 1 -> Da die komplement Zahl als Hex vorliegt, kann die parseInt funktion es umwandeln
-        zweierKompResult= parseInt(zweierKompResult,16)+1;
+        zweierKompResult = parseInt(zweierKompResult, 16) + 1;
         return zweierKompResult;
     }
 
-    function setCarry(){
+    function setCarry() {
         var tempStatus = getBinaryArray($scope.ram[3]);
-        tempStatus[0]=1;
-        $scope.carry=1;
-        $scope.ram[3]=convertArrayToHex(tempStatus);
+        tempStatus[0] = 1;
+        $scope.carry = 1;
+        $scope.ram[3] = convertArrayToHex(tempStatus);
 
     }
-    function clrCarry(){
+
+    function clrCarry() {
         var tempStatus = getBinaryArray($scope.ram[3]);
-        tempStatus[0]=0;
-        $scope.carry=0;
-        $scope.ram[3]=convertArrayToHex(tempStatus);
+        tempStatus[0] = 0;
+        $scope.carry = 0;
+        $scope.ram[3] = convertArrayToHex(tempStatus);
     }
-    function setDigitCarry(){
+
+    function setDigitCarry() {
         var tempStatus = getBinaryArray($scope.ram[3]);
-        tempStatus[1]=1;
-        $scope.digitCarry=1;
-        $scope.ram[3]=convertArrayToHex(tempStatus);
+        tempStatus[1] = 1;
+        $scope.digitCarry = 1;
+        $scope.ram[3] = convertArrayToHex(tempStatus);
 
     }
-    function clrDigitCarry(){
+
+    function clrDigitCarry() {
         var tempStatus = getBinaryArray($scope.ram[3]);
-        tempStatus[1]=0;
-        $scope.digitCarry=0;
-        $scope.ram[3]=convertArrayToHex(tempStatus);
+        tempStatus[1] = 0;
+        $scope.digitCarry = 0;
+        $scope.ram[3] = convertArrayToHex(tempStatus);
 
     }
-    function setZeroFlag(){
+
+    function setZeroFlag() {
         var tempStatus = getBinaryArray($scope.ram[3]);
-        tempStatus[2]=1;
+        tempStatus[2] = 1;
         $scope.zeroFlag = 1;
-        $scope.ram[3]=convertArrayToHex(tempStatus);
+        $scope.ram[3] = convertArrayToHex(tempStatus);
     }
-    function clrZeroFlag(){
+
+    function clrZeroFlag() {
         var tempStatus = getBinaryArray($scope.ram[3]);
-        tempStatus[2]=0;
+        tempStatus[2] = 0;
         $scope.zeroFlag = 0;
-        $scope.ram[3]=convertArrayToHex(tempStatus);
+        $scope.ram[3] = convertArrayToHex(tempStatus);
     }
-
-
 
 
     $scope.callOperation = function (hexOP) {
@@ -213,7 +217,7 @@ app.controller('CPU', function ($scope, DataPic) {
 
         } else if ((parseInt(tempbin, 2) & parseInt('11111100000000', 2)).toString(2) == "100000000000") {
             //MOVF
-            Befehlsausfuehrung["MOVF"](getFileregister(tempbin),getDirectory(tempbin));
+            Befehlsausfuehrung["MOVF"](getFileregister(tempbin), getDirectory(tempbin));
         } else if ((parseInt(tempbin, 2) & parseInt('11111110000000', 2)).toString(2) == "10000000") {
             //MOVWF
             Befehlsausfuehrung["MOVWF"](getFileregister(tempbin));
@@ -358,16 +362,16 @@ app.controller('CPU', function ($scope, DataPic) {
 
             // Die Nibbles können durch einfaches konkadenieren von den Arrayemelenten gebildet werden
             wReg_firstN = tempW_RegArray[4].toString()
-                        + tempW_RegArray[3].toString()
-                        + tempW_RegArray[2].toString()
-                        + tempW_RegArray[1].toString()
-                        + tempW_RegArray[0].toString();
+                + tempW_RegArray[3].toString()
+                + tempW_RegArray[2].toString()
+                + tempW_RegArray[1].toString()
+                + tempW_RegArray[0].toString();
 
             addresresult_FirstN = tempaddresult_Array[4].toString()
-                                + tempaddresult_Array[3].toString()
-                                + tempaddresult_Array[2].toString()
-                                + tempaddresult_Array[1].toString()
-                                + tempaddresult_Array[0].toString();
+                + tempaddresult_Array[3].toString()
+                + tempaddresult_Array[2].toString()
+                + tempaddresult_Array[1].toString()
+                + tempaddresult_Array[0].toString();
 
             // Das Carrybit ist der überlauf vom 7. Bit und wird durch ein Ergebnis größer gleich 256 (2^8) ausgelöst
             // Das Carrybit wird gesetzt und der Überlauf, durch die Subtraktion von 256, abgeschnitten
@@ -378,23 +382,23 @@ app.controller('CPU', function ($scope, DataPic) {
                 setCarry();
                 temp = temp - 256;
                 addresult = temp.toString(16);
-            }else{
+            } else {
                 clrCarry();
             }
 
             // Zeroflag Überprüfung
             if (parseInt(addresult, 16) == 0) {
                 setZeroFlag();
-            }else{
+            } else {
                 clrZeroFlag();
             }
             // Beim DigitCarry übertrag muss das der vorherige Arbeitsregisterwert kleiner 15 und
             // nach der Rechnung größer 15 sein
             if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15)) {
                 setDigitCarry();
-            }else {
+            } else {
             }
-                clrDigitCarry();
+            clrDigitCarry();
 
             if (d == 1) {
 
@@ -416,7 +420,7 @@ app.controller('CPU', function ($scope, DataPic) {
 
             if (parseInt(andresult, 16) == 0) {
                 setZeroFlag();
-            }else{
+            } else {
                 clrZeroFlag();
             }
 
@@ -444,11 +448,11 @@ app.controller('CPU', function ($scope, DataPic) {
         },
         "COMF": function (f, d) {
             var tempcomresult = getBinaryArray($scope.ram[f]);
-            var comresult=getComArray(tempcomresult);
+            var comresult = getComArray(tempcomresult);
             comresult = convertArrayToHex(comresult);
             if (parseInt(comresult, 16) == 0) {
                 setZeroFlag();
-            }else{
+            } else {
                 clrZeroFlag();
             }
             if (d == 1) {
@@ -463,14 +467,14 @@ app.controller('CPU', function ($scope, DataPic) {
         "DECF": function (f, d) {
             //DO SOMETHING
             var result = parseInt($scope.ram[f], 16);
-            if(result>0){
+            if (result > 0) {
                 result--;
-            }else {
-                result=255; //result=ff
+            } else {
+                result = 255; //result=ff
             }
             if (result == 0) {
                 setZeroFlag();
-            }else {
+            } else {
                 clrZeroFlag();
             }
             result = result.toString(16);
@@ -485,10 +489,10 @@ app.controller('CPU', function ($scope, DataPic) {
         },
         "DECFSZ": function (f, d) {
             var result = parseInt($scope.ram[f], 16);
-            if(result>0){
+            if (result > 0) {
                 result--;
-            }else{
-                result=0;
+            } else {
+                result = 0;
             }
             //Wenn das register um 1 dekrementiert wird und damit 0 ergibt,
             //wird statt dem nächsten Befehl ein NOP ausgeführt
@@ -510,10 +514,10 @@ app.controller('CPU', function ($scope, DataPic) {
         },
         "INCF": function (f, d) {
             var result = parseInt($scope.ram[f], 16);
-            if(result<255){
+            if (result < 255) {
                 result++;
-            }else {
-                result=0;
+            } else {
+                result = 0;
             }
             result = result.toString(16);
 
@@ -525,7 +529,7 @@ app.controller('CPU', function ($scope, DataPic) {
 
             if (result == 0) {
                 setZeroFlag();
-            }else{
+            } else {
                 clrZeroFlag();
             }
             DataPic.Zeit(1);
@@ -533,10 +537,10 @@ app.controller('CPU', function ($scope, DataPic) {
         },
         "INCFSZ": function (f, d) {
             var result = parseInt($scope.ram[f], 16);
-            if(result<255){
+            if (result < 255) {
                 result++;
-            }else{
-                result=0;
+            } else {
+                result = 0;
             }
             //Wenn das register um 1 dekrementiert wird und damit 0 ergibt,
             //wird statt dem nächsten Befehl ein NOP ausgeführt
@@ -562,7 +566,7 @@ app.controller('CPU', function ($scope, DataPic) {
 
             if (parseInt(andresult, 16) == 0) {
                 setZeroFlag();
-            }else{
+            } else {
                 clrZeroFlag();
             }
 
@@ -576,20 +580,20 @@ app.controller('CPU', function ($scope, DataPic) {
             DataPic.IncTaktanzahl(1);
         },
         "MOVF": function (f, d) {
-            var movffile=$scope.ram[f];
-            if(movffile==0){
+            var movffile = $scope.ram[f];
+            if (movffile == 0) {
                 setZeroFlag();
             }
-            if(d==1){
-                $scope.ram[f]=movffile;
-            }else{
-                $scope.w_reg=movffile;
+            if (d == 1) {
+                $scope.ram[f] = movffile;
+            } else {
+                $scope.w_reg = movffile;
             }
             DataPic.Zeit(1);
             DataPic.IncTaktanzahl(1);
         },
         "MOVWF": function (f) {
-            $scope.ram[f]=$scope.w_reg;
+            $scope.ram[f] = $scope.w_reg;
             DataPic.Zeit(1);
             DataPic.IncTaktanzahl(1);
         },
@@ -600,97 +604,97 @@ app.controller('CPU', function ($scope, DataPic) {
             DataPic.IncTaktanzahl(1);
         },
         "RLF": function (f, d) {
-            var rlfresult=new Array();
-            var oldfile=getBinaryArray($scope.ram[f]);
-            var tempStatus=getBinaryArray($scope.ram[3]);
-            var tempCarry=tempStatus[0];
+            var rlfresult = new Array();
+            var oldfile = getBinaryArray($scope.ram[f]);
+            var tempStatus = getBinaryArray($scope.ram[3]);
+            var tempCarry = tempStatus[0];
 
-            $scope.carry=oldfile[7];
-            tempStatus[0]=oldfile[7];
-            $scope.ram[3]=convertArrayToHex(tempStatus);
+            $scope.carry = oldfile[7];
+            tempStatus[0] = oldfile[7];
+            $scope.ram[3] = convertArrayToHex(tempStatus);
 
-            for(var i=7; i>=0;i--){
-                if(i==0){
-                    rlfresult[i]=tempCarry;
-                }else{
-                    rlfresult[i]=oldfile[i-1];
+            for (var i = 7; i >= 0; i--) {
+                if (i == 0) {
+                    rlfresult[i] = tempCarry;
+                } else {
+                    rlfresult[i] = oldfile[i - 1];
                 }
             }
 
-            rlfresult=convertArrayToHex(rlfresult);
-            if(d==1){
-                $scope.ram[f]=rlfresult;
-            }else{
-                $scope.w_reg=rlfresult;
+            rlfresult = convertArrayToHex(rlfresult);
+            if (d == 1) {
+                $scope.ram[f] = rlfresult;
+            } else {
+                $scope.w_reg = rlfresult;
             }
             DataPic.Zeit(1);
             DataPic.IncTaktanzahl(1);
         },
         "RRF": function (f, d) {
-            var rrfresult=new Array();
-            var oldfile=getBinaryArray($scope.ram[f]);
-            var tempStatus=getBinaryArray($scope.ram[3]);
-            var tempCarry=tempStatus[0];
+            var rrfresult = new Array();
+            var oldfile = getBinaryArray($scope.ram[f]);
+            var tempStatus = getBinaryArray($scope.ram[3]);
+            var tempCarry = tempStatus[0];
 
-            $scope.carry=oldfile[0];
-            tempStatus[0]=oldfile[0];
-            $scope.ram[3]=convertArrayToHex(tempStatus);
+            $scope.carry = oldfile[0];
+            tempStatus[0] = oldfile[0];
+            $scope.ram[3] = convertArrayToHex(tempStatus);
 
-            for(var i=0; i<=7;i++){
-                if(i==7){
-                    rrfresult[i]=tempCarry;
-                }else{
-                    rrfresult[i]=oldfile[i+1];
+            for (var i = 0; i <= 7; i++) {
+                if (i == 7) {
+                    rrfresult[i] = tempCarry;
+                } else {
+                    rrfresult[i] = oldfile[i + 1];
                 }
             }
-            rrfresult=convertArrayToHex(rrfresult);
-            if(d==1){
-                $scope.ram[f]=rrfresult;
-            }else{
-                $scope.w_reg=rrfresult;
+            rrfresult = convertArrayToHex(rrfresult);
+            if (d == 1) {
+                $scope.ram[f] = rrfresult;
+            } else {
+                $scope.w_reg = rrfresult;
             }
             DataPic.Zeit(1);
             DataPic.IncTaktanzahl(1);
 
         },
         "SUBWF": function (f, d) {
-            var zahl1=parseInt($scope.ram[f],16);
-            var zahl2= getZweierKomplement($scope.w_reg);
-            var result = zahl1+zahl2;
-            result=result.toString(16);
+            var zahl1 = parseInt($scope.ram[f], 16);
+            var zahl2 = getZweierKomplement($scope.w_reg);
+            var result = zahl1 + zahl2;
+            result = result.toString(16);
             var tempW_RegArray = getBinaryArray($scope.w_reg);
             var tempaddresult_Array = getBinaryArray(result);
             var wReg_firstN, addresresult_FirstN;
 
             wReg_firstN = tempW_RegArray[4].toString()
-                        + tempW_RegArray[3].toString()
-                        + tempW_RegArray[2].toString()
-                        + tempW_RegArray[1].toString()
-                        + tempW_RegArray[0].toString();
+                + tempW_RegArray[3].toString()
+                + tempW_RegArray[2].toString()
+                + tempW_RegArray[1].toString()
+                + tempW_RegArray[0].toString();
 
             addresresult_FirstN = tempaddresult_Array[4].toString()
-                                + tempaddresult_Array[3].toString()
-                                + tempaddresult_Array[2].toString()
-                                + tempaddresult_Array[1].toString()
-                                + tempaddresult_Array[0].toString();
+                + tempaddresult_Array[3].toString()
+                + tempaddresult_Array[2].toString()
+                + tempaddresult_Array[1].toString()
+                + tempaddresult_Array[0].toString();
 
             if (parseInt(result, 16) > 255) {
 
-                var temp = parseInt(result, 16)-256;
+                var temp = parseInt(result, 16) - 256;
                 setCarry();
                 result = temp.toString(16);
-            }else{
+            } else {
                 clrCarry();
             }
-            if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15) && (tempW_RegArray[4]==tempaddresult_Array[4])) {
+            if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15) && (tempW_RegArray[4] == tempaddresult_Array[4])) {
                 setDigitCarry();
-            }else{
+            } else {
                 clrDigitCarry();
             }
 
             if (parseInt(result, 16) == 0) {
                 setZeroFlag();
-            }else{
+            } else {
                 clrZeroFlag();
             }
             if (d == 1) {
@@ -702,12 +706,12 @@ app.controller('CPU', function ($scope, DataPic) {
             DataPic.IncTaktanzahl(1);
         },
         "SWAPF": function (f, d) {
-            var tempArray=getBinaryArray($scope.ram[f]);
-            var nibble1=tempArray[3].toString()+tempArray[2].toString()+tempArray[1].toString()+tempArray[0].toString();
-            var nibble2=tempArray[7].toString()+tempArray[6].toString()+tempArray[5].toString()+tempArray[4].toString();
-            var swapResult=nibble1+nibble2;
-            swapResult=parseInt(swapResult,2);
-            swapResult=swapResult.toString(16);
+            var tempArray = getBinaryArray($scope.ram[f]);
+            var nibble1 = tempArray[3].toString() + tempArray[2].toString() + tempArray[1].toString() + tempArray[0].toString();
+            var nibble2 = tempArray[7].toString() + tempArray[6].toString() + tempArray[5].toString() + tempArray[4].toString();
+            var swapResult = nibble1 + nibble2;
+            swapResult = parseInt(swapResult, 2);
+            swapResult = swapResult.toString(16);
 
             if (d == 1) {
                 $scope.ram[f] = swapResult;
@@ -725,7 +729,7 @@ app.controller('CPU', function ($scope, DataPic) {
 
             if (parseInt(xorresult, 16) == 0) {
                 setZeroFlag();
-            }else{
+            } else {
                 clrZeroFlag();
             }
 
@@ -797,16 +801,16 @@ app.controller('CPU', function ($scope, DataPic) {
             ///TODO Diese Funktionen lassen sich gut refactorn
 
             wReg_firstN = tempW_RegArray[4].toString()
-                        + tempW_RegArray[3].toString()
-                        + tempW_RegArray[2].toString()
-                        + tempW_RegArray[1].toString()
-                        + tempW_RegArray[0].toString();
+                + tempW_RegArray[3].toString()
+                + tempW_RegArray[2].toString()
+                + tempW_RegArray[1].toString()
+                + tempW_RegArray[0].toString();
 
             addresresult_FirstN = tempaddresult_Array[4].toString()
-                                + tempaddresult_Array[3].toString()
-                                + tempaddresult_Array[2].toString()
-                                + tempaddresult_Array[1].toString()
-                                + tempaddresult_Array[0].toString();
+                + tempaddresult_Array[3].toString()
+                + tempaddresult_Array[2].toString()
+                + tempaddresult_Array[1].toString()
+                + tempaddresult_Array[0].toString();
 
             if (parseInt(addresult, 16) > 255) {
 
@@ -814,20 +818,20 @@ app.controller('CPU', function ($scope, DataPic) {
                 setCarry();
                 temp = temp - 256;
                 addresult = temp.toString(16);
-            }else{
+            } else {
                 clrCarry();
             }
 
-            if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15) && (tempW_RegArray[4]==tempaddresult_Array[4])) {
+            if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15) && (tempW_RegArray[4] == tempaddresult_Array[4])) {
 
                 setDigitCarry();
-            }else{
+            } else {
                 clrDigitCarry();
             }
 
             if (parseInt(addresult, 16) == 0) {
                 setZeroFlag();
-            }else{
+            } else {
                 clrZeroFlag();
             }
 
@@ -840,7 +844,7 @@ app.controller('CPU', function ($scope, DataPic) {
             andresult = andresult.toString(16);
             if (parseInt(andresult, 16) == 0) {
                 setZeroFlag();
-            }else{
+            } else {
                 clrZeroFlag();
             }
             $scope.w_reg = andresult;
@@ -850,45 +854,45 @@ app.controller('CPU', function ($scope, DataPic) {
         "CALL": function (k) {
 
             /*
-            //Das PCLATH wird als Hex Zahl gelagert, zum verarbeiten wird es aber als Bit array Benötigt, daher Umwandlung
-            var PCLATHarray=getBinaryArray($scope.PCLATH);
+             //Das PCLATH wird als Hex Zahl gelagert, zum verarbeiten wird es aber als Bit array Benötigt, daher Umwandlung
+             var PCLATHarray=getBinaryArray($scope.PCLATH);
 
-            //Zur Vereinfachten Weiterverarbeitung wird ein neues Array mit einer 2 Bit größe erstellt
-            //In dieses werden das 4. und 3. Bit des PCLATH gespeichert
-            var PCLATH43=new Array(2);
+             //Zur Vereinfachten Weiterverarbeitung wird ein neues Array mit einer 2 Bit größe erstellt
+             //In dieses werden das 4. und 3. Bit des PCLATH gespeichert
+             var PCLATH43=new Array(2);
 
-            //ProgramSTack ist die Stack funltion, auf dem wird der Nächste Befehl gespeichert
-            $scope.ProgramStack.push($scope.operations[Data.Instructioncounter+1].befehl);
+             //ProgramSTack ist die Stack funltion, auf dem wird der Nächste Befehl gespeichert
+             $scope.ProgramStack.push($scope.operations[Data.Instructioncounter+1].befehl);
 
-            //Laden der 2 PCLATH bits in das Verarbeitungsarray
-            PCLATH43[0]=PCLATHarray[3];
-            PCLATH43[1]=PCLATHarray[4];
+             //Laden der 2 PCLATH bits in das Verarbeitungsarray
+             PCLATH43[0]=PCLATHarray[3];
+             PCLATH43[1]=PCLATHarray[4];
 
-            //Das Literalarray enthält 11 Bit und PCLATH 2 Bit damit der PC die nötigen 13 Bit größe bekommt,
-            //Müssen diese mit dem Concat Befehl konkateniert werden
-            var PCLnewArray= PCLATH43.concat(literalArray);
+             //Das Literalarray enthält 11 Bit und PCLATH 2 Bit damit der PC die nötigen 13 Bit größe bekommt,
+             //Müssen diese mit dem Concat Befehl konkateniert werden
+             var PCLnewArray= PCLATH43.concat(literalArray);
 
-            //Der Join Befehl enfernt die "," aus einem Array. Dadurch entsteht eine Binäre Zahl, die zu einem Int
-            //Umgewandelt werden kann und dannach zu einem Hex String
-            var PCLBefehl=parseInt(PCLnewArray.join(''),2);
+             //Der Join Befehl enfernt die "," aus einem Array. Dadurch entsteht eine Binäre Zahl, die zu einem Int
+             //Umgewandelt werden kann und dannach zu einem Hex String
+             var PCLBefehl=parseInt(PCLnewArray.join(''),2);
 
-            //Umwandlung der Integer Zahl in einen Hex String wert
-            PCLBefehl = PCLBefehl.toString(16);
+             //Umwandlung der Integer Zahl in einen Hex String wert
+             PCLBefehl = PCLBefehl.toString(16);
 
-            $scope.ProgramCounter=PCLBefehl;
-            */
+             $scope.ProgramCounter=PCLBefehl;
+             */
 
             ///Das Eingegebene Literal muss zunächt in ein 13 Bit Array umgewandelt werden
 
-            var vergleichszeile= k.toString(16);
+            var vergleichszeile = k.toString(16);
 
             DataPic.ProgramStack.push(DataPic.Instructioncounter);
-            $scope.ProgramStack=DataPic.ProgramStack;
+            $scope.ProgramStack = DataPic.ProgramStack;
 
-            for (var i=0; i<=$scope.operations.length;i++){
-                if(parseInt($scope.operations[i].zeile,16)==parseInt(vergleichszeile,16)){
-                    DataPic.GotoFlag=1;
-                    DataPic.Instructioncounter=parseInt($scope.operations[i].zeile,16);
+            for (var i = 0; i <= $scope.operations.length; i++) {
+                if (parseInt($scope.operations[i].zeile, 16) == parseInt(vergleichszeile, 16)) {
+                    DataPic.GotoFlag = 1;
+                    DataPic.Instructioncounter = parseInt($scope.operations[i].zeile, 16);
                     break;
                 }
             }
@@ -900,46 +904,46 @@ app.controller('CPU', function ($scope, DataPic) {
         },
         "CRLWDT": function () {
             //DO SOMETHING
-            $scope.watchdogtimer='00';
-            $scope.TimeOutbit=1;
-            var tempStatus= getBinaryArray($scope.ram[3]);
-            tempStatus[3]=1;
-            $scope.ram[3]=tempStatus;
+            $scope.watchdogtimer = '00';
+            $scope.TimeOutbit = 1;
+            var tempStatus = getBinaryArray($scope.ram[3]);
+            tempStatus[3] = 1;
+            $scope.ram[3] = tempStatus;
             DataPic.Zeit(1);
             DataPic.IncTaktanzahl(1);
         },
         "GOTO": function (k) {
-        /*
-            //Das PCLATH wird als Hex Zahl gelagert, zum verarbeiten wird es aber als Bit array Benötigt, daher Umwandlung
-            var PCLATHarray=getBinaryArray($scope.PCLATH);
-            var literalArray=getBinaryLiteralArray(k);
-            //Zur Vereinfachten Weiterverarbeitung wird ein neues Array mit einer 2 Bit größe erstellt
-            //In dieses werden das 4. und 3. Bit des PCLATH gespeichert
-            var PCLATH43=new Array(2);
+            /*
+             //Das PCLATH wird als Hex Zahl gelagert, zum verarbeiten wird es aber als Bit array Benötigt, daher Umwandlung
+             var PCLATHarray=getBinaryArray($scope.PCLATH);
+             var literalArray=getBinaryLiteralArray(k);
+             //Zur Vereinfachten Weiterverarbeitung wird ein neues Array mit einer 2 Bit größe erstellt
+             //In dieses werden das 4. und 3. Bit des PCLATH gespeichert
+             var PCLATH43=new Array(2);
 
-            //Laden der 2 PCLATH bits in das Verarbeitungsarray
-            PCLATH43[0]=PCLATHarray[3];
-            PCLATH43[1]=PCLATHarray[4];
+             //Laden der 2 PCLATH bits in das Verarbeitungsarray
+             PCLATH43[0]=PCLATHarray[3];
+             PCLATH43[1]=PCLATHarray[4];
 
-            //Das Literalarray enthält 11 Bit und PCLATH 2 Bit damit der PC die nötigen 13 Bit größe bekommt,
-            //Müssen diese mit dem Concat Befehl konkateniert werden
-            var PCLnewArray= PCLATH43.concat(literalArray);
+             //Das Literalarray enthält 11 Bit und PCLATH 2 Bit damit der PC die nötigen 13 Bit größe bekommt,
+             //Müssen diese mit dem Concat Befehl konkateniert werden
+             var PCLnewArray= PCLATH43.concat(literalArray);
 
-            //Der Join Befehl enfernt die "," aus einem Array. Dadurch entsteht eine Binäre Zahl, die zu einem Int
-            //Umgewandelt werden kann
-            var PCLBefehl=parseInt(PCLnewArray.join(''),2);
+             //Der Join Befehl enfernt die "," aus einem Array. Dadurch entsteht eine Binäre Zahl, die zu einem Int
+             //Umgewandelt werden kann
+             var PCLBefehl=parseInt(PCLnewArray.join(''),2);
 
-            //Umwandlung der Integer Zahl in einen Hex String wert
-            PCLBefehl = PCLBefehl.toString(16);
+             //Umwandlung der Integer Zahl in einen Hex String wert
+             PCLBefehl = PCLBefehl.toString(16);
 
-            $scope.ProgramCounter=PCLBefehl;
-         */
-            var vergleichszeile= k.toString(16);
+             $scope.ProgramCounter=PCLBefehl;
+             */
+            var vergleichszeile = k.toString(16);
 
-            for (var i=0; i<=$scope.operations.length;i++){
-                if(parseInt($scope.operations[i].zeile,16)==parseInt(vergleichszeile,16)){
-                    DataPic.GotoFlag=1;
-                    DataPic.Instructioncounter=parseInt($scope.operations[i].zeile,16);
+            for (var i = 0; i <= $scope.operations.length; i++) {
+                if (parseInt($scope.operations[i].zeile, 16) == parseInt(vergleichszeile, 16)) {
+                    DataPic.GotoFlag = 1;
+                    DataPic.Instructioncounter = parseInt($scope.operations[i].zeile, 16);
                     break;
                 }
             }
@@ -952,7 +956,7 @@ app.controller('CPU', function ($scope, DataPic) {
             andresult = andresult.toString(16);
             if (parseInt(andresult, 16) == 0) {
                 setZeroFlag();
-            }else{
+            } else {
                 clrZeroFlag();
             }
             $scope.w_reg = andresult;
@@ -960,7 +964,7 @@ app.controller('CPU', function ($scope, DataPic) {
             DataPic.IncTaktanzahl(1);
         },
         "MOVLW": function (k) {
-            $scope.w_reg=k.toString(16);
+            $scope.w_reg = k.toString(16);
             DataPic.Zeit(1);
             DataPic.IncTaktanzahl(1);
 
@@ -968,24 +972,24 @@ app.controller('CPU', function ($scope, DataPic) {
         },
         "RETFIE": function () {
             ///TODO me: Muss getestet werden!
-            DataPic.GotoFlag=1;
-            $scope.ram[11]=(parseInt($scope.ram[11],16)&parseInt("01111111",2)).toString(16);
-            DataPic.Instructioncounter=DataPic.ProgramStack[DataPic.ProgramStack.length -1]+1;
+            DataPic.GotoFlag = 1;
+            $scope.ram[11] = (parseInt($scope.ram[11], 16) | parseInt("10000000", 2)).toString(16);
+            DataPic.Instructioncounter = DataPic.ProgramStack[DataPic.ProgramStack.length - 1] + 1;
             DataPic.ProgramStack.pop();
             DataPic.Zeit(2);
             DataPic.IncTaktanzahl(2);
         },
         "RETLW": function (k) {
-            ///TODO: TESTEN!
+
             //Der übergebene Literal muss vor der Speicherung in einen Hexwert umgewandelt werden
-            DataPic.GotoFlag=1;
-            $scope.w_reg= k.toString(16);
+            DataPic.GotoFlag = 1;
+            $scope.w_reg = k.toString(16);
             //Das Top of Stack von ProgramStack wird durch die maxlänge-1 bestimmt, da es keine native fkt dafür gibt
             //Und im ProgramCounter abgespeichert
-            DataPic.Instructioncounter=DataPic.ProgramStack[DataPic.ProgramStack.length-1]+1;
+            DataPic.Instructioncounter = DataPic.ProgramStack[DataPic.ProgramStack.length - 1] + 1;
             //Nach dem Übertrag wird der TOS vom ProgramStack gelöscht
             DataPic.ProgramStack.pop();
-            $scope.ProgramStack= DataPic.ProgramStack;
+            $scope.ProgramStack = DataPic.ProgramStack;
             DataPic.Zeit(1);
             DataPic.IncTaktanzahl(1);
         },
@@ -993,68 +997,66 @@ app.controller('CPU', function ($scope, DataPic) {
             //Wie RETLW nur ohne Literalübergabe
             //Das Top of Stack von ProgramStack wird durch die maxlänge-1 bestimmt, da es keine native fkt dafür gibt
             //Und im ProgramCounter abgespeichert
-            DataPic.GotoFlag=1;
-            DataPic.Instructioncounter=DataPic.ProgramStack[DataPic.ProgramStack.length-1]+1;
+            DataPic.GotoFlag = 1;
+            DataPic.Instructioncounter = DataPic.ProgramStack[DataPic.ProgramStack.length - 1] + 1;
             //Nach dem Übertrag wird der TOS vom ProgramStack gelöscht
             DataPic.ProgramStack.pop();
-            $scope.ProgramStack= DataPic.ProgramStack;
+            $scope.ProgramStack = DataPic.ProgramStack;
             DataPic.Zeit(1);
             DataPic.IncTaktanzahl(1);
         },
         "SLEEP": function () {
             ///TODO: Wie zur Hölle soll man des Simulieren ??????????
-            $scope.watchdogtimer='00';
-            $scope.wdtPrescaler=0;
-            $scope.TimeOutbit=1;
-            $scope.PowerDownbit=0;
+            $scope.watchdogtimer = '00';
+            $scope.wdtPrescaler = 0;
+            $scope.TimeOutbit = 1;
+            $scope.PowerDownbit = 0;
             var tempStatus = getBinaryArray($scope.ram[3]);
-            tempStatus[4]=1;
-            tempStatus[3]=0;
-            $scope.ram[3]=convertArrayToHex(tempStatus);
+            tempStatus[4] = 1;
+            tempStatus[3] = 0;
+            $scope.ram[3] = convertArrayToHex(tempStatus);
             // Hier sollte sowas wie ein Sleep kommen, aber kp wie der umzusetzten ist ...
             // Absolut kp
             DataPic.Zeit(1);
             DataPic.IncTaktanzahl(1);
         },
         "SUBLW": function (k) {
-            var zahl1=k;
-            var zahl2= getZweierKomplement($scope.w_reg);
-            var result = zahl1+zahl2;
-            result=result.toString(16);
+            var zahl1 = k;
+            var zahl2 = getZweierKomplement($scope.w_reg);
+            var result = zahl1 + zahl2;
+            result = result.toString(16);
             var tempW_RegArray = getBinaryArray($scope.w_reg);
             var tempaddresult_Array = getBinaryArray(result);
             var wReg_firstN, addresresult_FirstN;
 
             wReg_firstN = tempW_RegArray[4].toString()
-                        + tempW_RegArray[3].toString()
-                        + tempW_RegArray[2].toString()
-                        + tempW_RegArray[1].toString()
-                        + tempW_RegArray[0].toString();
+                + tempW_RegArray[3].toString()
+                + tempW_RegArray[2].toString()
+                + tempW_RegArray[1].toString()
+                + tempW_RegArray[0].toString();
 
             addresresult_FirstN = tempaddresult_Array[4].toString()
-                                + tempaddresult_Array[3].toString()
-                                + tempaddresult_Array[2].toString()
-                                + tempaddresult_Array[1].toString()
-                                + tempaddresult_Array[0].toString();
+                + tempaddresult_Array[3].toString()
+                + tempaddresult_Array[2].toString()
+                + tempaddresult_Array[1].toString()
+                + tempaddresult_Array[0].toString();
 
             if (parseInt(result, 16) > 255) {
-
-                var temp = parseInt(result, 16)-256;
+                var temp = parseInt(result, 16) - 256;
                 setCarry();
                 result = temp.toString(16);
-            }else{
+            } else {
                 clrCarry();
             }
-            if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15) && (tempW_RegArray[4]==tempaddresult_Array[4])){
+            if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15) && (tempW_RegArray[4] == tempaddresult_Array[4])) {
                 setDigitCarry();
-            }else {
+            } else {
                 clrDigitCarry();
             }
 
-
             if (parseInt(result, 16) == 0) {
                 setZeroFlag();
-            }else{
+            } else {
                 clrZeroFlag();
             }
             $scope.w_reg = result;
@@ -1066,7 +1068,7 @@ app.controller('CPU', function ($scope, DataPic) {
             xorlresult = xorlresult.toString(16);
             if (parseInt(xorlresult, 16) == 0) {
                 setZeroFlag();
-            }else{
+            } else {
                 clrZeroFlag();
             }
             $scope.w_reg = xorlresult;
@@ -1075,38 +1077,38 @@ app.controller('CPU', function ($scope, DataPic) {
         }
     };
 
-    $scope.rollBackState= function(lastState){
-        for (var i =0 ; i<=$scope.ram.length-1;i++){
-            $scope.ram[i]=lastState.ram[i];
+    $scope.rollBackState = function (lastState) {
+        for (var i = 0; i <= $scope.ram.length - 1; i++) {
+            $scope.ram[i] = lastState.ram[i];
         }
-        $scope.w_reg= lastState.w_reg;
+        $scope.w_reg = lastState.w_reg;
         DataPic.Instructioncounter = lastState.InstructionCounter;  //lastState.Instructioncounter
-        DataPic.AnzeigeIC =lastState.AnzeigeIC; // lastState.AnzeigeIC
+        DataPic.AnzeigeIC = lastState.AnzeigeIC; // lastState.AnzeigeIC
         $scope.digitCarry = lastState.digitCarry;
         $scope.carry = lastState.carry;
         $scope.zeroFlag = lastState.zeroFlag;
-        DataPic.Laufzeit= lastState.laufzeit;
+        DataPic.Laufzeit = lastState.laufzeit;
     };
     $scope.changePortBbit = function (bitpos) {
         var temp = getBinaryArray($scope.ram[6]);
-        if(temp[bitpos]==1){
-            temp[bitpos]=0;
-            $scope.PortBbits[bitpos]=0;
-        }else{
-            temp[bitpos]=1;
-            $scope.PortBbits[bitpos]=1;
+        if (temp[bitpos] == 1) {
+            temp[bitpos] = 0;
+            $scope.PortBbits[bitpos] = 0;
+        } else {
+            temp[bitpos] = 1;
+            $scope.PortBbits[bitpos] = 1;
         }
         $scope.ram[6] = convertArrayToHex(temp);
         $scope.PORTB = $scope.ram[6];
     };
     $scope.changePortAbit = function (bitpos) {
         var temp = getBinaryArray($scope.ram[5]);
-        if(temp[bitpos]==1){
-            temp[bitpos]=0;
-            $scope.PortAbits[bitpos]=0;
-        }else{
-            temp[bitpos]=1;
-            $scope.PortAbits[bitpos]=1;
+        if (temp[bitpos] == 1) {
+            temp[bitpos] = 0;
+            $scope.PortAbits[bitpos] = 0;
+        } else {
+            temp[bitpos] = 1;
+            $scope.PortAbits[bitpos] = 1;
         }
         $scope.ram[5] = convertArrayToHex(temp);
         $scope.PORTA = $scope.ram[5];
@@ -1114,61 +1116,75 @@ app.controller('CPU', function ($scope, DataPic) {
 
     $scope.calculatePrescale = function () {
 
-        var tempOPTreg=getBinaryArray($scope.ram[81]);
-        var prescalerVal=tempOPTreg[2].toString()+tempOPTreg[1].toString()+tempOPTreg[0].toString();
-        prescalerVal=parseInt(prescalerVal,2);
-        var prescaler=Math.pow(2,prescalerVal);
+        var tempOPTreg = getBinaryArray($scope.ram[81]);
+        var prescalerVal = tempOPTreg[2].toString() + tempOPTreg[1].toString() + tempOPTreg[0].toString();
+        prescalerVal = parseInt(prescalerVal, 2);
+        var prescaler = Math.pow(2, prescalerVal);
 
-        if(tempOPTreg[3]==0){
-            return (4*prescaler);
-        }else {
+        if (tempOPTreg[3] == 0) {
+            return (4 * prescaler);
+        } else {
             return (4);
         }
     };
 
-    $scope.resetPic = function(){
-        for(var i=0; i<=$scope.ram.length-1;i++){
-            $scope.ram[i]=0;
+    $scope.resetPic = function () {
+        for (var i = 0; i <= $scope.ram.length - 1; i++) {
+            $scope.ram[i] = 0;
         }
         ///TODO Faktory auslagern
-        $scope.PCL='00';
-        $scope.ram[3]='18';
-        $scope.STATUS=$scope.ram[3];
-        DataPic.Instructioncounter=0;
-        $scope.Instructioncounter=0;
-        DataPic.AnzeigeIC=0;
-        $scope.StopFlag=1;
-        $scope.ProgramCounter=0;
-        $scope.ProgramStack=[];
-        $scope.zeroFlag=0;
-        $scope.digitCarry=0;
-        $scope.carry=0;
-        $scope.watchdogtimer=0;
-        $scope.w_reg='00';
-        DataPic.Laufzeit=0;
-        $scope.Laufzeit=0;
-        $scope.OPTION_REG='ff';
-        $scope.TRISA='1f';
-        $scope.TRISB='ff';
-        $scope.RP0=0;
-        $scope.TimeOutbit=1;
-        $scope.PowerDownbit=1;
+        $scope.PCL = '00';
+        $scope.ram[3] = '18';
+        $scope.STATUS = $scope.ram[3];
+        DataPic.Instructioncounter = 0;
+        $scope.Instructioncounter = 0;
+        DataPic.AnzeigeIC = 0;
+        $scope.StopFlag = 1;
+        $scope.ProgramCounter = 0;
+        $scope.ProgramStack = [];
+        $scope.zeroFlag = 0;
+        $scope.digitCarry = 0;
+        $scope.carry = 0;
+        $scope.watchdogtimer = 0;
+        $scope.w_reg = '00';
+        DataPic.Laufzeit = 0;
+        $scope.Laufzeit = 0;
+        $scope.OPTION_REG = 'ff';
+        $scope.TRISA = '1f';
+        $scope.TRISB = 'ff';
+        $scope.RP0 = 0;
+        $scope.TimeOutbit = 1;
+        $scope.PowerDownbit = 1;
     };
 
-    $scope.$watch('ram[4]',function(){
-       if($scope.ram[4]!=0) {
-           $scope.ram[0] = $scope.ram[parseInt($scope.ram[4], 16)];
-       }else{
-           $scope.ram[0]='00';
-       }
+    $scope.$watch('ram[4]', function () {
+        if ($scope.ram[4] != 0) {
+            $scope.ram[0] = $scope.ram[parseInt($scope.ram[4], 16)];
+        } else {
+            $scope.ram[0] = '00';
+        }
     });
-    $scope.$watch('ram[0]',function (newValue, oldValue) {
-        $scope.ram[parseInt($scope.ram[4],16)]=newValue;
+    $scope.$watch('ram[0]', function (newValue, oldValue) {
+        $scope.ram[parseInt($scope.ram[4], 16)] = newValue;
     });
+    $scope.$watch(function () {
+        return DataPic.Instructioncounter
+    }, function () {
+        var tempPC = getBinaryArray(DataPic.Instructioncounter.toString(16));
+        var tempPClow = "";
+        for (var i = 0; i < 8; i++) {
+            tempPClow = tempPC[i].toString() + tempPClow;
+        }
+        tempPClow = parseInt(tempPClow, 2);
+        $scope.ram[2] = tempPClow.toString(16);
 
+    });
+    /*
+     $scope.$watch('ram[2]',function(){
+     DataPic.Instructioncounter=parseInt($scope.ram[2],16);
+     })
 
-
-
+     */
 
 
 });

@@ -198,9 +198,7 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
     $scope.$watch('ram[6]',function (newValue, oldValue) {
 
         if((parseInt($scope.ram[81],16)&&parseInt("01000000",2))==62){
-            alert("Steigende Flanke");
             if(((parseInt(oldValue,16)&&parseInt("00000001",2))==0)&&((parseInt(newValue,16)&&parseInt("00000001",2))==1)){
-                alert("gefunden!");
                 $scope.RB0InterruptFlag=1;
                 $scope.ram[11]=(parseInt($scope.ram[11],16)|parseInt("00000010",2)).toString(16);
             }else{
