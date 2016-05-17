@@ -332,16 +332,16 @@
                     <h4 class="modal-title" id="beispielModalLabel">Speicheradresse</h4>
                 </div>
                 <div class="modal-body">
-                    <form name="Bla">
+                    <form name="Modal">
                         <div class="form-group">
                             <label for="neuerhexwert" class="control-label">Neuer Wert:</label>
-                            <input type="text" pattern="[A-Fa-f0-9]{2}" title="bla" class="form-control" id="neuerhexwert" size="2" maxlength="2" minlength="2" ng-model="newRamvalue" required>
+                            <input type="text" pattern="[A-Fa-f0-9]{2}" class="form-control" id="neuerhexwert" size="2" maxlength="2" minlength="2" ng-model="newRamvalue" required>
                         </div>
                     </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
-                    <button type="button" class="btn btn-primary" ng-click="saveNewRam(newRamvalue)" ng-disabled="Bla.$invalid" data-dismiss="modal">Speichern</button>
+                    <button type="button" class="btn btn-primary" ng-click="saveNewRam(newRamvalue)" ng-disabled="Modal.$invalid" data-dismiss="modal">Speichern</button>
                 </div>
             </div>
         </div>
