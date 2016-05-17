@@ -28,7 +28,17 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
         ///TODO: Refactorn vll
         controlBreakPoint($scope.operations[DataPic.Instructioncounter].zeile);
         if($scope.StopFlag==false){
+            if(DataPic.Sleepflag==false){
                 $scope.oneStep();
+            }else{
+                $scope.checkInterrupt();
+                DataPic.Zeit(1);
+                DataPic.IncTaktanzahl(1);
+                if(DataPic.Taktanzahl % $scope.calculatePrescale() == 0 && DataPic.Taktanzahl>=4){
+                    $scope.runTimer();
+                }
+                $scope.Laufzeit=DataPic.Laufzeit;
+            }
         }
 
 
@@ -224,16 +234,25 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout){
         if  (((($scope.T0IE&&$scope.T0IF)&&$scope.GIE))||
             ((($scope.INTE&&$scope.RB0InterruptFlag)&&$scope.GIE))||
             (($scope.RBIE&&$scope.RBIF)&&$scope.GIE)){
-            $scope.ram[11]=(parseInt($scope.ram[11],16)&parseInt("01111111",2)).toString(16);
-            DataPic.ProgramStack.push(DataPic.Instructioncounter);
-            $scope.ProgramStack=DataPic.ProgramStack;
-            DataPic.Instructioncounter=4;
-            DataPic.GotoFlag=1;
-            return true;
-        }else {
-            return false;
+
+                DataPic.Sleepflag=true;
+                $scope.ram[11]=(parseInt($scope.ram[11],16)&parseInt("01111111",2)).toString(16);
+                DataPic.ProgramStack.push(DataPic.Instructioncounter);
+                $scope.ProgramStack=DataPic.ProgramStack;
+                DataPic.Instructioncounter=4;
+                DataPic.GotoFlag=1;
+                return true;
+            }else {
+                return false;
         }
     };
+    $scope.$watch(function() {
+        return DataPic.Sleepflag
+        }, function (newValue, oldValue) {
+        if(newValue==false && oldValue==true){
+            DataPic.Instructioncounter = DataPic.Instructioncounter++;
+        }
+    });
 
 });
 /*

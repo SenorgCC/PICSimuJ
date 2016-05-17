@@ -33,6 +33,7 @@ app.factory('DataPic',function () {
     PicData.GIE=0;
     PicData.T0IF=0;
     PicData.T0IE=0;
+    PicData.Sleepflag=false;
     
 
     //Berechnung der Laufzeitanzeige Übergabe sind die benötigten Takte eines Befehls

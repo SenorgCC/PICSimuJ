@@ -316,7 +316,7 @@ app.controller('CPU', function ($scope, DataPic) {
             //RETURN
             Befehlsausfuehrung["RETURN"]();
 
-        } else if ((parseInt(tempbin, 2) & parseInt('11111111111111', 2)).toString(2) == "110011") {
+        } else if ((parseInt(tempbin, 2) & parseInt('11111111111111', 2)).toString(2) == "1100011") {
             //SLEEP
             Befehlsausfuehrung["SLEEP"]();
 
@@ -1015,8 +1015,10 @@ app.controller('CPU', function ($scope, DataPic) {
             tempStatus[4] = 1;
             tempStatus[3] = 0;
             $scope.ram[3] = convertArrayToHex(tempStatus);
+            DataPic.Sleepflag=true;
             // Hier sollte sowas wie ein Sleep kommen, aber kp wie der umzusetzten ist ...
             // Absolut kp
+            
             DataPic.Zeit(1);
             DataPic.IncTaktanzahl(1);
         },
