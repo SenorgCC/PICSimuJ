@@ -973,14 +973,14 @@ app.controller('CPU', function ($scope, DataPic) {
         "RETFIE": function () {
             ///TODO me: Muss getestet werden!
             DataPic.GotoFlag = 1;
-            $scope.ram[11] = (parseInt($scope.ram[11], 16) | parseInt("10000000", 2)).toString(16);
+            $scope.ram[11] = (parseInt($scope.ram[11], 16) & parseInt("01111111", 2)).toString(16);
             DataPic.Instructioncounter = DataPic.ProgramStack[DataPic.ProgramStack.length - 1] + 1;
             DataPic.ProgramStack.pop();
             DataPic.Zeit(2);
             DataPic.IncTaktanzahl(2);
         },
         "RETLW": function (k) {
-
+            ///TODO: TESTEN!
             //Der übergebene Literal muss vor der Speicherung in einen Hexwert umgewandelt werden
             DataPic.GotoFlag = 1;
             $scope.w_reg = k.toString(16);
