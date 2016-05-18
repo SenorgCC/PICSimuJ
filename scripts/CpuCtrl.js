@@ -902,9 +902,9 @@ app.controller('CPU', function ($scope, DataPic) {
             DataPic.IncTaktanzahl(1);
 
         },
-        "CRLWDT": function () {
+        "CLRWDT": function () {
             //DO SOMETHING
-            $scope.watchdogtimer = '00';
+            DataPic.watchdogtimer = 0;
             $scope.TimeOutbit = 1;
             var tempStatus = getBinaryArray($scope.ram[3]);
             tempStatus[3] = 1;
@@ -1007,7 +1007,7 @@ app.controller('CPU', function ($scope, DataPic) {
         },
         "SLEEP": function () {
             ///TODO: Wie zur Hölle soll man des Simulieren ??????????
-            $scope.watchdogtimer = '00';
+            DataPic.watchdogtimer = 0;
             $scope.wdtPrescaler = 0;
             $scope.TimeOutbit = 1;
             $scope.PowerDownbit = 0;
@@ -1129,6 +1129,19 @@ app.controller('CPU', function ($scope, DataPic) {
             return (4);
         }
     };
+    $scope.watchdogPrescale = function () {
+
+        var tempOPTreg = getBinaryArray($scope.ram[81]);
+        var prescalerVal = tempOPTreg[2].toString() + tempOPTreg[1].toString() + tempOPTreg[0].toString();
+        prescalerVal = parseInt(prescalerVal, 2);
+        var prescaler = Math.pow(2, prescalerVal);
+
+        if (tempOPTreg[3] == 1) {
+            return (prescaler);
+        } else {
+            return (1);
+        }
+    };
 
     $scope.resetPic = function () {
         for (var i = 0; i <= $scope.ram.length - 1; i++) {
@@ -1147,7 +1160,7 @@ app.controller('CPU', function ($scope, DataPic) {
         $scope.zeroFlag = 0;
         $scope.digitCarry = 0;
         $scope.carry = 0;
-        $scope.watchdogtimer = 0;
+        DataPic.watchdogtimer = 0;
         $scope.w_reg = '00';
         DataPic.Laufzeit = 0;
         $scope.Laufzeit = 0;
@@ -1157,6 +1170,7 @@ app.controller('CPU', function ($scope, DataPic) {
         $scope.RP0 = 0;
         $scope.TimeOutbit = 1;
         $scope.PowerDownbit = 1;
+        DataPic.Sleepflag=false;
     };
 
     $scope.$watch('ram[4]', function () {

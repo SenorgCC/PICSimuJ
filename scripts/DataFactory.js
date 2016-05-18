@@ -28,6 +28,8 @@ app.factory('DataPic',function () {
     PicData.ProgramStack =[];
     PicData.BreakPointArray=[];
 
+    PicData.watchdogtimer=0;
+
     //Interruptflags
 
     PicData.GIE=0;

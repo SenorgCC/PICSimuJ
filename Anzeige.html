@@ -58,6 +58,12 @@
                                            <button type="submit" class="btn btn-default" ng-disabled="!content" ng-click="oneStep()">Ein Schritt</button>
                                            <button type="submit" class="btn btn-default" ng-disabled="!content" ng-click="stoppapp()">Stop</button>
                                            <button type="submit" class="btn btn-default" ng-disabled="!content" ng-click="reset()">Reset</button>
+                                           <div class="input-group">
+                                               <span class="form-control">Watchdog</span>
+                                               <span class="input-group-addon">
+                                                    <input type="checkbox" aria-label="..." ng-click="changeWatchdogState()">
+                                                </span>
+                                           </div><!-- /input-group -->
                                        </form>
                                    </li>
                                     <li>
