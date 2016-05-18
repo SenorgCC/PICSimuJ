@@ -281,7 +281,7 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout) {
             //$scope.watchdogflag = false;
         }
     };
-
+    
 });
 /*
 
