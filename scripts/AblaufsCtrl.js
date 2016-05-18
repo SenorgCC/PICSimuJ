@@ -59,11 +59,10 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout) {
 
     $scope.oneStep = function () {
         $scope.SaveStep();
-        if ($scope.checkInterrupt() == false) {
-            $scope.callOperation($scope.operations[DataPic.Instructioncounter].befehl);
-            if (DataPic.Taktanzahl % $scope.calculatePrescale() == 0 && DataPic.Taktanzahl >= 4) {
-                $scope.runTimer();
-            }
+        $scope.checkInterrupt();
+        $scope.callOperation($scope.operations[DataPic.Instructioncounter].befehl);
+        if (DataPic.Taktanzahl % $scope.calculatePrescale() == 0 && DataPic.Taktanzahl >= 4) {
+            $scope.runTimer();
         }
         if (DataPic.GotoFlag == 1) {
             DataPic.GotoFlag = 0;
@@ -241,16 +240,15 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout) {
             ((($scope.INTE && $scope.RB0InterruptFlag) && $scope.GIE)) ||
             (($scope.RBIE && $scope.RBIF) && $scope.GIE)) {
 
-            DataPic.Sleepflag = true;
+            DataPic.Sleepflag = false;
             $scope.ram[11] = (parseInt($scope.ram[11], 16) & parseInt("01111111", 2)).toString(16);
             DataPic.ProgramStack.push(DataPic.Instructioncounter);
             $scope.ProgramStack = DataPic.ProgramStack;
             DataPic.Instructioncounter = 4;
-            DataPic.GotoFlag = 1;
-            return true;
-        } else {
-            return false;
+           // DataPic.GotoFlag = 1;
         }
+
+
     };
     $scope.$watch(function () {
         return DataPic.Sleepflag
@@ -266,19 +264,18 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout) {
             $scope.incrementWatchdog();
         }
 
-
         runner = $timeout(function () {
             if ($scope.watchdogflag == true) {
                 $scope.checkWatchdog();
             }
-        }, 100 / DataPic.Takt);
+        }, 1000 / DataPic.Takt);
     };
     $scope.incrementWatchdog = function (){
         //Der Watchdogtimer im PIC hat per default eine länge von 18ms, diese wird mit dem prescaler verrechnet
         if(DataPic.watchdogtimer<=18*$scope.watchdogPrescale()){
             DataPic.watchdogtimer++;
         }else{
-            $scope.reset();
+            //$scope.reset();
             $scope.stoppapp();
             ///TODO: ans checkbox model anbinden!
             //$scope.watchdogflag = false;
