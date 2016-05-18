@@ -52,7 +52,7 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout) {
             if ($scope.StopFlag == false) {
                 $scope.Startapp();
             }
-        }, 1000 / DataPic.Takt);
+        }, 100 / DataPic.Takt);
 
 
     };
@@ -262,28 +262,26 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout) {
 
     $scope.checkWatchdog = function () {
 
-        if ($scope.StopFlag == false) {
+        if ($scope.watchdogflag == true) {
             $scope.incrementWatchdog();
         }
 
 
         runner = $timeout(function () {
-            if ($scope.StopFlag == false) {
+            if ($scope.watchdogflag == true) {
                 $scope.checkWatchdog();
             }
-        }, 1000 / DataPic.Takt);
+        }, 100 / DataPic.Takt);
     };
     $scope.incrementWatchdog = function (){
         //Der Watchdogtimer im PIC hat per default eine länge von 18ms, diese wird mit dem prescaler verrechnet
         if(DataPic.watchdogtimer<=18*$scope.watchdogPrescale()){
             DataPic.watchdogtimer++;
         }else{
-            alert("Watchdogtimeout!");
-            $scope.StopFlag = true;
             $scope.reset();
-            $scope.runPic();
-
-
+            $scope.stoppapp();
+            ///TODO: ans checkbox model anbinden!
+            //$scope.watchdogflag = false;
         }
     };
 
