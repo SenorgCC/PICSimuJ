@@ -43,7 +43,7 @@ app.factory('DataPic',function () {
         PicData.Laufzeit= PicData.Laufzeit + (1/PicData.Takt)* takte;
     };
 
-    PicData.SaveLastStep = function (IC,Ram,AIC,WREG,DC,C,ZF,LZ) {
+    PicData.SaveLastStep = function (IC,Ram,AIC,WREG,DC,C,ZF,LZ,WDT) {
         PicData.LastState.push({
             InstructionCounter: IC,
             ram: Ram,
@@ -52,7 +52,8 @@ app.factory('DataPic',function () {
             digitCarry: DC,
             carry: C,
             zeroFlag: ZF,
-            laufzeit: LZ
+            laufzeit: LZ,
+            watchdog: WDT
         });
     };
 

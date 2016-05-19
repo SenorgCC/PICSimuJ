@@ -1,7 +1,7 @@
 /**
  * Created by Alex on 02.05.2016.
  */
-app.controller("AblaufsCtrl",function($scope,DataPic,$timeout) {
+app.controller("AblaufsCtrl", function ($scope, DataPic, $timeout) {
     $scope.StopFlag = false;
     DataPic.Instructioncounter = 0;
     var testsequenzeline;
@@ -13,7 +13,6 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout) {
     var runner;
 
     var firstrunFlag = true;
-
 
     $scope.runPic = function () {
         $scope.Startapp();
@@ -47,23 +46,21 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout) {
             }
         }
 
-
         runner = $timeout(function () {
             if ($scope.StopFlag == false) {
                 $scope.Startapp();
             }
-        }, 1000 / DataPic.Takt);
+        }, 100 / DataPic.Takt);
 
 
     };
 
     $scope.oneStep = function () {
         $scope.SaveStep();
-        if ($scope.checkInterrupt() == false) {
-            $scope.callOperation($scope.operations[DataPic.Instructioncounter].befehl);
-            if (DataPic.Taktanzahl % $scope.calculatePrescale() == 0 && DataPic.Taktanzahl >= 4) {
-                $scope.runTimer();
-            }
+        $scope.checkInterrupt();
+        $scope.callOperation($scope.operations[DataPic.Instructioncounter].befehl);
+        if (DataPic.Taktanzahl % $scope.calculatePrescale() == 0 && DataPic.Taktanzahl >= 4) {
+            $scope.runTimer();
         }
         if (DataPic.GotoFlag == 1) {
             DataPic.GotoFlag = 0;
@@ -73,8 +70,6 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout) {
         DataPic.AnzeigeIC++; //Angezeigter Operationszähler
         $scope.Laufzeit = DataPic.Laufzeit;
         $scope.Instructioncounter = DataPic.AnzeigeIC;
-        //checkBreakPoint(); ///TODO macht an dieser Stelle wenig sinn da man ansonsten nicht über den Breakpoint hinwegkommt
-        //checkInterrupt();ui
 
 
     };
@@ -98,30 +93,21 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout) {
         var tempC = $scope.carry;
         var tempZF = $scope.zeroFlag;
         var tempLZ = DataPic.Laufzeit;
+        var tempWDT = DataPic.watchdogtimer;
 
-        DataPic.SaveLastStep(tempIC, tempram, tempAIC, tempW, tempDC, tempC, tempZF, tempLZ);
+        DataPic.SaveLastStep(tempIC, tempram, tempAIC, tempW, tempDC, tempC, tempZF, tempLZ, tempWDT);
     };
     $scope.checkActive = function (line) {
         var vergleichsline = line.split(' ');
-        if (vergleichsline[0] == $scope.operations[DataPic.Instructioncounter].zeile) {
-            return true;
-        } else {
-            return false;
-        }
+        return (vergleichsline[0] == $scope.operations[DataPic.Instructioncounter].zeile);
     };
     //Funktion zum Abprüfen ob eine BreakpointCheckbox angezeigt werden soll in der Zeile oder nicht
     $scope.checkBreakpoint = function (line) {
-        if (/[0-9a-fA-F]{4}\s*[0-9a-fA-F]{4}/.test(line)) {
-            return true
-        }
-        else {
-            return false
-        }
+        return (/[0-9a-fA-F]{4}\s*[0-9a-fA-F]{4}/.test(line));
     };
 
     $scope.oneStepBack = function () {
         var lastState = DataPic.LastState[DataPic.LastState.length - 1];
-
         $scope.rollBackState(lastState);
         $scope.Instructioncounter = DataPic.AnzeigeIC;
         $scope.Laufzeit = DataPic.Laufzeit;
@@ -134,7 +120,6 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout) {
         var tempLine = BreakLine.split(' ');
         var breakLine = tempLine[0];
         var vorhandenFlag = false;
-
 
         for (var i = 0; i <= DataPic.BreakPointArray.length - 1; i++) {
             if (breakLine == DataPic.BreakPointArray[i]) {
@@ -186,29 +171,54 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout) {
         }
     };
 
-    //GIE und T0IE Watcher meldet jede änderung am ram[11] und check ob die bedingungen erfult wurden
-    $scope.$watch('ram[11]', function () {
-        if ((parseInt($scope.ram[11], 16) & parseInt("10000000", 2)) == 128) {
-            $scope.GIE = 1;
-        } else {
-            $scope.GIE = 0;
-        }
-        if ((parseInt($scope.ram[11], 16) & parseInt("00100000", 2)) == 32) {
-            $scope.T0IE = 1;
-        } else {
-            $scope.T0IE = 0;
-        }
-        if ((parseInt($scope.ram[11], 16) & parseInt("00010000", 2)) == 16) {
-            $scope.INTE = 1;
-        } else {
-            $scope.INTE = 0;
-        }
-        if ((parseInt($scope.ram[11], 16) & parseInt("00001000", 2)) == 8) {
-            $scope.RBIE = 1;
-        } else {
-            $scope.RBIE = 0;
+    $scope.checkInterrupt = function () {
+
+        if (((($scope.T0IE && $scope.T0IF) && $scope.GIE)) ||
+            ((($scope.INTE && $scope.RB0InterruptFlag) && $scope.GIE)) ||
+            (($scope.RBIE && $scope.RBIF) && $scope.GIE)) {
+            DataPic.Sleepflag = false;
+            $scope.ram[11] = (parseInt($scope.ram[11], 16) & parseInt("01111111", 2)).toString(16);
+            DataPic.ProgramStack.push(DataPic.Instructioncounter);
+            $scope.ProgramStack = DataPic.ProgramStack;
+            DataPic.Instructioncounter = 4;
+            // DataPic.GotoFlag = 1;
         }
 
+
+    };
+
+    $scope.checkWatchdog = function () {
+
+        if ($scope.watchdogflag == true) {
+            $scope.incrementWatchdog();
+        }
+
+        runner = $timeout(function () {
+            if ($scope.watchdogflag == true) {
+                $scope.checkWatchdog();
+            }
+        }, 1000 / DataPic.Takt);
+    };
+    $scope.incrementWatchdog = function () {
+        //Der Watchdogtimer im PIC hat per default eine länge von 18ms, diese wird mit dem prescaler verrechnet
+        if (DataPic.watchdogtimer <= 18 * $scope.watchdogPrescale()) {
+            DataPic.watchdogtimer++;
+        } else {
+            //$scope.reset();
+            $scope.stoppapp();
+            ///TODO: ans checkbox model anbinden!
+            $scope.watchdogflag = false;
+            $scope.watchdogCB = false;
+        }
+    };
+
+    ///TODO: Der Muss getestet werden ... kp was ich damit vorhatte
+    $scope.$watch(function () {
+        return DataPic.Sleepflag
+    }, function (newValue, oldValue) {
+        if (newValue == false && oldValue == true) {
+            DataPic.Instructioncounter++;
+        }
     });
 
     $scope.$watch('ram[6]', function (newValue, oldValue) {
@@ -235,59 +245,33 @@ app.controller("AblaufsCtrl",function($scope,DataPic,$timeout) {
             $scope.RBIF = 0;
         }
     });
-    $scope.checkInterrupt = function () {
 
-        if (((($scope.T0IE && $scope.T0IF) && $scope.GIE)) ||
-            ((($scope.INTE && $scope.RB0InterruptFlag) && $scope.GIE)) ||
-            (($scope.RBIE && $scope.RBIF) && $scope.GIE)) {
-
-            DataPic.Sleepflag = true;
-            $scope.ram[11] = (parseInt($scope.ram[11], 16) & parseInt("01111111", 2)).toString(16);
-            DataPic.ProgramStack.push(DataPic.Instructioncounter);
-            $scope.ProgramStack = DataPic.ProgramStack;
-            DataPic.Instructioncounter = 4;
-            DataPic.GotoFlag = 1;
-            return true;
+    //GIE und T0IE Watcher meldet jede änderung am ram[11] und check ob die bedingungen erfult wurden
+    $scope.$watch('ram[11]', function () {
+        if ((parseInt($scope.ram[11], 16) & parseInt("10000000", 2)) == 128) {
+            $scope.GIE = 1;
         } else {
-            return false;
+            $scope.GIE = 0;
         }
-    };
-    $scope.$watch(function () {
-        return DataPic.Sleepflag
-    }, function (newValue, oldValue) {
-        if (newValue == false && oldValue == true) {
-            DataPic.Instructioncounter = DataPic.Instructioncounter++;
+        if ((parseInt($scope.ram[11], 16) & parseInt("00100000", 2)) == 32) {
+            $scope.T0IE = 1;
+        } else {
+            $scope.T0IE = 0;
         }
+        if ((parseInt($scope.ram[11], 16) & parseInt("00010000", 2)) == 16) {
+            $scope.INTE = 1;
+        } else {
+            $scope.INTE = 0;
+        }
+        if ((parseInt($scope.ram[11], 16) & parseInt("00001000", 2)) == 8) {
+            $scope.RBIE = 1;
+        } else {
+            $scope.RBIE = 0;
+        }
+
     });
-
-    $scope.checkWatchdog = function () {
-
-        if ($scope.StopFlag == false) {
-            $scope.incrementWatchdog();
-        }
-
-
-        runner = $timeout(function () {
-            if ($scope.StopFlag == false) {
-                $scope.checkWatchdog();
-            }
-        }, 1000 / DataPic.Takt);
-    };
-    $scope.incrementWatchdog = function (){
-        //Der Watchdogtimer im PIC hat per default eine länge von 18ms, diese wird mit dem prescaler verrechnet
-        if(DataPic.watchdogtimer<=18*$scope.watchdogPrescale()){
-            DataPic.watchdogtimer++;
-        }else{
-            alert("Watchdogtimeout!");
-            $scope.StopFlag = true;
-            $scope.reset();
-            $scope.runPic();
-
-
-        }
-    };
 
 });
 /*
 
-*/
+ */

@@ -56,8 +56,7 @@ app.controller('CPU', function ($scope, DataPic) {
 
     function getBinaryLiteralArray(IntVal) {
 
-        //Das k Literalfeld wird mit 11 Bit Kodiert der Programmcounter Benötigt 13
-        //diese 11 werden in einem BinArray gespeichert
+        //Das k Literalfeld wird mit 11 Bit codiert, der Programmcounter Benötigt 13
         var result_Binary = [];
 
         for (var i = 0; i < 11; i++) {
@@ -406,6 +405,9 @@ app.controller('CPU', function ($scope, DataPic) {
             } else {
                 $scope.w_reg = addresult;
             }
+            if (f == 2) {
+                changeProgramCounter();
+            }
             // Die Laufzeitberechnungsfunktion liegt in der Factory DataPic, damit es scopeübergreifend
             // den selben Wert speichern kann
             DataPic.Zeit(1);
@@ -596,6 +598,9 @@ app.controller('CPU', function ($scope, DataPic) {
             $scope.ram[f] = $scope.w_reg;
             DataPic.Zeit(1);
             DataPic.IncTaktanzahl(1);
+            if (f == 2) {
+                changeProgramCounter();
+            }
         },
         "NOP": function () {
             //Der NOP Befehl erhöt nur den IC, Keine weitere Funktion
@@ -853,53 +858,28 @@ app.controller('CPU', function ($scope, DataPic) {
         },
         "CALL": function (k) {
 
-            /*
-             //Das PCLATH wird als Hex Zahl gelagert, zum verarbeiten wird es aber als Bit array Benötigt, daher Umwandlung
-             var PCLATHarray=getBinaryArray($scope.PCLATH);
-
-             //Zur Vereinfachten Weiterverarbeitung wird ein neues Array mit einer 2 Bit größe erstellt
-             //In dieses werden das 4. und 3. Bit des PCLATH gespeichert
-             var PCLATH43=new Array(2);
-
-             //ProgramSTack ist die Stack funltion, auf dem wird der Nächste Befehl gespeichert
-             $scope.ProgramStack.push($scope.operations[Data.Instructioncounter+1].befehl);
-
-             //Laden der 2 PCLATH bits in das Verarbeitungsarray
-             PCLATH43[0]=PCLATHarray[3];
-             PCLATH43[1]=PCLATHarray[4];
-
-             //Das Literalarray enthält 11 Bit und PCLATH 2 Bit damit der PC die nötigen 13 Bit größe bekommt,
-             //Müssen diese mit dem Concat Befehl konkateniert werden
-             var PCLnewArray= PCLATH43.concat(literalArray);
-
-             //Der Join Befehl enfernt die "," aus einem Array. Dadurch entsteht eine Binäre Zahl, die zu einem Int
-             //Umgewandelt werden kann und dannach zu einem Hex String
-             var PCLBefehl=parseInt(PCLnewArray.join(''),2);
-
-             //Umwandlung der Integer Zahl in einen Hex String wert
-             PCLBefehl = PCLBefehl.toString(16);
-
-             $scope.ProgramCounter=PCLBefehl;
-             */
-
-            ///Das Eingegebene Literal muss zunächt in ein 13 Bit Array umgewandelt werden
-
-            var vergleichszeile = k.toString(16);
-
+            var tempPcLath = $scope.ram[10].toString(16);
             DataPic.ProgramStack.push(DataPic.Instructioncounter);
             $scope.ProgramStack = DataPic.ProgramStack;
 
-            for (var i = 0; i <= $scope.operations.length; i++) {
-                if (parseInt($scope.operations[i].zeile, 16) == parseInt(vergleichszeile, 16)) {
-                    DataPic.GotoFlag = 1;
-                    DataPic.Instructioncounter = parseInt($scope.operations[i].zeile, 16);
-                    break;
-                }
+            var sprungliteral = getBinaryLiteralArray(k);
+            tempPcLath = getBinaryArray(tempPcLath);
+
+            var pcLath43 = [];
+            pcLath43.push(tempPcLath[4]);
+            pcLath43.push(tempPcLath[3]);
+            var tempPCLow = [];
+            for (var i = 10; i >= 0; i--) {
+                tempPCLow.push(sprungliteral[i]);
             }
+            var newPC = pcLath43.concat(tempPCLow);
+            newPC = newPC.join();
+            newPC = newPC.replace(/,/g, '');
+            DataPic.GotoFlag = 1;
 
-
-            DataPic.Zeit(1);
-            DataPic.IncTaktanzahl(1);
+            DataPic.Instructioncounter = parseInt(newPC, 2);
+            DataPic.Zeit(2);
+            DataPic.IncTaktanzahl(2);
 
         },
         "CLRWDT": function () {
@@ -913,43 +893,34 @@ app.controller('CPU', function ($scope, DataPic) {
             DataPic.IncTaktanzahl(1);
         },
         "GOTO": function (k) {
-            /*
-             //Das PCLATH wird als Hex Zahl gelagert, zum verarbeiten wird es aber als Bit array Benötigt, daher Umwandlung
-             var PCLATHarray=getBinaryArray($scope.PCLATH);
-             var literalArray=getBinaryLiteralArray(k);
-             //Zur Vereinfachten Weiterverarbeitung wird ein neues Array mit einer 2 Bit größe erstellt
-             //In dieses werden das 4. und 3. Bit des PCLATH gespeichert
-             var PCLATH43=new Array(2);
 
-             //Laden der 2 PCLATH bits in das Verarbeitungsarray
-             PCLATH43[0]=PCLATHarray[3];
-             PCLATH43[1]=PCLATHarray[4];
+            //Das PCLATH wird als Hex Zahl gelagert, zum verarbeiten wird es aber als Bit array Benötigt, daher Umwandlung
+            var tempPcLath = $scope.ram[10].toString(16);
 
-             //Das Literalarray enthält 11 Bit und PCLATH 2 Bit damit der PC die nötigen 13 Bit größe bekommt,
-             //Müssen diese mit dem Concat Befehl konkateniert werden
-             var PCLnewArray= PCLATH43.concat(literalArray);
+            var sprungliteral = getBinaryLiteralArray(k);
+            tempPcLath = getBinaryArray(tempPcLath);
 
-             //Der Join Befehl enfernt die "," aus einem Array. Dadurch entsteht eine Binäre Zahl, die zu einem Int
-             //Umgewandelt werden kann
-             var PCLBefehl=parseInt(PCLnewArray.join(''),2);
-
-             //Umwandlung der Integer Zahl in einen Hex String wert
-             PCLBefehl = PCLBefehl.toString(16);
-
-             $scope.ProgramCounter=PCLBefehl;
-             */
-            var vergleichszeile = k.toString(16);
-
-            for (var i = 0; i <= $scope.operations.length; i++) {
-                if (parseInt($scope.operations[i].zeile, 16) == parseInt(vergleichszeile, 16)) {
-                    DataPic.GotoFlag = 1;
-                    DataPic.Instructioncounter = parseInt($scope.operations[i].zeile, 16);
-                    break;
-                }
+            var pcLath43 = [];
+            pcLath43.push(tempPcLath[4]);
+            pcLath43.push(tempPcLath[3]);
+            // Problem: Der folgende Concat Befehlt vereint zwei Arrays zu einem.
+            // Dabei wird das erste Array korrekt hinzugefügt und das zweite aber mit einer LSB zuerst Darstellung.
+            // Damit wird der tatsächliche Wert verfälscht und daher muss das hintere Array (PCLow Array) rotiert werden
+            var tempPCLow = [];
+            for (var i = 10; i >= 0; i--) {
+                tempPCLow.push(sprungliteral[i]);
             }
+            var newPC = pcLath43.concat(tempPCLow);
+            //Der Join Befehl enfernt die "," aus einem Array. Dadurch entsteht eine Binäre Zahl, die zu einem Int
+            //Umgewandelt werden kann
+            newPC = newPC.join();
+            newPC = newPC.replace(/,/g, '');
+            DataPic.GotoFlag = 1;
 
+            DataPic.Instructioncounter = parseInt(newPC, 2);
             DataPic.Zeit(2);
             DataPic.IncTaktanzahl(2);
+
         },
         "IORLW": function (k) {
             var andresult = ((parseInt($scope.w_reg, 16)) | (k));
@@ -1015,10 +986,10 @@ app.controller('CPU', function ($scope, DataPic) {
             tempStatus[4] = 1;
             tempStatus[3] = 0;
             $scope.ram[3] = convertArrayToHex(tempStatus);
-            DataPic.Sleepflag=true;
+            DataPic.Sleepflag = true;
             // Hier sollte sowas wie ein Sleep kommen, aber kp wie der umzusetzten ist ...
             // Absolut kp
-            
+
             DataPic.Zeit(1);
             DataPic.IncTaktanzahl(1);
         },
@@ -1090,6 +1061,7 @@ app.controller('CPU', function ($scope, DataPic) {
         $scope.carry = lastState.carry;
         $scope.zeroFlag = lastState.zeroFlag;
         DataPic.Laufzeit = lastState.laufzeit;
+        DataPic.watchdogtimer= lastState.watchdogtimer;
     };
     $scope.changePortBbit = function (bitpos) {
         var temp = getBinaryArray($scope.ram[6]);
@@ -1170,7 +1142,7 @@ app.controller('CPU', function ($scope, DataPic) {
         $scope.RP0 = 0;
         $scope.TimeOutbit = 1;
         $scope.PowerDownbit = 1;
-        DataPic.Sleepflag=false;
+        DataPic.Sleepflag = false;
     };
 
     $scope.$watch('ram[4]', function () {
@@ -1201,6 +1173,31 @@ app.controller('CPU', function ($scope, DataPic) {
      })
 
      */
+
+    changeProgramCounter = function () {
+        $scope.GotoFlag = 1;
+        var pcLow = parseInt($scope.ram[2], 16);
+        var pcLArray = [];
+        for (var i = 0; i < 8; i++) {
+            pcLArray[i] = (pcLow >> i) & 1;
+        }
+        var pcLath = parseInt($scope.ram[10], 16);
+        var pcLathArray = [];
+        for (var i = 0; i < 8; i++) {
+            pcLathArray[i] = (pcLath >> i) & 1;
+        }
+        var PCResult = "";
+        PCResult = pcLathArray[4].toString() + pcLathArray[3].toString() +
+            pcLathArray[2].toString() + pcLathArray[1].toString() +
+            pcLathArray[0].toString() +
+            pcLArray[7].toString() + pcLArray[6].toString() +
+            pcLArray[5].toString() + pcLArray[4].toString() +
+            pcLArray[3].toString() + pcLArray[2].toString() +
+            pcLArray[1].toString() + pcLArray[0].toString();
+
+        PCResult = parseInt(PCResult, 2);
+        DataPic.Instructioncounter = PCResult;
+    }
 
 
 });
