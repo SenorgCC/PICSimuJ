@@ -80,14 +80,19 @@ app.controller('ramcontroller', function ($scope,DataPic,$timeout) {
     //Javascript für das Modal zum RAM verändern
     var intramAddresse;
     $('#ramModal').on('show.bs.modal', function (event) {
-        var button = $(event.relatedTarget); // Button, der das Modal ausgelöst hat
-        var ramaddress = button.data('whatever'); // Infos aus data-*-Attributen extrahieren
-        intramAddresse=parseInt(ramaddress,16); //Parsen des Hexwerts der Speicherstelle um das korrekte Arrayelement mit dem Wert befüllen zu können
+        // Button, der das Modal ausgelöst hat
+        var button = $(event.relatedTarget); 
+        // Infos aus data-*-Attributen extrahieren
+        var ramaddress = button.data('whatever'); 
+        //Parsen des Hexwerts der Speicherstelle um das korrekte Arrayelement mit dem Wert befüllen zu können
+        intramAddresse=parseInt(ramaddress,16); 
         var modal = $(this);
-        modal.find('.modal-title').text('Speicheradresse: ' + ramaddress + 'h'); //Überschrift des Modals
+        //Überschrift des Modals, die bei der Klasse modal-title eingefügt wird
+        modal.find('.modal-title').text('Speicheradresse: ' + ramaddress + 'h'); 
     });
     $scope.saveNewRam = function (newWert) {
-        $scope.ram[intramAddresse]=newWert; //Speichern des eingegebenen Werts im Modal im entsprechenden Element des Arrays
+        //Speichern des eingegebenen Werts im Modal im entsprechenden Element des Arrays
+        $scope.ram[intramAddresse]=newWert; 
     };
     
 });

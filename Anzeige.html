@@ -221,6 +221,7 @@
                         </tr>
                         <tr>
                             <td>
+                                <!--Anzeige von Port A mit Änderungsbuttons-->
                                 <div>
                                     <h4>Port A</h4>
                                     <table>
@@ -248,6 +249,7 @@
                                 </div>
                             </td>
                                 <td>
+                                    <!--Anzeige von Port B mit Änderungsbuttons-->
                                     <div>
                                         <h4>Port B</h4>
                                         <table>
@@ -276,6 +278,7 @@
                                 </td>
                             </tr>
                         </table>
+                    <!--Anzeige des Stacks mit zeienweisem Aufbau-->
                     <label><h4><b>Stack:</b></h4></label>
                     <p ng-repeat="line in ProgramStack">{{line}}</p>
                 </div>
@@ -294,12 +297,13 @@
                         </tr>
                         <tr>
                             <td>{{w_reg}}</td>
-                            <td>{{ram[4]}}</td>
-                            <td>{{ram[2]}}</td>
-                            <td>{{ram[10]}}</td>
+                            <td>{{ram[4]}}</td><!--FSR-->
+                            <td>{{ram[2]}}</td><!--PCL-->
+                            <td>{{ram[10]}}</td><!--PCLATH-->
                             <td>{{Instructioncounter}}</td>
                         </tr>
                     </table>
+                    <!--Bitweise Anzeige des STATUS-Registers-->
                     <table border="1" class="table table-striped">
                         <th>
                             STATUS
@@ -335,9 +339,11 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Schließen"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="beispielModalLabel">Speicheradresse</h4>
+                    <!--Anzeige der Überschrift (wird mit jQuery aus RamCtrl befüllt-->
+                    <h4 class="modal-title" id="beispielModalLabel"></h4>
                 </div>
                 <div class="modal-body">
+                    <!--Eingabefeld für den Hexwert(durch Pattern realisiert) der angeklickten Speicherzelle-->
                     <form name="Modal">
                         <div class="form-group">
                             <label for="neuerhexwert" class="control-label">Neuer Wert:</label>
@@ -345,6 +351,7 @@
                         </div>
                     </form>
                 </div>
+                <!--Buttons zum Schließen des Modals-->
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Schließen</button>
                     <button type="button" class="btn btn-primary" ng-click="saveNewRam(newRamvalue)" ng-disabled="Modal.$invalid" data-dismiss="modal">Speichern</button>
