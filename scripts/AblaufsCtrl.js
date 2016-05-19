@@ -204,11 +204,13 @@ app.controller("AblaufsCtrl", function ($scope, DataPic, $timeout) {
         if (DataPic.watchdogtimer <= 18 * $scope.watchdogPrescale()) {
             DataPic.watchdogtimer++;
         } else {
-            //$scope.reset();
-            $scope.stoppapp();
-            ///TODO: ans checkbox model anbinden!
-            $scope.watchdogflag = false;
-            $scope.watchdogCB = false;
+            if(DataPic.Sleepflag==true){
+                DataPic.Sleepflag=false;
+                DataPic.Instructioncounter++;
+                DataPic.GotoFlag=1;
+            }else {
+                $scope.reset();
+            }
         }
     };
 
