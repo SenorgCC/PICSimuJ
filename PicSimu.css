@@ -1,36 +1,45 @@
 body {
-    font-family: sans-serif;
+    font-family: sans-serif; /*Schriftart im gesamten Body auf sans-serif gesetzt*/
 }
+/*Selektor für die Klasse "codeanzeige"*/
 .codeanzeige{
     position: static;
     float: left;
+    /*50% des Bildschirms sollen verwendet werden*/
     width: 50%;
+    /*Die Höhe der Klasse ist auf 500px begrenzt*/
     height: 500px;
+    /*Benötigt die Klasse mehr Platz als verfügbar, sollen Scrollbalken aktiviert werden*/
     overflow: scroll;
 }
+/*Selektor für die Klasse "ram"*/
 .ram{
     float: left;
     position: relative;
+    /*50% des Bildschirms sollen verwendet werden*/
     width: 50%;
+    /*Die Höhe der Klasse ist auf 500px begrenzt*/
     height: 500px;
+    /*Benötigt die Klasse mehr Platz als verfügbar, sollen Scrollbalken aktiviert werden*/
     overflow: scroll;
 }
+/*Selektor für die ID "Speicherbereich"*/
 #Speicherbereich {
-    text-align: center;
-    vertical-align: middle;
+    /*Ausrichtung der Inhalte der Ramtabelle in den Mittelpunkt der einzelnen Tabellenzellen*/
+    text-align: center;/*waagrecht*/
+    vertical-align: middle;/*senkrecht*/
 }
+/*Selector für die Klasse higlighted zur Zeilenmarkierung*/
 .highlighted{
     background-color: #1b6d85;
 }
-.cpu{
-    position:relative;
-    float: left;
-}
+/*Selektor für die Klasse fileUpload*/
 .fileUpload {
     position: relative;
     overflow: hidden;
     margin: 10px;
 }
+/*Selektor für den input-Button mit der Klasse upload*/
 .fileUpload input.upload {
     position: absolute;
     top: 0;
@@ -42,15 +51,20 @@ body {
     opacity: 0;
     filter: alpha(opacity=0);
 }
+/*Selektor für die Klasse "ueberstrich"*/
 .ueberstrich {
     text-decoration: overline;
 }
+/*Selektor für die Klasse "statuswreg"*/
 .statuswreg{
     position: relative;
     float: left;
+    /*50% des Bildschirms sollen verwendet werden*/
     width: 50%;
 }
+/*Selektor für die Klasse "rahmenporttakt"*/
 .rahmenporttakt{
+    /*50% des Bildschirms sollen verwendet werden*/
     width: 50%;
     float: left;
 }
