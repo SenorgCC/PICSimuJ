@@ -1065,6 +1065,13 @@ app.controller('CPU', function ($scope, DataPic) {
     };
     $scope.changePortBbit = function (bitpos) {
         var temp = getBinaryArray($scope.ram[6]);
+        var trisVergleich= getBinaryArray($scope.ram[134]);
+        if(trisVergleich[bitpos]==0){
+            // Wenn das TrisBit auf 0 steht wird PortB Bit als Ausgang genutzt
+            // und somit soll keine weitere eingabe möglich sein
+            $scope.PortBbits[bitpos]=0;
+            return;
+        }
         if (temp[bitpos] == 1) {
             temp[bitpos] = 0;
             $scope.PortBbits[bitpos] = 0;
@@ -1072,7 +1079,11 @@ app.controller('CPU', function ($scope, DataPic) {
             temp[bitpos] = 1;
             $scope.PortBbits[bitpos] = 1;
         }
-        $scope.ram[6] = convertArrayToHex(temp);
+        temp = convertArrayToHex(temp);
+        // Vor der Ausgabe wird die Eingabe mit dem TrisB verundet, da TRIS B bestimmt ob Port B einoder Ausgabe ist
+        // TrisB 1 = Eingang ; TrisB 0= Ausgang
+        temp= parseInt($scope.ram[134],16)&parseInt(temp,16);
+        $scope.ram[6]=temp.toString(16);
         $scope.PORTB = $scope.ram[6];
     };
     $scope.changePortAbit = function (bitpos) {
@@ -1138,7 +1149,9 @@ app.controller('CPU', function ($scope, DataPic) {
         $scope.Laufzeit = 0;
         $scope.OPTION_REG = 'ff';
         $scope.TRISA = '1f';
+        $scope.ram[133]='1f';
         $scope.TRISB = 'ff';
+        $scope.ram[134]='ff';
         $scope.RP0 = 0;
         $scope.TimeOutbit = 1;
         $scope.PowerDownbit = 1;
@@ -1149,7 +1162,7 @@ app.controller('CPU', function ($scope, DataPic) {
         if ($scope.ram[4] != 0) {
             $scope.ram[0] = $scope.ram[parseInt($scope.ram[4], 16)];
         } else {
-            $scope.ram[0] = '00';
+            $scope.ram[0] = '0';
         }
     });
     $scope.$watch('ram[0]', function (newValue, oldValue) {

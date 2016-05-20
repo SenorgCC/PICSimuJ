@@ -10,6 +10,9 @@ app.controller("AblaufsCtrl", function ($scope, DataPic, $timeout) {
     $scope.breakpointview = true;
     $scope.ProgramCounter = [];
     $scope.watchdogflag = false;
+    var watchflag=false;
+    var trisflag=false;
+
     var runner;
 
     var firstrunFlag = true;
@@ -225,27 +228,47 @@ app.controller("AblaufsCtrl", function ($scope, DataPic, $timeout) {
 
     $scope.$watch('ram[6]', function (newValue, oldValue) {
 
-        if ((parseInt($scope.ram[81], 16) && parseInt("01000000", 2)) == 62) {
-            if (((parseInt(oldValue, 16) && parseInt("00000001", 2)) == 0) && ((parseInt(newValue, 16) && parseInt("00000001", 2)) == 1)) {
-                $scope.RB0InterruptFlag = 1;
-                $scope.ram[11] = (parseInt($scope.ram[11], 16) | parseInt("00000010", 2)).toString(16);
-            } else {
-                $scope.RB0InterruptFlag = 0;
+        if(((parseInt($scope.ram[3],16)&parseInt('00100000',2))==32)&&(watchflag)){
+            //Register 134d = 86h -> TrisB
+            if(newValue!=0) {
+                $scope.ram[134]=newValue;
             }
-        } else {
-            if (((parseInt(oldValue, 16) && parseInt("00000001", 2)) == 1) && ((parseInt(newValue, 16) && parseInt("00000001", 2)) == 0)) {
-                $scope.RB0InterruptFlag = 1;
-                $scope.ram[11] = (parseInt($scope.ram[11], 16) | parseInt("00000010", 2)).toString(16);
+            $scope.ram[6]=parseInt(oldValue,16)&parseInt(newValue,16);
+            watchflag=false;
+            trisflag = true;
+            return;
+
+        }else{
+
+            if (((parseInt($scope.ram[81], 16) & parseInt("01000000", 2)) == 62)&&(!trisflag)) {
+                if (((parseInt(oldValue, 16) & parseInt("00000001", 2)) == 0) && ((parseInt(newValue, 16) & parseInt("00000001", 2)) == 1)) {
+                    $scope.RB0InterruptFlag = 1;
+                    $scope.ram[11] = (parseInt("10010010", 2)).toString(16);
+                    watchflag=true;
+                    return;
+                } else {
+                    $scope.RB0InterruptFlag = 0;
+                }
             } else {
-                $scope.RB0InterruptFlag = 0;
+                if (((parseInt(oldValue, 16) & parseInt("00000001", 2)) == 1) && ((parseInt(newValue, 16) & parseInt("00000001", 2)) == 0)&&(!trisflag)) {
+                    $scope.RB0InterruptFlag = 1;
+                    $scope.ram[11] = (parseInt("10010010", 2)).toString(16);
+                    watchflag=true;
+                    return;
+                } else {
+                    $scope.RB0InterruptFlag = 0;
+                }
+            }
+            if (((parseInt($scope.ram[6], 16) > 15))&&(!trisflag)) {
+                $scope.RBIF = 1;
+                $scope.ram[11] = (parseInt("10001001", 2)).toString(16);
+                watchflag=true;
+                return;
+            } else {
+                $scope.RBIF = 0;
             }
         }
-        if (parseInt($scope.ram[6], 16) > 15) {
-            $scope.RBIF = 1;
-            $scope.ram[11] = (parseInt($scope.ram[11], 16) | parseInt("00000001", 2)).toString(16);
-        } else {
-            $scope.RBIF = 0;
-        }
+        trisflag=false;
     });
 
     //GIE und T0IE Watcher meldet jede änderung am ram[11] und check ob die bedingungen erfult wurden
