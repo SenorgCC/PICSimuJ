@@ -2,10 +2,10 @@ app.controller('Befehlsspeichercontroller', function ($scope) {
 
     // ShowConten Visualisiert die eingegebene Datei und erstellt ein Objekt Array für die weitere Verarbeitung
     $scope.showContent = function ($fileContent) {
-        var befehlssatz = new Array();                            //[]
-        befehlssatz = $fileContent.split('\n');                 //[0001 ORG 0, ....]
-        $scope.content = befehlssatz;//Array ausgabe mittels ng-repeat simpel
-        var tempbefehlsarray = new Array();                       //befehlszwischenspeicher
+        var befehlssatz = new Array();                  // []
+        befehlssatz = $fileContent.split('\n');         // [0001 ORG 0, ....]
+        $scope.content = befehlssatz;                   // Arrayausgabe im View mittels ng-repeat simpel
+        var tempbefehlsarray = new Array();             // befehlszwischenspeicher
 
         //Unsicher, ob operations abgebildet werden soll
         $scope.operations = new Array(); //Echter Befehlsspeicher Objektarray

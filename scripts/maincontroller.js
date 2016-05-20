@@ -5,7 +5,6 @@
 var app = angular.module('pic', ['ui.bootstrap']);
 
 //Angularmagic zum Parsen von Dateien
-//Schwarze Magie
 app.directive('onReadFile', function ($parse) {
     return {
         restrict: 'A',
@@ -20,7 +19,6 @@ app.directive('onReadFile', function ($parse) {
                         fn(scope, {$fileContent: onLoadEvent.target.result});
                     });
                 };
-
                 reader.readAsText((onChangeEvent.srcElement || onChangeEvent.target).files[0]);
             });
         }

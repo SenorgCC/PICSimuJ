@@ -438,7 +438,6 @@ app.controller('CPU', function ($scope, DataPic) {
         "CLRF": function (f) {
             $scope.ram[f] = '00';
             setZeroFlag();
-
             DataPic.Zeit(1);
             DataPic.IncTaktanzahl(1);
         },
@@ -467,7 +466,6 @@ app.controller('CPU', function ($scope, DataPic) {
             DataPic.IncTaktanzahl(1);
         },
         "DECF": function (f, d) {
-            //DO SOMETHING
             var result = parseInt($scope.ram[f], 16);
             if (result > 0) {
                 result--;
@@ -573,7 +571,6 @@ app.controller('CPU', function ($scope, DataPic) {
             }
 
             if (d == 1) {
-
                 $scope.ram[f] = andresult;
             } else {
                 $scope.w_reg = andresult;
@@ -859,7 +856,7 @@ app.controller('CPU', function ($scope, DataPic) {
         "CALL": function (k) {
 
             var tempPcLath = $scope.ram[10].toString(16);
-            DataPic.ProgramStack.push(DataPic.Instructioncounter);
+            DataPic.ProgramStack.push(DataPic.Instructioncounter +1);
             $scope.ProgramStack = DataPic.ProgramStack;
 
             var sprungliteral = getBinaryLiteralArray(k);
@@ -913,14 +910,17 @@ app.controller('CPU', function ($scope, DataPic) {
             var newPC = pcLath43.concat(tempPCLow);
             //Der Join Befehl enfernt die "," aus einem Array. Dadurch entsteht eine Binäre Zahl, die zu einem Int
             //Umgewandelt werden kann
-            newPC = newPC.join();
-            newPC = newPC.replace(/,/g, '');
+            // Join() und replace() sind Stringoperationen, die auch Strings zurückliefern
+            newPC = newPC.join(); //["1","0","1,","0"...] -> "1,0,1,0..."
+            newPC = newPC.replace(/,/g, ''); // REGEX zum suchen und entfernen der Komma : "1,0,1,.." -> "101.."
+            // Bei dem Gotobefehl darf der Instructioncounter nicht automatisch erhöht werden,
+            // da er schon vom GOTO manipuliert wurde
             DataPic.GotoFlag = 1;
-
             DataPic.Instructioncounter = parseInt(newPC, 2);
+
+            //Zeitfunktionen
             DataPic.Zeit(2);
             DataPic.IncTaktanzahl(2);
-
         },
         "IORLW": function (k) {
             var andresult = ((parseInt($scope.w_reg, 16)) | (k));
@@ -938,57 +938,61 @@ app.controller('CPU', function ($scope, DataPic) {
             $scope.w_reg = k.toString(16);
             DataPic.Zeit(1);
             DataPic.IncTaktanzahl(1);
-
-
         },
         "RETFIE": function () {
-            ///TODO me: Muss getestet werden!
+            // RETURN und CALL Befehle verändern selbst den Programmcounter, daher muss das GOTO flag gesetzt werden
             DataPic.GotoFlag = 1;
+            // GIE wird vom RETFIE zurückgesetzt
             $scope.ram[11] = (parseInt($scope.ram[11], 16) & parseInt("01111111", 2)).toString(16);
-            DataPic.Instructioncounter = DataPic.ProgramStack[DataPic.ProgramStack.length - 1] + 1;
+
+            // Das letzte Element aus dem ProgrammStack wird in den Programmcounter geladen und
+            // aus dem dem Stack mit pop() entfernt
+            DataPic.Instructioncounter = DataPic.ProgramStack[DataPic.ProgramStack.length - 1];
             DataPic.ProgramStack.pop();
+
             DataPic.Zeit(2);
             DataPic.IncTaktanzahl(2);
         },
         "RETLW": function (k) {
-            ///TODO: TESTEN!
             //Der übergebene Literal muss vor der Speicherung in einen Hexwert umgewandelt werden
             DataPic.GotoFlag = 1;
             $scope.w_reg = k.toString(16);
             //Das Top of Stack von ProgramStack wird durch die maxlänge-1 bestimmt, da es keine native fkt dafür gibt
             //Und im ProgramCounter abgespeichert
-            DataPic.Instructioncounter = DataPic.ProgramStack[DataPic.ProgramStack.length - 1] + 1;
+            DataPic.Instructioncounter = DataPic.ProgramStack[DataPic.ProgramStack.length - 1];
             //Nach dem Übertrag wird der TOS vom ProgramStack gelöscht
             DataPic.ProgramStack.pop();
             $scope.ProgramStack = DataPic.ProgramStack;
+
             DataPic.Zeit(1);
             DataPic.IncTaktanzahl(1);
         },
         "RETURN": function () {
-            //Wie RETLW nur ohne Literalübergabe
-            //Das Top of Stack von ProgramStack wird durch die maxlänge-1 bestimmt, da es keine native fkt dafür gibt
-            //Und im ProgramCounter abgespeichert
+            // Wie RETLW nur ohne Literalübergabe
+            // Das Top of Stack von ProgramStack wird durch die maxlänge-1 bestimmt, da es keine native fkt dafür gibt
+            // Und im ProgramCounter abgespeichert
             DataPic.GotoFlag = 1;
-            DataPic.Instructioncounter = DataPic.ProgramStack[DataPic.ProgramStack.length - 1] + 1;
-            //Nach dem Übertrag wird der TOS vom ProgramStack gelöscht
+            DataPic.Instructioncounter = DataPic.ProgramStack[DataPic.ProgramStack.length - 1];
+            // Nach dem Übertrag wird der TOS vom ProgramStack gelöscht
             DataPic.ProgramStack.pop();
             $scope.ProgramStack = DataPic.ProgramStack;
             DataPic.Zeit(1);
             DataPic.IncTaktanzahl(1);
         },
         "SLEEP": function () {
-            ///TODO: Wie zur Hölle soll man des Simulieren ??????????
             DataPic.watchdogtimer = 0;
             $scope.wdtPrescaler = 0;
             $scope.TimeOutbit = 1;
             $scope.PowerDownbit = 0;
+
+            // Die Zwei Bits werden ins Statusregister geladen
             var tempStatus = getBinaryArray($scope.ram[3]);
-            tempStatus[4] = 1;
-            tempStatus[3] = 0;
+            tempStatus[4] = $scope.TimeOutbit;
+            tempStatus[3] = $scope.PowerDownbit;
             $scope.ram[3] = convertArrayToHex(tempStatus);
+
+            // Sleepzustand wird aktiviert
             DataPic.Sleepflag = true;
-            // Hier sollte sowas wie ein Sleep kommen, aber kp wie der umzusetzten ist ...
-            // Absolut kp
 
             DataPic.Zeit(1);
             DataPic.IncTaktanzahl(1);
@@ -1051,9 +1055,11 @@ app.controller('CPU', function ($scope, DataPic) {
     };
 
     $scope.rollBackState = function (lastState) {
+        // Der Ram wird mit dem alten Ramzustand überschrieben
         for (var i = 0; i <= $scope.ram.length - 1; i++) {
             $scope.ram[i] = lastState.ram[i];
         }
+        // W Register, Bits, Laufzeit, Watchdog werden mit den alten Werten überschrieben
         $scope.w_reg = lastState.w_reg;
         DataPic.Instructioncounter = lastState.InstructionCounter;  //lastState.Instructioncounter
         DataPic.AnzeigeIC = lastState.AnzeigeIC; // lastState.AnzeigeIC
@@ -1130,9 +1136,7 @@ app.controller('CPU', function ($scope, DataPic) {
         for (var i = 0; i <= $scope.ram.length - 1; i++) {
             $scope.ram[i] = 0;
         }
-        ///TODO Faktory auslagern
-        $scope.PCL = '00';
-        $scope.ram[3] = '18';
+
         $scope.STATUS = $scope.ram[3];
         DataPic.Instructioncounter = 0;
         $scope.Instructioncounter = 0;
@@ -1147,45 +1151,28 @@ app.controller('CPU', function ($scope, DataPic) {
         $scope.w_reg = '00';
         DataPic.Laufzeit = 0;
         $scope.Laufzeit = 0;
+
+        // Register, die beim Reset beladen sein müssen:
+        $scope.PCL = '00';
+        // STATUS
+        $scope.ram[3] = '18';
+        $scope.ram[131]='18';
+        // OPTION_REG
+        $scope.ram[129]='ff';
         $scope.OPTION_REG = 'ff';
-        $scope.TRISA = '1f';
+        // TRISA
         $scope.ram[133]='1f';
+        $scope.TRISA = '1f';
+        // TRISB
         $scope.TRISB = 'ff';
         $scope.ram[134]='ff';
+
+        // Spezielle Bits
         $scope.RP0 = 0;
         $scope.TimeOutbit = 1;
         $scope.PowerDownbit = 1;
         DataPic.Sleepflag = false;
     };
-
-    $scope.$watch('ram[4]', function () {
-        if ($scope.ram[4] != 0) {
-            $scope.ram[0] = $scope.ram[parseInt($scope.ram[4], 16)];
-        } else {
-            $scope.ram[0] = '0';
-        }
-    });
-    $scope.$watch('ram[0]', function (newValue, oldValue) {
-        $scope.ram[parseInt($scope.ram[4], 16)] = newValue;
-    });
-    $scope.$watch(function () {
-        return DataPic.Instructioncounter
-    }, function () {
-        var tempPC = getBinaryArray(DataPic.Instructioncounter.toString(16));
-        var tempPClow = "";
-        for (var i = 0; i < 8; i++) {
-            tempPClow = tempPC[i].toString() + tempPClow;
-        }
-        tempPClow = parseInt(tempPClow, 2);
-        $scope.ram[2] = tempPClow.toString(16);
-
-    });
-    /*
-     $scope.$watch('ram[2]',function(){
-     DataPic.Instructioncounter=parseInt($scope.ram[2],16);
-     })
-
-     */
 
     changeProgramCounter = function () {
         $scope.GotoFlag = 1;
@@ -1211,6 +1198,31 @@ app.controller('CPU', function ($scope, DataPic) {
         PCResult = parseInt(PCResult, 2);
         DataPic.Instructioncounter = PCResult;
     }
+
+
+    $scope.$watch('ram[4]', function () {
+        if ($scope.ram[4] != 0) {
+            $scope.ram[0] = $scope.ram[parseInt($scope.ram[4], 16)];
+        } else {
+            $scope.ram[0] = '0';
+        }
+    });
+    $scope.$watch('ram[0]', function (newValue, oldValue) {
+        $scope.ram[parseInt($scope.ram[4], 16)] = newValue;
+    });
+    $scope.$watch(function () {
+        return DataPic.Instructioncounter
+    }, function () {
+        var tempPC = getBinaryArray(DataPic.Instructioncounter.toString(16));
+        var tempPClow = "";
+        for (var i = 0; i < 8; i++) {
+            tempPClow = tempPC[i].toString() + tempPClow;
+        }
+        tempPClow = parseInt(tempPClow, 2);
+        $scope.ram[2] = tempPClow.toString(16);
+
+    });
+
 
 
 });

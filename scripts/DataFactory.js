@@ -21,6 +21,7 @@ app.factory('DataPic',function () {
     PicData.Taktanzahl=0;
     PicData.Laufzeit=0;
 
+    // Bitflags für die Anzeige
     PicData.zeroFlag=0;
     PicData.digitCarry=0;
     PicData.carry=0;
@@ -31,7 +32,6 @@ app.factory('DataPic',function () {
     PicData.watchdogtimer=0;
 
     //Interruptflags
-
     PicData.GIE=0;
     PicData.T0IF=0;
     PicData.T0IE=0;
@@ -43,7 +43,10 @@ app.factory('DataPic',function () {
         PicData.Laufzeit= PicData.Laufzeit + (1/PicData.Takt)* takte;
     };
 
+    // LastState wird mit dem push() Befehl als ein Stack genutzt.
+    // Somit besteht keine Gefahr, dass Werte überschrieben werden
     PicData.SaveLastStep = function (IC,Ram,AIC,WREG,DC,C,ZF,LZ,WDT) {
+        // Es wird ein Objekt mit den Variablen in den Stack gelegt
         PicData.LastState.push({
             InstructionCounter: IC,
             ram: Ram,
