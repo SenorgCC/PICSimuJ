@@ -799,8 +799,6 @@ app.controller('CPU', function ($scope, DataPic) {
             var tempW_RegArray = getBinaryArray($scope.w_reg);
             var tempaddresult_Array = getBinaryArray(addresult);
             var wReg_firstN, addresresult_FirstN;
-            //kommentar
-            ///TODO Diese Funktionen lassen sich gut refactorn
 
             wReg_firstN = tempW_RegArray[4].toString()
                 + tempW_RegArray[3].toString()
