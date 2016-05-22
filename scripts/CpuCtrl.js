@@ -1105,20 +1105,19 @@ app.controller('CPU', function ($scope, DataPic) {
 
     $scope.calculatePrescale = function () {
 
-        var tempOPTreg = getBinaryArray($scope.ram[81]);
+        var tempOPTreg = getBinaryArray($scope.ram[129]);
         var prescalerVal = tempOPTreg[2].toString() + tempOPTreg[1].toString() + tempOPTreg[0].toString();
         prescalerVal = parseInt(prescalerVal, 2);
         var prescaler = Math.pow(2, prescalerVal);
-
         if (tempOPTreg[3] == 0) {
-            return (4 * prescaler);
+            return (2 * prescaler);
         } else {
             return (4);
         }
     };
     $scope.watchdogPrescale = function () {
 
-        var tempOPTreg = getBinaryArray($scope.ram[81]);
+        var tempOPTreg = getBinaryArray($scope.ram[129]);
         var prescalerVal = tempOPTreg[2].toString() + tempOPTreg[1].toString() + tempOPTreg[0].toString();
         prescalerVal = parseInt(prescalerVal, 2);
         var prescaler = Math.pow(2, prescalerVal);
@@ -1218,9 +1217,6 @@ app.controller('CPU', function ($scope, DataPic) {
         }
         tempPClow = parseInt(tempPClow, 2);
         $scope.ram[2] = tempPClow.toString(16);
-
     });
-
-
 
 });

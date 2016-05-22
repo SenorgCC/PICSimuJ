@@ -12,6 +12,7 @@ app.controller("AblaufsCtrl", function ($scope, DataPic, $timeout) {
     $scope.watchdogflag = false;
     var watchflag = false;
     var trisflag = false;
+    var optflag = false;
 
     var runner;
 
@@ -51,7 +52,7 @@ app.controller("AblaufsCtrl", function ($scope, DataPic, $timeout) {
                 DataPic.IncTaktanzahl(1);
                 // Timerimpulsberechnung setzt sich aus der Gesamtanzahl von den Takten und
                 // der Prescalereinstellung zusammen
-                if (DataPic.Taktanzahl % $scope.calculatePrescale() == 0 && DataPic.Taktanzahl >= 4) {
+                if (((DataPic.Taktanzahl % $scope.calculatePrescale()) === 0) && DataPic.Taktanzahl >= 4) {
                     // incrementiert den TMR0
                     $scope.runTimer();
                 }
@@ -66,7 +67,6 @@ app.controller("AblaufsCtrl", function ($scope, DataPic, $timeout) {
                 $scope.Startapp();
             }
         }, 100 / DataPic.Takt); // Die Zahlenangabe verlangsamt und den Betrag die Ausführung der Schleife in [ms]
-
     };
 
     // Eigentliche Abarbeitung der Befehle
@@ -79,7 +79,7 @@ app.controller("AblaufsCtrl", function ($scope, DataPic, $timeout) {
         $scope.callOperation($scope.operations[DataPic.Instructioncounter].befehl);
 
         // Wie zuvor TMR0 Incrementierung
-        if (DataPic.Taktanzahl % $scope.calculatePrescale() == 0 && DataPic.Taktanzahl >= 4) {
+        if (((DataPic.Taktanzahl % $scope.calculatePrescale()) === 0) && DataPic.Taktanzahl >= 4) {
             $scope.runTimer();
         }
 
@@ -354,5 +354,17 @@ app.controller("AblaufsCtrl", function ($scope, DataPic, $timeout) {
             $scope.RBIE = 0;
         }
 
+    });
+
+    $scope.$watch('ram[1]',function(newValue, oldValue){
+
+        if (((parseInt($scope.ram[3], 16) & parseInt('00100000', 2)) == 32) && (optflag)) {
+            //Register 134d = 86h -> TrisB
+            $scope.ram[129] = newValue;
+            $scope.ram[1] = oldValue;
+            optflag=false;
+            return;
+        }
+        optflag=true;
     });
 });
