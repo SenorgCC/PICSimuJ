@@ -350,28 +350,6 @@ app.controller('CPU', function ($scope, DataPic) {
             // doch für eine bessere Lesbarkeit wurden diese Befehle getrennt
             addresult = addresult.toString(16);
 
-            // Da Javascript keine Konvertierung von Integer auf binär Array kann,
-            // erfüllt diese Funktion die Aufgabe. Rückgabewert ist ein Bitarray
-            var tempW_RegArray = getBinaryArray($scope.w_reg);
-            var tempaddresult_Array = getBinaryArray(addresult);
-
-            // Für die Überprüfung des Digitcarrys werden die unteren Nibble des vorherigen Arbeitsregisters
-            // und der Wert des Arbeitsregisters nach dem Befehl benötigt.
-            var wReg_firstN, addresresult_FirstN;
-
-            // Die Nibbles können durch einfaches konkadenieren von den Arrayemelenten gebildet werden
-            wReg_firstN = tempW_RegArray[4].toString()
-                + tempW_RegArray[3].toString()
-                + tempW_RegArray[2].toString()
-                + tempW_RegArray[1].toString()
-                + tempW_RegArray[0].toString();
-
-            addresresult_FirstN = tempaddresult_Array[4].toString()
-                + tempaddresult_Array[3].toString()
-                + tempaddresult_Array[2].toString()
-                + tempaddresult_Array[1].toString()
-                + tempaddresult_Array[0].toString();
-
             // Das Carrybit ist der überlauf vom 7. Bit und wird durch ein Ergebnis größer gleich 256 (2^8) ausgelöst
             // Das Carrybit wird gesetzt und der Überlauf, durch die Subtraktion von 256, abgeschnitten
             // Bei zwei 8 Bit registern ist die Höstmögliche Zahl (FF+FF) = 1FE und damit nicht größer als das 8. Bit
@@ -391,9 +369,8 @@ app.controller('CPU', function ($scope, DataPic) {
             } else {
                 clrZeroFlag();
             }
-            // Beim DigitCarry übertrag muss das der vorherige Arbeitsregisterwert kleiner 15 und
-            // nach der Rechnung größer 15 sein
-            if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15)) {
+            // Beim DigitCarry übertrag muss das Ergebnis der unteren Nibble der zwei Zahlen größer als 15 sein
+            if ((tempW_Reg & parseInt("00001111", 2)) + (parseInt($scope.ram[f], 16) & parseInt("00001111", 2)) > 15) {
                 setDigitCarry();
             } else {
             }
@@ -582,6 +559,8 @@ app.controller('CPU', function ($scope, DataPic) {
             var movffile = $scope.ram[f];
             if (movffile == 0) {
                 setZeroFlag();
+            } else {
+                clrZeroFlag();
             }
             if (d == 1) {
                 $scope.ram[f] = movffile;
@@ -664,21 +643,6 @@ app.controller('CPU', function ($scope, DataPic) {
             var zahl2 = getZweierKomplement($scope.w_reg);
             var result = zahl1 + zahl2;
             result = result.toString(16);
-            var tempW_RegArray = getBinaryArray($scope.w_reg);
-            var tempaddresult_Array = getBinaryArray(result);
-            var wReg_firstN, addresresult_FirstN;
-
-            wReg_firstN = tempW_RegArray[4].toString()
-                + tempW_RegArray[3].toString()
-                + tempW_RegArray[2].toString()
-                + tempW_RegArray[1].toString()
-                + tempW_RegArray[0].toString();
-
-            addresresult_FirstN = tempaddresult_Array[4].toString()
-                + tempaddresult_Array[3].toString()
-                + tempaddresult_Array[2].toString()
-                + tempaddresult_Array[1].toString()
-                + tempaddresult_Array[0].toString();
 
             if (parseInt(result, 16) > 255) {
 
@@ -688,7 +652,7 @@ app.controller('CPU', function ($scope, DataPic) {
             } else {
                 clrCarry();
             }
-            if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15) && (tempW_RegArray[4] == tempaddresult_Array[4])) {
+            if ((zahl1 & parseInt("00001111", 2)) + (zahl2 & parseInt("00001111", 2)) > 15) {
                 setDigitCarry();
             } else {
                 clrDigitCarry();
@@ -796,21 +760,6 @@ app.controller('CPU', function ($scope, DataPic) {
             var tempW_Reg = parseInt($scope.w_reg, 16);
             var addresult = tempW_Reg + k;
             addresult = addresult.toString(16);
-            var tempW_RegArray = getBinaryArray($scope.w_reg);
-            var tempaddresult_Array = getBinaryArray(addresult);
-            var wReg_firstN, addresresult_FirstN;
-
-            wReg_firstN = tempW_RegArray[4].toString()
-                + tempW_RegArray[3].toString()
-                + tempW_RegArray[2].toString()
-                + tempW_RegArray[1].toString()
-                + tempW_RegArray[0].toString();
-
-            addresresult_FirstN = tempaddresult_Array[4].toString()
-                + tempaddresult_Array[3].toString()
-                + tempaddresult_Array[2].toString()
-                + tempaddresult_Array[1].toString()
-                + tempaddresult_Array[0].toString();
 
             if (parseInt(addresult, 16) > 255) {
 
@@ -822,7 +771,7 @@ app.controller('CPU', function ($scope, DataPic) {
                 clrCarry();
             }
 
-            if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15) && (tempW_RegArray[4] == tempaddresult_Array[4])) {
+            if ((tempW_Reg & parseInt("00001111", 2)) + (k & parseInt("00001111", 2)) > 15) {
 
                 setDigitCarry();
             } else {
@@ -854,7 +803,7 @@ app.controller('CPU', function ($scope, DataPic) {
         "CALL": function (k) {
 
             var tempPcLath = $scope.ram[10].toString(16);
-            DataPic.ProgramStack.push(DataPic.Instructioncounter +1);
+            DataPic.ProgramStack.push(DataPic.Instructioncounter + 1);
             $scope.ProgramStack = DataPic.ProgramStack;
 
             var sprungliteral = getBinaryLiteralArray(k);
@@ -1000,21 +949,6 @@ app.controller('CPU', function ($scope, DataPic) {
             var zahl2 = getZweierKomplement($scope.w_reg);
             var result = zahl1 + zahl2;
             result = result.toString(16);
-            var tempW_RegArray = getBinaryArray($scope.w_reg);
-            var tempaddresult_Array = getBinaryArray(result);
-            var wReg_firstN, addresresult_FirstN;
-
-            wReg_firstN = tempW_RegArray[4].toString()
-                + tempW_RegArray[3].toString()
-                + tempW_RegArray[2].toString()
-                + tempW_RegArray[1].toString()
-                + tempW_RegArray[0].toString();
-
-            addresresult_FirstN = tempaddresult_Array[4].toString()
-                + tempaddresult_Array[3].toString()
-                + tempaddresult_Array[2].toString()
-                + tempaddresult_Array[1].toString()
-                + tempaddresult_Array[0].toString();
 
             if (parseInt(result, 16) > 255) {
                 var temp = parseInt(result, 16) - 256;
@@ -1023,7 +957,7 @@ app.controller('CPU', function ($scope, DataPic) {
             } else {
                 clrCarry();
             }
-            if ((parseInt(wReg_firstN, 2) < 16) && (parseInt(addresresult_FirstN, 2) > 15) && (tempW_RegArray[4] == tempaddresult_Array[4])) {
+            if ((zahl1 & parseInt("00001111", 2)) + (zahl2 & parseInt("00001111", 2)) > 15) {
                 setDigitCarry();
             } else {
                 clrDigitCarry();
@@ -1065,15 +999,15 @@ app.controller('CPU', function ($scope, DataPic) {
         $scope.carry = lastState.carry;
         $scope.zeroFlag = lastState.zeroFlag;
         DataPic.Laufzeit = lastState.laufzeit;
-        DataPic.watchdogtimer= lastState.watchdogtimer;
+        DataPic.watchdogtimer = lastState.watchdogtimer;
     };
     $scope.changePortBbit = function (bitpos) {
         var temp = getBinaryArray($scope.ram[6]);
-        var trisVergleich= getBinaryArray($scope.ram[134]);
-        if(trisVergleich[bitpos]==0){
+        var trisVergleich = getBinaryArray($scope.ram[134]);
+        if (trisVergleich[bitpos] == 0) {
             // Wenn das TrisBit auf 0 steht wird PortB Bit als Ausgang genutzt
             // und somit soll keine weitere eingabe möglich sein
-            $scope.PortBbits[bitpos]=0;
+            $scope.PortBbits[bitpos] = 0;
             return;
         }
         if (temp[bitpos] == 1) {
@@ -1086,8 +1020,8 @@ app.controller('CPU', function ($scope, DataPic) {
         temp = convertArrayToHex(temp);
         // Vor der Ausgabe wird die Eingabe mit dem TrisB verundet, da TRIS B bestimmt ob Port B einoder Ausgabe ist
         // TrisB 1 = Eingang ; TrisB 0= Ausgang
-        temp= parseInt($scope.ram[134],16)&parseInt(temp,16);
-        $scope.ram[6]=temp.toString(16);
+        temp = parseInt($scope.ram[134], 16) & parseInt(temp, 16);
+        $scope.ram[6] = temp.toString(16);
         $scope.PORTB = $scope.ram[6];
     };
     $scope.changePortAbit = function (bitpos) {
@@ -1153,16 +1087,16 @@ app.controller('CPU', function ($scope, DataPic) {
         $scope.PCL = '00';
         // STATUS
         $scope.ram[3] = '18';
-        $scope.ram[131]='18';
+        $scope.ram[131] = '18';
         // OPTION_REG
-        $scope.ram[129]='ff';
+        $scope.ram[129] = 'ff';
         $scope.OPTION_REG = 'ff';
         // TRISA
-        $scope.ram[133]='1f';
+        $scope.ram[133] = '1f';
         $scope.TRISA = '1f';
         // TRISB
         $scope.TRISB = 'ff';
-        $scope.ram[134]='ff';
+        $scope.ram[134] = 'ff';
 
         // Spezielle Bits
         $scope.RP0 = 0;
