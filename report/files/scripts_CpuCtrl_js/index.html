@@ -1,0 +1,1274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Plato - scripts/CpuCtrl.js</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <!--[if lt IE 9]>
+  <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link href="../../assets/css/vendor/morris.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/bootstrap.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/font-awesome.css" rel="stylesheet">
+  <link href="../../assets/css/vendor/codemirror.css" rel="stylesheet">
+  <link href="../../assets/css/plato.css" rel="stylesheet">
+  <link href="../../assets/css/plato-file.css" rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-fixed-top">
+  <div class="container">
+    <a class="navbar-brand" href="http://github.com/es-analysis/plato">Plato on Github</a>
+    <ul class="nav navbar-nav">
+      <li>
+        <a href="../../index.html">Report Home</a>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<div class="jumbotron">
+  <div class="container">
+    <h1>scripts/CpuCtrl.js</h1>
+  </div>
+</div>
+
+<div class="container aggregate-stats">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Maintainability <a href="http://blogs.msdn.com/b/codeanalysis/archive/2007/11/20/maintainability-index-range-and-meaning.aspx"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="A value between 0 and 100 that represents the relative ease of maintaining the code. A high value means better maintainability." data-original-title="Maintainability Index"  data-container="body"></i></a></h2>
+      <p class="stat">58.77</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Lines of code <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h2>
+      <p class="stat">1157</p>
+    </div>
+  </div>
+  <div class="row historical">
+    <div class="col-md-6">
+      <p id="chart_historical_maint" class="chart"></p>
+    </div>
+    <div class="col-md-6">
+      <p id="chart_historical_sloc" class="chart"></p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="header">Difficulty  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="The difficulty measure is related to the difficulty of the program to write or understand." data-original-title="Difficulty" data-container="body"></i></a></h2>
+      <p class="stat">145.62</p>
+    </div>
+    <div class="col-md-6">
+      <h2 class="header">Estimated Errors  <a href="http://en.wikipedia.org/wiki/Halstead_complexity_measures"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Halstead's delivered bugs is an estimate for the number of errors in the implementation." data-original-title="Delivered Bugs" data-container="body"></i></a></h2>
+      <p class="stat">13.45</p>
+    </div>
+  </div>
+</div>
+
+<div class="container charts">
+  <div class="row">
+    <h2 class="header">Function weight</h2>
+  </div>
+  <div class="row">
+    <div class="col-md-6">
+      <h3 class="chart-header">By Complexity <a href="http://en.wikipedia.org/wiki/Cyclomatic_complexity"><i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="This metric counts the number of distinct paths through a block of code. Lower values are better." data-original-title="Cyclomatic Complexity" data-container="body"></i></a></h3>
+      <div id="fn-by-complexity" class="stat"></div>
+    </div>
+    <div class="col-md-6">
+      <h3 class="chart-header">By SLOC  <i class="icon icon-info-sign" rel="popover" data-placement="top" data-trigger="hover" data-content="Source Lines of Code / Logical Lines of Code" data-original-title="SLOC/LSLOC" data-container="body"></i></h3>
+      <div id="fn-by-sloc" class="stat"></div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <textarea id="file-source" class="col-md-12">app.controller(&#039;CPU&#039;, function ($scope, DataPic) {
+
+    function getDirectory(binOP) {
+        //Das D-Bit befindet sich bei den meisten Befehlen an der Selben Position, daher kann es ausmaskiert werden
+        var directory = parseInt(binOP, 2) &amp; parseInt(&#039;00000010000000&#039;, 2);
+        //Die &quot;&gt;&gt;&quot; Bewirken einen Rotate right um eine Anzahl von Stellen
+        //Da das Directory Bit sich an der 8. Stelle befindet muss es um 7 Stellen rotiert werden
+        //Dies vereinfacht die weitere Verarbeitung, da es nur noch auf &quot;1&quot; überprüft werden muss
+        directory = directory &gt;&gt; 7;
+        return directory;
+    }
+
+    function getFileregister(binOP) {
+        //Die File-Bits werden bei diesem Befehl ausmaskiert
+        //JS macht bei einer Verundung von von Strings probleme
+        //daher müssen diese zuerst in einen Integer gecastet werden
+        var file = parseInt(binOP, 2) &amp; parseInt(&#039;00000001111111&#039;, 2);
+        return file;
+    }
+
+    function getbitAddress(binOP) {
+        //Selbiges Prinzip wie bei getFileregister und getDirectory
+        //zum einfacheren Verarbeiten wird das ergebnis um 7 stellen nach rechts rotiert
+        var bitAddress = parseInt(binOP, 2) &amp; parseInt(&#039;00001110000000&#039;, 2);
+        bitAddress = bitAddress &gt;&gt; 7;
+        return bitAddress;
+    }
+
+    function getLiteralfieldshort(binOP) {
+        //Einfache Maskierung, wie bei den anderen Befehlen
+        //Desweiteren gibt es hier 2 Literalmaskierungsfunktionen, da es befehle gibt zu 11 statt 7 Bit liefern
+        var literalfield = parseInt(binOP, 2) &amp; parseInt(&#039;00000011111111&#039;, 2);
+        return literalfield;
+    }
+
+    function getLiteralfieldlong(binOP) {
+        //Die Befehle GOTO und CALL benötigen ein 11 Bit Literal, statt einem 7 Bit großen
+        var literalfield = parseInt(binOP, 2) &amp; parseInt(&#039;00011111111111&#039;, 2);
+        return literalfield;
+    }
+
+    function getBinaryArray(hexVal) {
+
+        //Sowohl der Inhalt des W Registers als auch des File Registers sind in Hex kodiert
+        //Die meisten Funktionen benötigen aber bitweise operationen -&gt; Umwandlungsfunktion, liefert ein Bitarray
+        var tempHex_Val = parseInt(hexVal, 16);
+        var result_Binary = [];
+        // Der Rotationsbefehl verändert dieIntegerzahl bitweise
+        // diese Verschiebung kann zur Umwandlung in ein bitarray genutzt werden
+        for (var i = 0; i &lt; 8; i++) {
+            result_Binary[i] = (tempHex_Val &gt;&gt; i) &amp; 1;
+        }
+        return result_Binary;
+
+    }
+
+    function getBinaryLiteralArray(IntVal) {
+
+        //Das k Literalfeld wird mit 11 Bit codiert, der Programmcounter Benötigt 13
+        var result_Binary = [];
+
+        for (var i = 0; i &lt; 11; i++) {
+            result_Binary[i] = (IntVal &gt;&gt; i) &amp; 1;
+        }
+        return result_Binary;
+
+    }
+
+    function convertArrayToHex(BinArray) {
+        //Um eine Korrekte Umwandlung von einem Binär Array zu einem Hex wert zu ermöglichen
+        //wird das übergebene Bit Array Bitweise zusammengesetzt und im Anschluss konvertiert
+        //Diese Funktion umgeht das MSB und LSB problem zwischen JS und der Ausgabe
+        var result = &quot;&quot;;
+        result = BinArray[7].toString() + BinArray[6].toString()
+            + BinArray[5].toString() + BinArray[4].toString()
+            + BinArray[3].toString() + BinArray[2].toString()
+            + BinArray[1].toString() + BinArray[0].toString();
+        result = parseInt(result, 2);
+        result = result.toString(16);
+        return result;
+    }
+
+    function getComArray(binArray) {
+        // Diese Funktion Wandelt das eingegebene binär Array in das ensprechende komplimentäre array um und gibt es aus
+        var complement = new Array();
+
+        // Da nur 8 Bit Werte übergeben werden reicht eine abfrage bis 8
+        for (var i = 0; i &lt; 8; i++) {
+            if (binArray[i] == 0) {
+                complement[i] = 1;
+            } else {
+                complement[i] = 0;
+            }
+        }
+        return complement;
+
+    }
+
+    function getZweierKomplement(hexValue) {
+        // Das Zweierkomplement wird durch die Negation der Binär zahl und anschließender Addition von 1 errechnet
+        // Da die Werte als Hex gespeichert werden müssen diese umgewandelt werden
+        var zweierKompResult = getBinaryArray(hexValue);
+
+        // Wandelt das Bitarray in ihr Komplement um
+        zweierKompResult = getComArray(zweierKompResult);
+
+        // Es können keine arithmetischen Operationen mit einem Bitarray dsurchgeführt werden, die Bitarray to Hex
+        // Funktion erleichtert die Konvertierung
+        zweierKompResult = convertArrayToHex(zweierKompResult);
+
+        //Zweierkomplement = Komplement + 1 -&gt; Da die komplement Zahl als Hex vorliegt, kann die parseInt funktion es umwandeln
+        zweierKompResult = parseInt(zweierKompResult, 16) + 1;
+        return zweierKompResult;
+    }
+
+    function setCarry() {
+        var tempStatus = getBinaryArray($scope.ram[3]);
+        tempStatus[0] = 1;
+        $scope.carry = 1;
+        $scope.ram[3] = convertArrayToHex(tempStatus);
+
+    }
+
+    function clrCarry() {
+        var tempStatus = getBinaryArray($scope.ram[3]);
+        tempStatus[0] = 0;
+        $scope.carry = 0;
+        $scope.ram[3] = convertArrayToHex(tempStatus);
+    }
+
+    function setDigitCarry() {
+        var tempStatus = getBinaryArray($scope.ram[3]);
+        tempStatus[1] = 1;
+        $scope.digitCarry = 1;
+        $scope.ram[3] = convertArrayToHex(tempStatus);
+
+    }
+
+    function clrDigitCarry() {
+        var tempStatus = getBinaryArray($scope.ram[3]);
+        tempStatus[1] = 0;
+        $scope.digitCarry = 0;
+        $scope.ram[3] = convertArrayToHex(tempStatus);
+
+    }
+
+    function setZeroFlag() {
+        var tempStatus = getBinaryArray($scope.ram[3]);
+        tempStatus[2] = 1;
+        $scope.zeroFlag = 1;
+        $scope.ram[3] = convertArrayToHex(tempStatus);
+    }
+
+    function clrZeroFlag() {
+        var tempStatus = getBinaryArray($scope.ram[3]);
+        tempStatus[2] = 0;
+        $scope.zeroFlag = 0;
+        $scope.ram[3] = convertArrayToHex(tempStatus);
+    }
+
+
+    $scope.callOperation = function (hexOP) {
+        // Die callOperation Funktion ist die Kernfunktion der CPU
+        // Sie Sucht nach dem Richtigen Befehl, der als Hex Wert übergeben wird
+        // Durch Maskierung werden die Variablenwerte aus dem übergebenem Hexwert rausgefiltert
+
+        var temp = parseInt(hexOP, 16);
+        var tempbin = temp.toString(2);
+
+        // abfrage auf den Befehl anführende &quot;00&quot; werden leider ausgeschnitten und js kann nativ kein binary
+        // Durch binäre Verknüpfung wird der Richtige Befehl gefiltert, da jeder Befehl durch
+        // eine einmalige Bitfolge dargestellt wird
+        // manche Befehle Enthalten Don&#039;t care Zustände diese können statt einzeln auszustesten
+        // durch die Intergerzahl Darstellung zusammengefasst werden
+
+
+        if ((parseInt(tempbin, 2) &amp; parseInt(&#039;11111100000000&#039;, 2)).toString(2) == &quot;11100000000&quot;) {
+            //Befehl ADDWF
+            Befehlsausfuehrung[&quot;ADDWF&quot;](getFileregister(tempbin), getDirectory(tempbin));
+
+        } else if ((parseInt(tempbin, 2) &amp; parseInt(&#039;11111100000000&#039;, 2)).toString(2) == &quot;10100000000&quot;) {
+            //ANDWF
+            Befehlsausfuehrung[&quot;ANDWF&quot;](getFileregister(tempbin), getDirectory(tempbin));
+
+        } else if ((parseInt(tempbin, 2) &amp; parseInt(&#039;11111110000000&#039;, 2)).toString(2) == &quot;110000000&quot;) {
+            //CLRF
+            Befehlsausfuehrung[&quot;CLRF&quot;](getFileregister(tempbin), getDirectory(tempbin));
+
+        } else if (((parseInt(tempbin, 2) &amp; parseInt(&#039;11111110000000&#039;, 2)) &gt; 255) &amp; ((parseInt(tempbin, 2) &amp; parseInt(&#039;11111110000000&#039;, 2)) &lt; 384)) {
+            //CLRW
+            Befehlsausfuehrung[&quot;CLRW&quot;]();
+
+        } else if ((parseInt(tempbin, 2) &amp; parseInt(&#039;11111100000000&#039;, 2)).toString(2) == &quot;100100000000&quot;) {
+            //COMF
+            Befehlsausfuehrung[&quot;COMF&quot;](getFileregister(tempbin), getDirectory(tempbin));
+
+        } else if ((parseInt(tempbin, 2) &amp; parseInt(&#039;11111100000000&#039;, 2)).toString(2) == &quot;1100000000&quot;) {
+            //DECF
+            Befehlsausfuehrung[&quot;DECF&quot;](getFileregister(tempbin), getDirectory(tempbin));
+
+        } else if ((parseInt(tempbin, 2) &amp; parseInt(&#039;11111100000000&#039;, 2)).toString(2) == &quot;101100000000&quot;) {
+            //DECFSZ
+            Befehlsausfuehrung[&quot;DECFSZ&quot;](getFileregister(tempbin), getDirectory(tempbin));
+
+        } else if ((parseInt(tempbin, 2) &amp; parseInt(&#039;11111100000000&#039;, 2)).toString(2) == &quot;101000000000&quot;) {
+            //INCF
+            Befehlsausfuehrung[&quot;INCF&quot;](getFileregister(tempbin), getDirectory(tempbin));
+
+        } else if ((parseInt(tempbin, 2) &amp; parseInt(&#039;11111100000000&#039;, 2)).toString(2) == &quot;111100000000&quot;) {
+            //INCFSZ
+            Befehlsausfuehrung[&quot;INCFSZ&quot;](getFileregister(tempbin), getDirectory(tempbin));
+
+        } else if ((parseInt(tempbin, 2) &amp; parseInt(&#039;11111100000000&#039;, 2)).toString(2) == &quot;10000000000&quot;) {
+            //IORWF
+            Befehlsausfuehrung[&quot;IORWF&quot;](getFileregister(tempbin), getDirectory(tempbin));
+
+        } else if ((parseInt(tempbin, 2) &amp; parseInt(&#039;11111100000000&#039;, 2)).toString(2) == &quot;100000000000&quot;) {
+            //MOVF
+            Befehlsausfuehrung[&quot;MOVF&quot;](getFileregister(tempbin), getDirectory(tempbin));
+        } else if ((parseInt(tempbin, 2) &amp; parseInt(&#039;11111110000000&#039;, 2)).toString(2) == &quot;10000000&quot;) {
+            //MOVWF
+            Befehlsausfuehrung[&quot;MOVWF&quot;](getFileregister(tempbin));
+
+        } else if (((parseInt(tempbin, 2) &amp; parseInt(&#039;11111111111111&#039;, 2)).toString(2) == &quot;0&quot;)
+            | ((parseInt(tempbin, 2) &amp; parseInt(&#039;11111111111111&#039;, 2)).toString(2) == &quot;100000&quot;)
+            | ((parseInt(tempbin, 2) &amp; parseInt(&#039;11111111111111&#039;, 2)).toString(2) == &quot;1000000&quot;)
+            | ((parseInt(tempbin, 2) &amp; parseInt(&#039;11111111111111&#039;, 2)).toString(2) == &quot;1100000&quot;)) {
+            //NOP
+            Befehlsausfuehrung[&quot;NOP&quot;]();
+
+        } else if ((parseInt(tempbin, 2) &amp; parseInt(&#039;11111100000000&#039;, 2)).toString(2) == &quot;110100000000&quot;) {
+            //RLF
+            Befehlsausfuehrung[&quot;RLF&quot;](getFileregister(tempbin), getDirectory(tempbin));
+
+        } else if ((parseInt(tempbin, 2) &amp; parseInt(&#039;11111100000000&#039;, 2)).toString(2) == &quot;110000000000&quot;) {
+            //RRF
+            Befehlsausfuehrung[&quot;RRF&quot;](getFileregister(tempbin), getDirectory(tempbin));
+
+        } else if ((parseInt(tempbin, 2) &amp; parseInt(&#039;11111100000000&#039;, 2)).toString(2) == &quot;1000000000&quot;) {
+            //SUBWF
+            Befehlsausfuehrung[&quot;SUBWF&quot;](getFileregister(tempbin), getDirectory(tempbin));
+
+        } else if ((parseInt(tempbin, 2) &amp; parseInt(&#039;11111100000000&#039;, 2)).toString(2) == &quot;111000000000&quot;) {
+            //SWAPF
+            Befehlsausfuehrung[&quot;SWAPF&quot;](getFileregister(tempbin), getDirectory(tempbin));
+
+        } else if ((parseInt(tempbin, 2) &amp; parseInt(&#039;11111100000000&#039;, 2)).toString(2) == &quot;11000000000&quot;) {
+            //XORWF
+            Befehlsausfuehrung[&quot;XORWF&quot;](getFileregister(tempbin), getDirectory(tempbin));
+
+        } else if ((parseInt(tempbin, 2) &amp; parseInt(&#039;11110000000000&#039;, 2)).toString(2) == &quot;1000000000000&quot;) {
+
+            //BCF
+            Befehlsausfuehrung[&quot;BCF&quot;](getFileregister(tempbin), getbitAddress(tempbin));
+
+        } else if ((parseInt(tempbin, 2) &amp; parseInt(&#039;11110000000000&#039;, 2)).toString(2) == &quot;1010000000000&quot;) {
+            //BSF
+            Befehlsausfuehrung[&quot;BSF&quot;](getFileregister(tempbin), getbitAddress(tempbin));
+
+        } else if ((parseInt(tempbin, 2) &amp; parseInt(&#039;11110000000000&#039;, 2)).toString(2) == &quot;1100000000000&quot;) {
+            //call Befehel: BTFSC
+            Befehlsausfuehrung[&quot;BTFSC&quot;](getFileregister(tempbin), getbitAddress(tempbin));
+
+        } else if ((parseInt(tempbin, 2) &amp; parseInt(&#039;11110000000000&#039;, 2)).toString(2) == &quot;1110000000000&quot;) {
+
+            //call Befehl: BTFSS
+            Befehlsausfuehrung[&quot;BTFSS&quot;](getFileregister(tempbin), getbitAddress(tempbin));
+
+        } else if (((parseInt(tempbin, 2) &amp; parseInt(&#039;11111100000000&#039;, 2)).toString(2) == &quot;11111000000000&quot;)
+            | (parseInt(tempbin, 2) &amp; parseInt(&#039;11111100000000&#039;, 2)).toString(2) == &quot;11111100000000&quot;) {
+            //ADDLW
+            Befehlsausfuehrung[&quot;ADDLW&quot;](getLiteralfieldshort(tempbin));
+
+        } else if ((parseInt(tempbin, 2) &amp; parseInt(&#039;11111100000000&#039;, 2)).toString(2) == &quot;11100100000000&quot;) {
+            //ANDLW
+            Befehlsausfuehrung[&quot;ANDLW&quot;](getLiteralfieldshort(tempbin));
+
+        } else if ((parseInt(tempbin, 2) &amp; parseInt(&#039;11100000000000&#039;, 2)).toString(2) == &quot;10000000000000&quot;) {
+            //CALL
+            Befehlsausfuehrung[&quot;CALL&quot;](getLiteralfieldlong(tempbin));
+
+        } else if ((parseInt(tempbin, 2) &amp; parseInt(&#039;11111111111111&#039;, 2)).toString(2) == &quot;1100100&quot;) {
+            //CLRWDT
+            Befehlsausfuehrung[&quot;CLRWDT&quot;]();
+
+        } else if ((parseInt(tempbin, 2) &amp; parseInt(&#039;11100000000000&#039;, 2)).toString(2) == &quot;10100000000000&quot;) {
+            //GOTO
+            Befehlsausfuehrung[&quot;GOTO&quot;](getLiteralfieldlong(tempbin));
+
+        } else if ((parseInt(tempbin, 2) &amp; parseInt(&#039;11111100000000&#039;, 2)).toString(2) == &quot;11100000000000&quot;) {
+            //IORLW
+            Befehlsausfuehrung[&quot;IORLW&quot;](getLiteralfieldshort(tempbin));
+
+        } else if (((parseInt(tempbin, 2) &amp; parseInt(&#039;11111100000000&#039;, 2)).toString(2) == &quot;11000000000000&quot;)
+            | ((parseInt(tempbin, 2) &amp; parseInt(&#039;11111100000000&#039;, 2)).toString(2) == &quot;11000100000000&quot;)
+            | ((parseInt(tempbin, 2) &amp; parseInt(&#039;11111100000000&#039;, 2)).toString(2) == &quot;11001000000000&quot;)
+            | ((parseInt(tempbin, 2) &amp; parseInt(&#039;11111100000000&#039;, 2)).toString(2) == &quot;11001100000000&quot;)) {
+
+            //MOVLW
+            Befehlsausfuehrung[&quot;MOVLW&quot;](getLiteralfieldshort(tempbin));
+
+        } else if ((parseInt(tempbin, 2) &amp; parseInt(&#039;11111111111111&#039;, 2)).toString(2) == &quot;1001&quot;) {
+            //RETFIE
+            Befehlsausfuehrung[&quot;RETFIE&quot;]();
+
+        } else if (((parseInt(tempbin, 2) &amp; parseInt(&#039;11111100000000&#039;, 2)).toString(2) == &quot;11010000000000&quot;)
+            | ((parseInt(tempbin, 2) &amp; parseInt(&#039;11111100000000&#039;, 2)).toString(2) == &quot;11010100000000&quot;)
+            | ((parseInt(tempbin, 2) &amp; parseInt(&#039;11111100000000&#039;, 2)).toString(2) == &quot;11011000000000&quot;)
+            | ((parseInt(tempbin, 2) &amp; parseInt(&#039;11111100000000&#039;, 2)).toString(2) == &quot;11011100000000&quot;)) {
+
+            //RETLW
+            Befehlsausfuehrung[&quot;RETLW&quot;](getLiteralfieldshort(tempbin));
+
+        } else if ((parseInt(tempbin, 2) &amp; parseInt(&#039;11111111111111&#039;, 2)).toString(2) == &quot;1000&quot;) {
+            //RETURN
+            Befehlsausfuehrung[&quot;RETURN&quot;]();
+
+        } else if ((parseInt(tempbin, 2) &amp; parseInt(&#039;11111111111111&#039;, 2)).toString(2) == &quot;1100011&quot;) {
+            //SLEEP
+            Befehlsausfuehrung[&quot;SLEEP&quot;]();
+
+        } else if (((parseInt(tempbin, 2) &amp; parseInt(&#039;11111100000000&#039;, 2)).toString(2) == &quot;11110000000000&quot;)
+            | ((parseInt(tempbin, 2) &amp; parseInt(&#039;11111100000000&#039;, 2)).toString(2) == &quot;11110100000000&quot;)) {
+
+            //SUBLW
+            Befehlsausfuehrung[&quot;SUBLW&quot;](getLiteralfieldshort(tempbin));
+
+        } else if ((parseInt(tempbin, 2) &amp; parseInt(&#039;11111100000000&#039;, 2)).toString(2) == &quot;11101000000000&quot;) {
+            //XORLW
+            Befehlsausfuehrung[&quot;XORLW&quot;](getLiteralfieldshort(tempbin));
+        }
+    };
+
+    // Statt alle PIC Befehle in einzelne Funktionen zu verpacken, haben wir uns für eine Lookup Table entschieden,
+    // der Aufruf sieht wie folgt aus : Befehlsausfuehrung[Bezeichner](Parameter)
+    // die Lookuptable ist somit übersichtlicher als die einzelnen Funktionen
+    var Befehlsausfuehrung = {
+        &quot;ADDWF&quot;: function (f, d) {
+            // Beim ADDWF Befehl wird ein Register mit dem Arbeitsregister addiert
+            // und die Summe bei gesetztem d Bit im Ram und nicht gesetztem im Arbeitsregister abgespeichert.
+            // Da dieser Befehl das DC carry manipulieren wird ein temporäre Kopie des Alten Arbeitsregisters benötigt.
+            // Die Daten werden sowohl im Arbeitsregister als auch im Fileregister in in Hexdarstellung
+            // und damit als String variablen gespeichert.
+            // Aus diesem Grund müssen diese vor der eigentlichen Bearbeitung in einen Integerwert geparst werden.
+            var tempW_Reg = parseInt($scope.w_reg, 16);
+
+            var addresult = tempW_Reg + parseInt($scope.ram[f], 16);
+
+            // Dieser Befehl könnte auch an die initialisierung angehängt werden,
+            // doch für eine bessere Lesbarkeit wurden diese Befehle getrennt
+            addresult = addresult.toString(16);
+
+            // Das Carrybit ist der überlauf vom 7. Bit und wird durch ein Ergebnis größer gleich 256 (2^8) ausgelöst
+            // Das Carrybit wird gesetzt und der Überlauf, durch die Subtraktion von 256, abgeschnitten
+            // Bei zwei 8 Bit registern ist die Höstmögliche Zahl (FF+FF) = 1FE und damit nicht größer als das 8. Bit
+            if (parseInt(addresult, 16) &gt; 255) {
+
+                var temp = parseInt(addresult, 16);
+                setCarry();
+                temp = temp - 256;
+                addresult = temp.toString(16);
+            } else {
+                clrCarry();
+            }
+
+            // Zeroflag Überprüfung
+            if (parseInt(addresult, 16) == 0) {
+                setZeroFlag();
+            } else {
+                clrZeroFlag();
+            }
+            // Beim DigitCarry übertrag muss das Ergebnis der unteren Nibble der zwei Zahlen größer als 15 sein
+            if ((tempW_Reg &amp; parseInt(&quot;00001111&quot;, 2)) + (parseInt($scope.ram[f], 16) &amp; parseInt(&quot;00001111&quot;, 2)) &gt; 15) {
+                setDigitCarry();
+            } else {
+                clrDigitCarry();
+            }
+
+
+            if (d == 1) {
+
+                $scope.ram[f] = addresult;
+            } else {
+                $scope.w_reg = addresult;
+            }
+            if (f == 2) {
+                changeProgramCounter();
+            }
+            // Die Laufzeitberechnungsfunktion liegt in der Factory DataPic, damit es scopeübergreifend
+            // den selben Wert speichern kann
+            DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
+
+        },
+        &quot;ANDWF&quot;: function (f, d) {
+
+            var fileRegValue = $scope.ram[f];
+            var andresult = ((parseInt($scope.w_reg, 16)) &amp; (parseInt(fileRegValue, 16)));
+            andresult = andresult.toString(16);
+
+            if (parseInt(andresult, 16) == 0) {
+                setZeroFlag();
+            } else {
+                clrZeroFlag();
+            }
+
+            if (d == 1) {
+
+                $scope.ram[f] = andresult;
+            } else {
+                $scope.w_reg = andresult;
+            }
+            DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
+        },
+        &quot;CLRF&quot;: function (f) {
+            $scope.ram[f] = &#039;00&#039;;
+            setZeroFlag();
+            DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
+        },
+        &quot;CLRW&quot;: function () {
+            $scope.w_reg = &#039;00&#039;;
+            setZeroFlag();
+            DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
+        },
+        &quot;COMF&quot;: function (f, d) {
+            var tempcomresult = getBinaryArray($scope.ram[f]);
+            var comresult = getComArray(tempcomresult);
+            comresult = convertArrayToHex(comresult);
+            if (parseInt(comresult, 16) == 0) {
+                setZeroFlag();
+            } else {
+                clrZeroFlag();
+            }
+            if (d == 1) {
+
+                $scope.ram[f] = comresult;
+            } else {
+                $scope.w_reg = comresult;
+            }
+            DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
+        },
+        &quot;DECF&quot;: function (f, d) {
+            var result = parseInt($scope.ram[f], 16);
+            if (result &gt; 0) {
+                result--;
+            } else {
+                result = 255; //result=ff
+            }
+            if (result == 0) {
+                setZeroFlag();
+            } else {
+                clrZeroFlag();
+            }
+            result = result.toString(16);
+
+            if (d == 1) {
+                $scope.ram[f] = result;
+            } else {
+                $scope.w_reg = result;
+            }
+            DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
+        },
+        &quot;DECFSZ&quot;: function (f, d) {
+            var result = parseInt($scope.ram[f], 16);
+            if (result &gt; 0) {
+                result--;
+            } else {
+                result = 0;
+            }
+            //Wenn das register um 1 dekrementiert wird und damit 0 ergibt,
+            //wird statt dem nächsten Befehl ein NOP ausgeführt
+            if (result == 0) {
+                DataPic.Instructioncounter++;
+                DataPic.Zeit(2);
+                DataPic.IncTaktanzahl(2);
+            } else {
+                DataPic.Zeit(1);
+                DataPic.IncTaktanzahl(1);
+            }
+            result = result.toString(16);
+            if (d == 1) {
+                $scope.ram[f] = result;
+            } else {
+                $scope.w_reg = result;
+            }
+
+        },
+        &quot;INCF&quot;: function (f, d) {
+            var result = parseInt($scope.ram[f], 16);
+            if (result &lt; 255) {
+                result++;
+            } else {
+                result = 0;
+            }
+            result = result.toString(16);
+
+            if (d == 1) {
+                $scope.ram[f] = result;
+            } else {
+                $scope.w_reg = result;
+            }
+
+            if (result == 0) {
+                setZeroFlag();
+            } else {
+                clrZeroFlag();
+            }
+            DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
+        },
+        &quot;INCFSZ&quot;: function (f, d) {
+            var result = parseInt($scope.ram[f], 16);
+            if (result &lt; 255) {
+                result++;
+            } else {
+                result = 0;
+            }
+            //Wenn das register um 1 dekrementiert wird und damit 0 ergibt,
+            //wird statt dem nächsten Befehl ein NOP ausgeführt
+            if (result == 0) {
+                DataPic.Instructioncounter++;
+                DataPic.Zeit(2);
+                DataPic.IncTaktanzahl(2);
+            } else {
+                DataPic.Zeit(1);
+                DataPic.IncTaktanzahl(1);
+            }
+            result = result.toString(16);
+            if (d == 1) {
+                $scope.ram[f] = result;
+            } else {
+                $scope.w_reg = result;
+            }
+        },
+        &quot;IORWF&quot;: function (f, d) {
+            var fileRegValue = $scope.ram[f];
+            var andresult = ((parseInt($scope.w_reg, 16)) | (parseInt(fileRegValue, 16)));
+            andresult = andresult.toString(16);
+
+            if (parseInt(andresult, 16) == 0) {
+                setZeroFlag();
+            } else {
+                clrZeroFlag();
+            }
+
+            if (d == 1) {
+                $scope.ram[f] = andresult;
+            } else {
+                $scope.w_reg = andresult;
+            }
+            DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
+        },
+        &quot;MOVF&quot;: function (f, d) {
+            var movffile = $scope.ram[f];
+            if (movffile == 0) {
+                setZeroFlag();
+            } else {
+                clrZeroFlag();
+            }
+            if (d == 1) {
+                $scope.ram[f] = movffile;
+            } else {
+                $scope.w_reg = movffile;
+            }
+            DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
+        },
+        &quot;MOVWF&quot;: function (f) {
+            $scope.ram[f] = $scope.w_reg;
+            DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
+            if (f == 2) {
+                changeProgramCounter();
+            }
+        },
+        &quot;NOP&quot;: function () {
+            //Der NOP Befehl erhöt nur den IC, Keine weitere Funktion
+            //$scope.Instructioncounter++;
+            DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
+        },
+        &quot;RLF&quot;: function (f, d) {
+            var rlfresult = new Array();
+            var oldfile = getBinaryArray($scope.ram[f]);
+            var tempStatus = getBinaryArray($scope.ram[3]);
+            var tempCarry = tempStatus[0];
+
+            $scope.carry = oldfile[7];
+            tempStatus[0] = oldfile[7];
+            $scope.ram[3] = convertArrayToHex(tempStatus);
+
+            for (var i = 7; i &gt;= 0; i--) {
+                if (i == 0) {
+                    rlfresult[i] = tempCarry;
+                } else {
+                    rlfresult[i] = oldfile[i - 1];
+                }
+            }
+
+            rlfresult = convertArrayToHex(rlfresult);
+            if (d == 1) {
+                $scope.ram[f] = rlfresult;
+            } else {
+                $scope.w_reg = rlfresult;
+            }
+            DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
+        },
+        &quot;RRF&quot;: function (f, d) {
+            var rrfresult = new Array();
+            var oldfile = getBinaryArray($scope.ram[f]);
+            var tempStatus = getBinaryArray($scope.ram[3]);
+            var tempCarry = tempStatus[0];
+
+            $scope.carry = oldfile[0];
+            tempStatus[0] = oldfile[0];
+            $scope.ram[3] = convertArrayToHex(tempStatus);
+
+            for (var i = 0; i &lt;= 7; i++) {
+                if (i == 7) {
+                    rrfresult[i] = tempCarry;
+                } else {
+                    rrfresult[i] = oldfile[i + 1];
+                }
+            }
+            rrfresult = convertArrayToHex(rrfresult);
+            if (d == 1) {
+                $scope.ram[f] = rrfresult;
+            } else {
+                $scope.w_reg = rrfresult;
+            }
+            DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
+
+        },
+        &quot;SUBWF&quot;: function (f, d) {
+            var zahl1 = parseInt($scope.ram[f], 16);
+            var zahl2 = getZweierKomplement($scope.w_reg);
+            var result = zahl1 + zahl2;
+            result = result.toString(16);
+
+            if (parseInt(result, 16) &gt; 255) {
+
+                var temp = parseInt(result, 16) - 256;
+                setCarry();
+                result = temp.toString(16);
+            } else {
+                clrCarry();
+            }
+            if ((zahl1 &amp; parseInt(&quot;00001111&quot;, 2)) + (zahl2 &amp; parseInt(&quot;00001111&quot;, 2)) &gt; 15) {
+                setDigitCarry();
+            } else {
+                clrDigitCarry();
+            }
+
+            if (parseInt(result, 16) == 0) {
+                setZeroFlag();
+            } else {
+                clrZeroFlag();
+            }
+            if (d == 1) {
+                $scope.ram[f] = result;
+            } else {
+                $scope.w_reg = result;
+            }
+            DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
+        },
+        &quot;SWAPF&quot;: function (f, d) {
+            var tempArray = getBinaryArray($scope.ram[f]);
+            var nibble1 = tempArray[3].toString() + tempArray[2].toString() + tempArray[1].toString() + tempArray[0].toString();
+            var nibble2 = tempArray[7].toString() + tempArray[6].toString() + tempArray[5].toString() + tempArray[4].toString();
+            var swapResult = nibble1 + nibble2;
+            swapResult = parseInt(swapResult, 2);
+            swapResult = swapResult.toString(16);
+
+            if (d == 1) {
+                $scope.ram[f] = swapResult;
+            } else {
+                $scope.w_reg = swapResult;
+            }
+            DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
+        },
+        &quot;XORWF&quot;: function (f, d) {
+
+            var fileRegValue = $scope.ram[f];
+            var xorresult = ((parseInt($scope.w_reg, 16)) ^ (parseInt(fileRegValue, 16)));
+            xorresult = xorresult.toString(16);
+
+            if (parseInt(xorresult, 16) == 0) {
+                setZeroFlag();
+            } else {
+                clrZeroFlag();
+            }
+
+            if (d == 1) {
+
+                $scope.ram[f] = xorresult;
+            } else {
+                $scope.w_reg = xorresult;
+            }
+            DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
+        },
+        &quot;BCF&quot;: function (f, b) {
+            var result;
+            var tempFile = getBinaryArray($scope.ram[f]);
+            tempFile[b] = 0;
+            result = convertArrayToHex(tempFile);
+            $scope.ram[f] = result;
+            DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
+        },
+        &quot;BSF&quot;: function (f, b) {
+            var result = &quot;&quot;;
+            var tempFile = getBinaryArray($scope.ram[f]);
+            tempFile[b] = 1;
+            result = convertArrayToHex(tempFile);
+            $scope.ram[f] = result;
+            DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
+        },
+        &quot;BTFSC&quot;: function (f, b) {
+            //DO SOMETHING
+            var tempFle = getBinaryArray($scope.ram[f]);
+            if (tempFle[b] == 0) {
+                //bei gesetztem bit wird statt dem nächsten Befehl ein NOP aufgerufen
+                //$scope.callOperation(&quot;0&quot;);
+                DataPic.Instructioncounter++;
+                DataPic.Zeit(2);
+                DataPic.IncTaktanzahl(2);
+            } else {
+                //$scope.Instructioncounter++;
+                //Ansonsten Tue nix
+                DataPic.Zeit(1);
+                DataPic.IncTaktanzahl(1);
+            }
+        },
+        &quot;BTFSS&quot;: function (f, b) {
+            var tempFle = getBinaryArray($scope.ram[f]);
+            if (tempFle[b] == 1) {
+                //bei gesetztem bit wird statt dem nächsten Befehl ein NOP aufgerufen
+                DataPic.Instructioncounter++;
+                DataPic.Zeit(2);
+                DataPic.IncTaktanzahl(2);
+            } else {
+                //$scope.Instructioncounter++;
+                //Ansonsten tue nix
+                DataPic.Zeit(1);
+                DataPic.IncTaktanzahl(1);
+            }
+        },
+        &quot;ADDLW&quot;: function (k) {
+            var tempW_Reg = parseInt($scope.w_reg, 16);
+            var addresult = tempW_Reg + k;
+            addresult = addresult.toString(16);
+
+            if (parseInt(addresult, 16) &gt; 255) {
+
+                var temp = parseInt(addresult, 16);
+                setCarry();
+                temp = temp - 256;
+                addresult = temp.toString(16);
+            } else {
+                clrCarry();
+            }
+
+            if ((tempW_Reg &amp; parseInt(&quot;00001111&quot;, 2)) + (k &amp; parseInt(&quot;00001111&quot;, 2)) &gt; 15) {
+
+                setDigitCarry();
+            } else {
+                clrDigitCarry();
+            }
+
+            if (parseInt(addresult, 16) == 0) {
+                setZeroFlag();
+            } else {
+                clrZeroFlag();
+            }
+
+            $scope.w_reg = addresult;
+            DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
+        },
+        &quot;ANDLW&quot;: function (k) {
+            var andresult = ((parseInt($scope.w_reg, 16)) &amp; (k));
+            andresult = andresult.toString(16);
+            if (parseInt(andresult, 16) == 0) {
+                setZeroFlag();
+            } else {
+                clrZeroFlag();
+            }
+            $scope.w_reg = andresult;
+            DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
+        },
+        &quot;CALL&quot;: function (k) {
+
+            var tempPcLath = $scope.ram[10].toString(16);
+            DataPic.ProgramStack.push(DataPic.Instructioncounter + 1);
+            $scope.ProgramStack = DataPic.ProgramStack;
+
+            var sprungliteral = getBinaryLiteralArray(k);
+            tempPcLath = getBinaryArray(tempPcLath);
+
+            var pcLath43 = [];
+            pcLath43.push(tempPcLath[4]);
+            pcLath43.push(tempPcLath[3]);
+            var tempPCLow = [];
+            for (var i = 10; i &gt;= 0; i--) {
+                tempPCLow.push(sprungliteral[i]);
+            }
+            var newPC = pcLath43.concat(tempPCLow);
+            newPC = newPC.join();
+            newPC = newPC.replace(/,/g, &#039;&#039;);
+            DataPic.GotoFlag = 1;
+
+            DataPic.Instructioncounter = parseInt(newPC, 2);
+            DataPic.Zeit(2);
+            DataPic.IncTaktanzahl(2);
+
+        },
+        &quot;CLRWDT&quot;: function () {
+            //DO SOMETHING
+            DataPic.watchdogtimer = 0;
+            $scope.TimeOutbit = 1;
+            var tempStatus = getBinaryArray($scope.ram[3]);
+            tempStatus[3] = 1;
+            $scope.ram[3] = tempStatus;
+            DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
+        },
+        &quot;GOTO&quot;: function (k) {
+
+            //Das PCLATH wird als Hex Zahl gelagert, zum verarbeiten wird es aber als Bit array Benötigt, daher Umwandlung
+            var tempPcLath = $scope.ram[10].toString(16);
+
+            var sprungliteral = getBinaryLiteralArray(k);
+            tempPcLath = getBinaryArray(tempPcLath);
+
+            var pcLath43 = [];
+            pcLath43.push(tempPcLath[4]);
+            pcLath43.push(tempPcLath[3]);
+            // Problem: Der folgende Concat Befehlt vereint zwei Arrays zu einem.
+            // Dabei wird das erste Array korrekt hinzugefügt und das zweite aber mit einer LSB zuerst Darstellung.
+            // Damit wird der tatsächliche Wert verfälscht und daher muss das hintere Array (PCLow Array) rotiert werden
+            var tempPCLow = [];
+            for (var i = 10; i &gt;= 0; i--) {
+                tempPCLow.push(sprungliteral[i]);
+            }
+            var newPC = pcLath43.concat(tempPCLow);
+            //Der Join Befehl enfernt die &quot;,&quot; aus einem Array. Dadurch entsteht eine Binäre Zahl, die zu einem Int
+            //Umgewandelt werden kann
+            // Join() und replace() sind Stringoperationen, die auch Strings zurückliefern
+            newPC = newPC.join(); //[&quot;1&quot;,&quot;0&quot;,&quot;1,&quot;,&quot;0&quot;...] -&gt; &quot;1,0,1,0...&quot;
+            newPC = newPC.replace(/,/g, &#039;&#039;); // REGEX zum suchen und entfernen der Komma : &quot;1,0,1,..&quot; -&gt; &quot;101..&quot;
+            // Bei dem Gotobefehl darf der Instructioncounter nicht automatisch erhöht werden,
+            // da er schon vom GOTO manipuliert wurde
+            DataPic.GotoFlag = 1;
+            DataPic.Instructioncounter = parseInt(newPC, 2);
+
+            //Zeitfunktionen
+            DataPic.Zeit(2);
+            DataPic.IncTaktanzahl(2);
+        },
+        &quot;IORLW&quot;: function (k) {
+            var andresult = ((parseInt($scope.w_reg, 16)) | (k));
+            andresult = andresult.toString(16);
+            if (parseInt(andresult, 16) == 0) {
+                setZeroFlag();
+            } else {
+                clrZeroFlag();
+            }
+            $scope.w_reg = andresult;
+            DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
+        },
+        &quot;MOVLW&quot;: function (k) {
+            $scope.w_reg = k.toString(16);
+            DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
+        },
+        &quot;RETFIE&quot;: function () {
+            // RETURN und CALL Befehle verändern selbst den Programmcounter, daher muss das GOTO flag gesetzt werden
+            DataPic.GotoFlag = 1;
+            // GIE wird vom RETFIE zurückgesetzt
+            $scope.ram[11] = (parseInt($scope.ram[11], 16) &amp; parseInt(&quot;01111111&quot;, 2)).toString(16);
+
+            // Das letzte Element aus dem ProgrammStack wird in den Programmcounter geladen und
+            // aus dem dem Stack mit pop() entfernt
+            DataPic.Instructioncounter = DataPic.ProgramStack[DataPic.ProgramStack.length - 1];
+            DataPic.ProgramStack.pop();
+
+            DataPic.Zeit(2);
+            DataPic.IncTaktanzahl(2);
+        },
+        &quot;RETLW&quot;: function (k) {
+            //Der übergebene Literal muss vor der Speicherung in einen Hexwert umgewandelt werden
+            DataPic.GotoFlag = 1;
+            $scope.w_reg = k.toString(16);
+            //Das Top of Stack von ProgramStack wird durch die maxlänge-1 bestimmt, da es keine native fkt dafür gibt
+            //Und im ProgramCounter abgespeichert
+            DataPic.Instructioncounter = DataPic.ProgramStack[DataPic.ProgramStack.length - 1];
+            //Nach dem Übertrag wird der TOS vom ProgramStack gelöscht
+            DataPic.ProgramStack.pop();
+            $scope.ProgramStack = DataPic.ProgramStack;
+
+            DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
+        },
+        &quot;RETURN&quot;: function () {
+            // Wie RETLW nur ohne Literalübergabe
+            // Das Top of Stack von ProgramStack wird durch die maxlänge-1 bestimmt, da es keine native fkt dafür gibt
+            // Und im ProgramCounter abgespeichert
+            DataPic.GotoFlag = 1;
+            DataPic.Instructioncounter = DataPic.ProgramStack[DataPic.ProgramStack.length - 1];
+            // Nach dem Übertrag wird der TOS vom ProgramStack gelöscht
+            DataPic.ProgramStack.pop();
+            $scope.ProgramStack = DataPic.ProgramStack;
+            DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
+        },
+        &quot;SLEEP&quot;: function () {
+            DataPic.watchdogtimer = 0;
+            $scope.wdtPrescaler = 0;
+            $scope.TimeOutbit = 1;
+            $scope.PowerDownbit = 0;
+
+            // Die Zwei Bits werden ins Statusregister geladen
+            var tempStatus = getBinaryArray($scope.ram[3]);
+            tempStatus[4] = $scope.TimeOutbit;
+            tempStatus[3] = $scope.PowerDownbit;
+            $scope.ram[3] = convertArrayToHex(tempStatus);
+
+            // Sleepzustand wird aktiviert
+            DataPic.Sleepflag = true;
+
+            DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
+        },
+        &quot;SUBLW&quot;: function (k) {
+            var zahl1 = k;
+            var zahl2 = getZweierKomplement($scope.w_reg);
+            var result = zahl1 + zahl2;
+            result = result.toString(16);
+
+            if (parseInt(result, 16) &gt; 255) {
+                var temp = parseInt(result, 16) - 256;
+                setCarry();
+                result = temp.toString(16);
+            } else {
+                clrCarry();
+            }
+            if ((zahl1 &amp; parseInt(&quot;00001111&quot;, 2)) + (zahl2 &amp; parseInt(&quot;00001111&quot;, 2)) &gt; 15) {
+                setDigitCarry();
+            } else {
+                clrDigitCarry();
+            }
+
+            if (parseInt(result, 16) == 0) {
+                setZeroFlag();
+            } else {
+                clrZeroFlag();
+            }
+            $scope.w_reg = result;
+            DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
+        },
+        &quot;XORLW&quot;: function (k) {
+            var xorlresult = ((parseInt($scope.w_reg, 16)) ^ (k));
+            xorlresult = xorlresult.toString(16);
+            if (parseInt(xorlresult, 16) == 0) {
+                setZeroFlag();
+            } else {
+                clrZeroFlag();
+            }
+            $scope.w_reg = xorlresult;
+            DataPic.Zeit(1);
+            DataPic.IncTaktanzahl(1);
+        }
+    };
+
+    $scope.rollBackState = function (lastState) {
+        // Der Ram wird mit dem alten Ramzustand überschrieben
+        for (var i = 0; i &lt;= $scope.ram.length - 1; i++) {
+            $scope.ram[i] = lastState.ram[i];
+        }
+        // W Register, Bits, Laufzeit, Watchdog werden mit den alten Werten überschrieben
+        $scope.w_reg = lastState.w_reg;
+        DataPic.Instructioncounter = lastState.InstructionCounter;  //lastState.Instructioncounter
+        DataPic.AnzeigeIC = lastState.AnzeigeIC; // lastState.AnzeigeIC
+        $scope.digitCarry = lastState.digitCarry;
+        $scope.carry = lastState.carry;
+        $scope.zeroFlag = lastState.zeroFlag;
+        DataPic.Laufzeit = lastState.laufzeit;
+        DataPic.watchdogtimer = lastState.watchdogtimer;
+    };
+    $scope.changePortBbit = function (bitpos) {
+        var temp = getBinaryArray($scope.ram[6]);
+        var trisVergleich = getBinaryArray($scope.ram[134]);
+        if (trisVergleich[bitpos] == 0) {
+            // Wenn das TrisBit auf 0 steht wird PortB Bit als Ausgang genutzt
+            // und somit soll keine weitere eingabe möglich sein
+            $scope.PortBbits[bitpos] = 0;
+            return;
+        }
+        if (temp[bitpos] == 1) {
+            temp[bitpos] = 0;
+            $scope.PortBbits[bitpos] = 0;
+        } else {
+            temp[bitpos] = 1;
+            $scope.PortBbits[bitpos] = 1;
+        }
+        temp = convertArrayToHex(temp);
+        // Vor der Ausgabe wird die Eingabe mit dem TrisB verundet, da TRIS B bestimmt ob Port B einoder Ausgabe ist
+        // TrisB 1 = Eingang ; TrisB 0= Ausgang
+        temp = parseInt($scope.ram[134], 16) &amp; parseInt(temp, 16);
+        $scope.ram[6] = temp.toString(16);
+        $scope.PORTB = $scope.ram[6];
+    };
+    $scope.changePortAbit = function (bitpos) {
+        var temp = getBinaryArray($scope.ram[5]);
+        if (temp[bitpos] == 1) {
+            temp[bitpos] = 0;
+            $scope.PortAbits[bitpos] = 0;
+        } else {
+            temp[bitpos] = 1;
+            $scope.PortAbits[bitpos] = 1;
+        }
+        $scope.ram[5] = convertArrayToHex(temp);
+        $scope.PORTA = $scope.ram[5];
+    };
+
+    $scope.calculatePrescale = function () {
+
+        var tempOPTreg = getBinaryArray($scope.ram[129]);
+        var prescalerVal = tempOPTreg[2].toString() + tempOPTreg[1].toString() + tempOPTreg[0].toString();
+        prescalerVal = parseInt(prescalerVal, 2);
+        var prescaler = Math.pow(2, prescalerVal);
+        if (tempOPTreg[3] == 0) {
+            return (2 * prescaler);
+        } else {
+            return (4);
+        }
+    };
+    $scope.watchdogPrescale = function () {
+
+        var tempOPTreg = getBinaryArray($scope.ram[129]);
+        var prescalerVal = tempOPTreg[2].toString() + tempOPTreg[1].toString() + tempOPTreg[0].toString();
+        prescalerVal = parseInt(prescalerVal, 2);
+        var prescaler = Math.pow(2, prescalerVal);
+
+        if (tempOPTreg[3] == 1) {
+            return (prescaler);
+        } else {
+            return (1);
+        }
+    };
+
+    $scope.resetPic = function () {
+        for (var i = 0; i &lt;= $scope.ram.length - 1; i++) {
+            $scope.ram[i] = 0;
+        }
+
+        $scope.STATUS = $scope.ram[3];
+        DataPic.Instructioncounter = 0;
+        $scope.Instructioncounter = 0;
+        DataPic.AnzeigeIC = 0;
+        $scope.StopFlag = 1;
+        $scope.ProgramCounter = 0;
+        $scope.ProgramStack = [];
+        $scope.zeroFlag = 0;
+        $scope.digitCarry = 0;
+        $scope.carry = 0;
+        DataPic.watchdogtimer = 0;
+        $scope.w_reg = &#039;00&#039;;
+        DataPic.Laufzeit = 0;
+        $scope.Laufzeit = 0;
+
+        // Register, die beim Reset beladen sein müssen:
+        $scope.PCL = &#039;00&#039;;
+        // STATUS
+        $scope.ram[3] = &#039;18&#039;;
+        $scope.ram[131] = &#039;18&#039;;
+        // OPTION_REG
+        $scope.ram[129] = &#039;ff&#039;;
+        $scope.OPTION_REG = &#039;ff&#039;;
+        // TRISA
+        $scope.ram[133] = &#039;1f&#039;;
+        $scope.TRISA = &#039;1f&#039;;
+        // TRISB
+        $scope.TRISB = &#039;ff&#039;;
+        $scope.ram[134] = &#039;ff&#039;;
+
+        // Spezielle Bits
+        $scope.RP0 = 0;
+        $scope.TimeOutbit = 1;
+        $scope.PowerDownbit = 1;
+        DataPic.Sleepflag = false;
+    };
+
+    changeProgramCounter = function () {
+        $scope.GotoFlag = 1;
+        var pcLow = parseInt($scope.ram[2], 16);
+        var pcLArray = [];
+        for (var i = 0; i &lt; 8; i++) {
+            pcLArray[i] = (pcLow &gt;&gt; i) &amp; 1;
+        }
+        var pcLath = parseInt($scope.ram[10], 16);
+        var pcLathArray = [];
+        for (var i = 0; i &lt; 8; i++) {
+            pcLathArray[i] = (pcLath &gt;&gt; i) &amp; 1;
+        }
+        var PCResult = &quot;&quot;;
+        PCResult = pcLathArray[4].toString() + pcLathArray[3].toString() +
+            pcLathArray[2].toString() + pcLathArray[1].toString() +
+            pcLathArray[0].toString() +
+            pcLArray[7].toString() + pcLArray[6].toString() +
+            pcLArray[5].toString() + pcLArray[4].toString() +
+            pcLArray[3].toString() + pcLArray[2].toString() +
+            pcLArray[1].toString() + pcLArray[0].toString();
+
+        PCResult = parseInt(PCResult, 2);
+        DataPic.Instructioncounter = PCResult;
+    }
+
+
+    $scope.$watch(&#039;ram[4]&#039;, function () {
+        if ($scope.ram[4] != 0) {
+            $scope.ram[0] = $scope.ram[parseInt($scope.ram[4], 16)];
+        } else {
+            $scope.ram[0] = &#039;0&#039;;
+        }
+    });
+    $scope.$watch(&#039;ram[0]&#039;, function (newValue, oldValue) {
+        $scope.ram[parseInt($scope.ram[4], 16)] = newValue;
+    });
+    $scope.$watch(function () {
+        return DataPic.Instructioncounter
+    }, function () {
+        var tempPC = getBinaryArray(DataPic.Instructioncounter.toString(16));
+        var tempPClow = &quot;&quot;;
+        for (var i = 0; i &lt; 8; i++) {
+            tempPClow = tempPC[i].toString() + tempPClow;
+        }
+        tempPClow = parseInt(tempPClow, 2);
+        $scope.ram[2] = tempPClow.toString(16);
+    });
+
+});</textarea>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="container">
+    <p>.</p>
+  </div>
+</footer>
+
+<script type="text/html" id="complexity-popover-template">
+  <div class="complexity-notice">
+    Complexity : {{ complexity.cyclomatic }} <br>
+    Length : {{ complexity.halstead.length }} <br>
+    Difficulty : {{ complexity.halstead.difficulty.toFixed(2) }} <br>
+    Est # bugs : {{ complexity.halstead.bugs.toFixed(2) }}<br>
+  </div>
+</script>
+
+<script type="text/javascript" src="../../assets/scripts/bundles/core-bundle.js"></script>
+<script type="text/javascript" src="../../assets/scripts/bundles/codemirror.js"></script>
+<script type="text/javascript" src="../../assets/scripts/codemirror.markpopovertext.js"></script>
+<script type="text/javascript" src="report.js"></script>
+<script type="text/javascript" src="report.history.js"></script>
+<script type="text/javascript" src="../../assets/scripts/plato-file.js"></script>
+</body>
+</html>
