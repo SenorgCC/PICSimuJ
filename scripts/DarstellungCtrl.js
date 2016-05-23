@@ -1,6 +1,3 @@
-/**
- * Created by harmi on 29.04.2016.
- */
 app.controller('DropdownCtrl', function ($scope, DataPic) {
     // Elemente für das Dropdownmenü
     $scope.items =

@@ -373,8 +373,9 @@ app.controller('CPU', function ($scope, DataPic) {
             if ((tempW_Reg & parseInt("00001111", 2)) + (parseInt($scope.ram[f], 16) & parseInt("00001111", 2)) > 15) {
                 setDigitCarry();
             } else {
+                clrDigitCarry();
             }
-            clrDigitCarry();
+
 
             if (d == 1) {
 

@@ -1,11 +1,6 @@
-/**
- * Created by Alex on 02.05.2016.
- */
 app.controller("AblaufsCtrl", function ($scope, DataPic, $timeout) {
     $scope.StopFlag = false;
     DataPic.Instructioncounter = 0;
-    var testsequenzeline;
-    var temp1, temp2;
     $scope.breakpointbox = false;
     $scope.breakpointview = true;
     $scope.ProgramCounter = [];

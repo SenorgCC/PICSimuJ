@@ -1,7 +1,3 @@
-/**
- * Created by Alex on 06.04.2016.
- */
-
 var app = angular.module('pic', ['ui.bootstrap']);
 
 //Angularmagic zum Parsen von Dateien

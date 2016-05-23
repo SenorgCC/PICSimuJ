@@ -1,6 +1,3 @@
-/**
- * Created by Alex on 07.05.2016.
- */
 app.factory('DataPic',function () {
     // Eine Factory sollte ein Objekt zurückliefern, dieses objekt kann mit dem "." - operater verschiedene Daten enthalten
     var PicData={};

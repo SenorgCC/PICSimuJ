@@ -1,4 +1,4 @@
-app.controller('ramcontroller', function ($scope,DataPic,$timeout) {
+app.controller('ramcontroller', function ($scope,DataPic) {
     $scope.ram=[];
     $scope.PortBbits=["0","0","0","0","0","0","0","0"];
     $scope.PortAbits=["0","0","0","0","0","0","0","0"];
